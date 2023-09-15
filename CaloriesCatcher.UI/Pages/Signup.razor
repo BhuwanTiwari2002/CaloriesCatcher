@@ -1,0 +1,28 @@
+﻿@page "/signup"
+<div style="text-align: center; max-width:75%; margin:auto;">
+    <MudText Typo="Typo.h3">Register</MudText>
+    <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Outlined">Name</MudTextField>
+    <MudTextField @bind-Value="UserName" Label="User Name" Variant="Variant.Outlined">User Name</MudTextField>
+    <MudTextField @bind-Value="Email" Label="Email" Variant="Variant.Outlined">Email</MudTextField>
+    <MudTextField @bind-Value="ConEmail" Label="Confirm Email" Variant="Variant.Outlined">Confirm Email</MudTextField>
+    
+    <MudTextField @bind-Value="Password" Label="Password" Variant="Variant.Outlined">Password</MudTextField>
+ 
+    <MudButton Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
+</div>
+@code {
+
+
+        public string Name { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; }= string.Empty;
+        public string ConEmail { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+
+      
+
+    
+    
+    
+}
