@@ -1,6 +1,6 @@
 ﻿namespace CalorieCatcher.BL.Models
 {
-    public class Class1
+    public class Food
     {
 
     }
