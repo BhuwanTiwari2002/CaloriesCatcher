@@ -1,154 +1,67 @@
 ﻿@page "/dashboard"
+@using static CaloriesCatcher.UI.Pages.Dashboard;
 
-<MudPaper Class="pa-4">
-    <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px" />
-</MudPaper>
-<MudPaper Class="pa-4 mt-2 d-flex justify-center">
-    <MudButton OnClick="AddDataSize" Variant="Variant.Filled" Color="Color.Primary">Add Food</MudButton>
-    <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
-    <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
-</MudPaper>
-@code {
-    private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
-    int dataSize = 4;
-    double[] data = { 77, 25, 20, 5 };
-    string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks"};
-
-
-    // change to edit 
-    void EditData()
-    {
-       /* var new_data = new double[dataSize];
-        for (int i = 0; i < new_data.Length; i++)
-            new_data[i] = random.NextDouble() * 100;
-        data = new_data;
-        StateHasChanged(); */
-    }
-
-    void AddDataSize()
-    {
-        if (dataSize < 20)
-        {
-            dataSize = dataSize + 1;
-           
-        }
-    }
-    void RemoveDataSize()
-    {
-        if (dataSize > 0)
-        {
-            dataSize = dataSize - 1;
-          
-        }
-    }
-}
-<MudButton Variant="Variant.Text">Track a food</MudButton>
-<MudButton Variant="Variant.Text">Track a recipe</MudButton>
-
-
-<MudItem xs="12" md="6">
-    <MudText Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
-    <MudPaper Width="100%">
-        <MudList>
-            <MudListItem Text="Food #1" />
-            <MudListItem Text="Food #2" />
-            <MudListItem Text="Food #3" />
-        </MudList>
+<div style="float:left; width:40%; margin-top:3%; margin-right:3%;">
+    <MudPaper Class="pa-4">
+        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="35%" Height="35%" />
     </MudPaper>
-</MudItem>
+    <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+        <MudButton OnClick="AddDataSize" Variant="Variant.Filled" Color="Color.Primary">Add Food</MudButton>
+        <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
+        <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+    </MudPaper>
+    @code {
+        private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
+        int dataSize = 4;
+        double[] data = { 77, 25, 20, 5 };
+        string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks"};
 
 
-
-<MudTable Items="food_items" Height="350px" Breakpoint="Breakpoint.Sm" Virtualize="true" FixedHeader="true">
-    <HeaderContent>
-        <MudTh>Food:</MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Column1">@context.Column1</MudTd>
-        <MudTd DataLabel="Column2">@context.Column2</MudTd>
-        <MudTd DataLabel="Column3">@context.Column3</MudTd>
-        <MudTd DataLabel="Column4">@context.Column4</MudTd>
-        <MudTd DataLabel="Column5">@context.Column5</MudTd>
-    </RowTemplate>
-</MudTable>
-@code {
-    public class FoodItem
-    {
-        public string Column1 { get; set; }
-        public string Column2 { get; set; }
-        public string Column3 { get; set; }
-        public string Column4 { get; set; }
-        public string Column5 { get; set; }
-    }
-
-
-    private List<FoodItem> food_items;
-
-    protected override void OnInitialized()
-    {
-        food_items = new List<FoodItem>();
-        for (int i = 0; i < 20000; i++)
+        // change to edit 
+        void EditData()
         {
-            food_items.Add(new FoodItem
-                {
-                    Column1 = $"Value_{i}",
-                    Column2 = $"Value_{i}",
-                    Column3 = $"Value_{i}",
-                    Column4 = $"Value_{i}",
-                    Column5 = $"Value_{i}",
-                });
+           /* var new_data = new double[dataSize];
+            for (int i = 0; i < new_data.Length; i++)
+                new_data[i] = random.NextDouble() * 100;
+            data = new_data;
+            StateHasChanged(); */
+        }
+
+        void AddDataSize()
+        {
+            if (dataSize < 20)
+            {
+                dataSize = dataSize + 1;
+           
+            }
+        }
+        void RemoveDataSize()
+        {
+            if (dataSize > 0)
+            {
+                dataSize = dataSize - 1;
+          
+            }
         }
     }
+        <div style="text-align:center; margin-top:2%;">
+            <MudButton Variant="Variant.Text">Track a food</MudButton> 
+            <MudButton Variant="Variant.Text">Track a recipe</MudButton>
+        </div>
+</div>
+<div style="float:right; width:40%;margin-top:3%; margin-right:3%">
+    <MudItem xs="12" md="6">
+        <MudText Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
+        <MudPaper Width="100%">
+            <MudList>
+                <MudListItem Text="Food #1" />
+                <MudListItem Text="Food #2" />
+                <MudListItem Text="Food #3" />
+                <MudListItem Text="Food #4" />
+                <MudListItem Text="Food #5" />
+                <MudListItem Text="Food #6" />
+            </MudList>
+        </MudPaper>
+    </MudItem>
 
-}
-
-<MudTable Items="recipe_items" Height="350px" Breakpoint="Breakpoint.Sm" Virtualize="true" FixedHeader="true">
-    <HeaderContent>
-        <MudTh>Recipe:</MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Column1">@context.Column1</MudTd>
-        <MudTd DataLabel="Column2">@context.Column2</MudTd>
-        <MudTd DataLabel="Column3">@context.Column3</MudTd>
-        <MudTd DataLabel="Column4">@context.Column4</MudTd>
-        <MudTd DataLabel="Column5">@context.Column5</MudTd>
-    </RowTemplate>
-</MudTable>
-@code {
-    public class RecipeItem
-    {
-        public string Column1 { get; set; }
-        public string Column2 { get; set; }
-        public string Column3 { get; set; }
-        public string Column4 { get; set; }
-        public string Column5 { get; set; }
-    }
-
-
-    private List<RecipeItem> recipe_items;
-
-    protected override void OnInitialized()
-    {
-        recipe_items = new List<RecipeItem>();
-        for (int i = 0; i < 20000; i++)
-        {
-            recipe_items.Add(new RecipeItem
-                {
-                    Column1 = $"Value_{i}",
-                    Column2 = $"Value_{i}",
-                    Column3 = $"Value_{i}",
-                    Column4 = $"Value_{i}",
-                    Column5 = $"Value_{i}",
-                });
-        }
-    }
-
-}
+</div>
