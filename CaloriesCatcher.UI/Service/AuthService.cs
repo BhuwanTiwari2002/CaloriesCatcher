@@ -1,11 +1,17 @@
 ﻿using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
+using KitchenComfort.Web.Models.Utility;
 
 namespace CaloriesCatcher.UI.Service
 {
     public class AuthService : IAuthService
     {
-        //private readonly IBaseService _baseService;
+        private readonly IBaseService _baseService;
+        public AuthService(IBaseService baseService)
+        {
+            _baseService = baseService;
+        }
+
         public Task<ResponseDto?> AssignRoleAsync(RegisterationRequestDto registerationRequestDto)
         {
             throw new NotImplementedException();
@@ -16,9 +22,14 @@ namespace CaloriesCatcher.UI.Service
             throw new NotImplementedException();
         }
 
-        public Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto)
+        public async Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = registerationRequestDto,
+                Url = "https://localhost:7002/api/auth/register"
+            });
         }
     }
 }

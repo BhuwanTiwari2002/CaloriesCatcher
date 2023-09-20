@@ -73,7 +73,7 @@ namespace CaloriesCatcher.UI.Service
                 }
 
             }
-            catch
+            catch(Exception ex)
             {
                 var dto = new ResponseDto
                 {

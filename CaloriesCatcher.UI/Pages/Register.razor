@@ -1,28 +1,46 @@
 ﻿@page "/register"
+@using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Service.IService
+@using KitchenComfort.Web.Models;
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
             <MudText Typo="Typo.h3" Color="Color.Primary">Register</MudText>
         </div>
-        <MudForm>
-            <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="UserName" Label="User Name" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="Email" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="ConEmail" Label="Confirm Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" FullWidth InputType="InputType.Password" />
-
+        <EditForm Model="registerationRequestDto" OnValidSubmit="OnRegister">
+            <MudTextField @bind-Value="registerationRequestDto.UserName" Label="Name" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="registerationRequestDto.Email" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="registerationRequestDto.PhoneNumber" Label="Phone Number" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="registerationRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" FullWidth InputType="InputType.Password" />
             <div class="text-center mt-4">
                 <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
             </div>
-        </MudForm>
+        </EditForm>
     </MudPaper>
 </div>
 
 @code {
-    public string Name { get; set; } = string.Empty;
-    public string UserName { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string ConEmail { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+
+    RegisterationRequestDto registerationRequestDto = new RegisterationRequestDto();
+
+
+    [Inject]
+    private IAuthService authService { get; set; } = default!;
+    [Inject]
+    private ISnackbar snackBar { get; set; } = default!;
+    protected override async Task OnInitializedAsync()
+    {}
+    private async void OnRegister(EditContext context)
+    {
+        registerationRequestDto.RoleName = "admin";
+        var response = await authService.RegisterAsync(registerationRequestDto);
+        if(response != null && response.IsSuccess)
+        {
+            snackBar.Add("The account has been registered", Severity.Success);
+        } else
+        {
+            snackBar.Add("Something went wrong", Severity.Error);
+        }
+    }
 
 }
