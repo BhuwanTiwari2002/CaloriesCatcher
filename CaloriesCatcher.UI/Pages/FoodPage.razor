@@ -1,0 +1,45 @@
+﻿﻿@page "/food"
+<div style="margin-top:3%; margin-bottom:3%">
+<MudTable Items="_items" Height="500px" Breakpoint="Breakpoint.Sm" Virtualize="true" FixedHeader="true">
+    <HeaderContent>
+        <MudTh>Food List:</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Column1">@context.Column1</MudTd>
+        <MudTd DataLabel="Column2">@context.Column2</MudTd>
+        <MudTd DataLabel="Column3">@context.Column3</MudTd>
+        <MudTd DataLabel="Column4">@context.Column4</MudTd>
+        <MudTd DataLabel="Column5">@context.Column5</MudTd>
+    </RowTemplate>
+</MudTable>
+@code {
+    public class TestItem
+    {
+        public string Column1 { get; set; }
+        public string Column2 { get; set; }
+        public string Column3 { get; set; }
+        public string Column4 { get; set; }
+        public string Column5 { get; set; }
+    }
+
+
+    private List<TestItem> _items;
+
+    protected override void OnInitialized()
+    {
+        _items = new List<TestItem>();
+        for (int i = 0; i < 100; i++)
+        {
+            _items.Add(new TestItem
+            {
+                Column1 = $"Value_{i}",
+                Column2 = $"Value_{i}",
+                Column3 = $"Value_{i}",
+                Column4 = $"Value_{i}",
+                Column5 = $"Value_{i}",
+            });
+        }
+    }
+
+}
+</div>
