@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 
-<div style="float:left; width:40%; margin-top:3%; margin-right:3%;">
+<div style="float:left; width:40%; margin: 20px;">
     <MudPaper Class="pa-4">
         <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%" />
     </MudPaper>
@@ -13,11 +13,8 @@
     @code {
         int i = -1;
         int dataSize = 4;
-
         double[] data = { 77, 25, 20, 5 };
         string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks" };
-
-
         // change to edit
         void EditData()
         {
@@ -46,21 +43,21 @@
         }
     }
     <div style="text-align:center; margin-top:2%;">
-        <MudButton Variant="Variant.Text">Track a food</MudButton>
-        <MudButton Variant="Variant.Text">Track a recipe</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
     </div>
 </div>
 <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
     <MudItem xs="12" md="6">
-        <MudText Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
+        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
         <MudPaper Width="100%">
             <MudList>
-                <MudListItem Text="Food #1" />
-                <MudListItem Text="Food #2" />
-                <MudListItem Text="Food #3" />
-                <MudListItem Text="Food #4" />
-                <MudListItem Text="Food #5" />
-                <MudListItem Text="Food #6" />
+                <MudListItem Text="Apple" />
+                <MudListItem Text="Qdoba Bowl" />
+                <MudListItem Text="Water" />
+                <MudListItem Text="Pepsi" />
+                <MudListItem Text="Snack Bar" />
+                <MudListItem Text="Orange" />
             </MudList>
         </MudPaper>
     </MudItem>
