@@ -8,10 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.10.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
