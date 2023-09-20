@@ -9,8 +9,8 @@
         </div>
         <EditForm Model="registerationRequestDto" OnValidSubmit="OnRegister">
             <MudTextField @bind-Value="registerationRequestDto.UserName" Label="Name" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="registerationRequestDto.Email" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="registerationRequestDto.PhoneNumber" Label="Phone Number" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="registerationRequestDto.Email" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth InputType="InputType.Email" />
+            <MudTextField @bind-Value="registerationRequestDto.PhoneNumber" Label="Phone Number" Variant="Variant.Outlined" Class="mt-4" FullWidth InputType="InputType.Telephone" />
             <MudTextField @bind-Value="registerationRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" FullWidth InputType="InputType.Password" />
             <div class="text-center mt-4">
                 <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>

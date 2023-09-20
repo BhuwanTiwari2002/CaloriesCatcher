@@ -8,8 +8,8 @@
             <MudText Typo="Typo.h3" Color="Color.Primary">Login</MudText>
         </div>
         <EditForm Model="loginRequestDto" OnValidSubmit="OnLogin">
-            <MudTextField @bind-Value="loginRequestDto.UserName" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="loginRequestDto.UserName" Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" InputType="InputType.Password" FullWidth />
             <div class="text-center mt-4">
                 <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
             </div>

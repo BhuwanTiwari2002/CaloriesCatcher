@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="_isDarkMode ? _darkTheme : _lightTheme" />
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <PageTitle>Calories Catcher</PageTitle>
@@ -25,8 +25,16 @@
 
 @code {
     bool _drawerOpen = true;
-    bool _isDarkMode = true;  // By default, set to light mode
-
+    bool _isDarkMode = false;  // By default, set to light mode
+    private MudThemeProvider _mudThemeProvider;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
     MudBlazor.MudTheme _lightTheme = new MudBlazor.MudTheme
         {
             Palette = new MudBlazor.Palette
