@@ -1,0 +1,43 @@
+﻿@page "/login"
+@using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Service.IService
+@using KitchenComfort.Web.Models;
+<div class="mud-container">
+    <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
+        <div class="text-center">
+            <MudText Typo="Typo.h3" Color="Color.Primary">Login</MudText>
+        </div>
+        <EditForm Model="loginRequestDto" OnValidSubmit="OnLogin">
+            <MudTextField @bind-Value="loginRequestDto.UserName" Label="Email" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" FullWidth />
+            <div class="text-center mt-4">
+                <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
+            </div>
+        </EditForm>
+    </MudPaper>
+</div>
+
+@code {
+
+    LoginRequestDto loginRequestDto = new LoginRequestDto();
+    [Inject]
+    private IAuthService authService { get; set; } = default!;
+    [Inject]
+    private ISnackbar snackBar { get; set; } = default!;
+    [Inject]
+    private NavigationManager navigationManager { get; set; } = default!;
+    protected override async Task OnInitializedAsync()
+    {}
+    private async void OnLogin(EditContext context)
+    {
+        var response = await authService.LoginAsync(loginRequestDto);
+        if(response != null && response.IsSuccess)
+        {
+            navigationManager.NavigateTo("/");
+        } else
+        {
+            snackBar.Add("Something went wrong", Severity.Error);
+        }
+    }
+
+}

@@ -17,9 +17,14 @@ namespace CaloriesCatcher.UI.Service
             throw new NotImplementedException();
         }
 
-        public Task<ResponseDto?> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<ResponseDto?> LoginAsync(LoginRequestDto loginRequestDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = loginRequestDto,
+                Url = "https://localhost:7002/api/auth/login"
+            });
         }
 
         public async Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto)

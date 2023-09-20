@@ -39,7 +39,7 @@ namespace Auth.API.Controllers
                 return BadRequest(_responseDto);
             }
             _responseDto.Result = loginResponse;
-            return Ok();
+            return Ok(_responseDto);
         }
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegisterationRequestDto model)
