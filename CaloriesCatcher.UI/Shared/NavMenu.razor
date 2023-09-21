@@ -1,9 +1,41 @@
-﻿<MudNavMenu>
+﻿@using CaloriesCatcher.UI.Service.IService;
+<MudNavMenu>
     <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavGroup Title="User" Expanded="true">
-        <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
-        <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
-    </MudNavGroup>
-    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix">About</MudNavLink>
+    @if(!IsLoggedIn)
+    {
+        <MudNavGroup Title="User" Expanded="true">
+            <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
+            <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
+        </MudNavGroup>
+    }
+    <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
+
+    @if(IsLoggedIn)
+    {
+        <MudNavGroup Title="User" Expanded="true">
+            <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
+            <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
+        </MudNavGroup>
+    }
 </MudNavMenu>
 
+@code {
+    [Inject]
+    private ITokenProvider tokenProvider { get; set; } = default!;
+    [Inject]
+    private NavigationManager navigationManager { get; set; } = default!;
+    public bool IsLoggedIn { get; set; } = false;
+    protected override async Task OnInitializedAsync()
+    {
+        var token = tokenProvider.GetToken();
+        if(token != null)
+        {
+            IsLoggedIn = true;
+        }
+    }
+    private async Task Logout()
+    {
+        tokenProvider.ClearToken();
+        navigationManager.NavigateTo("/", true);
+    }
+}

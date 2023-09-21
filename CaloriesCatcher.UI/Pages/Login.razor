@@ -2,6 +2,8 @@
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
+@using Newtonsoft.Json;
+@using System.Security.Claims;
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
@@ -25,19 +27,28 @@
     [Inject]
     private ISnackbar snackBar { get; set; } = default!;
     [Inject]
+    private ITokenProvider tokenProvider { get; set; } = default!;
+    [Inject]
     private NavigationManager navigationManager { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {}
-    private async void OnLogin(EditContext context)
+    private async Task OnLogin(EditContext context) // Note: Changed to Task instead of void
     {
         var response = await authService.LoginAsync(loginRequestDto);
-        if(response != null && response.IsSuccess)
+        if (response != null && response.IsSuccess)
         {
+            // Gets the user Token and Information
+            LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
+            tokenProvider.SetToken(loginResponseDto.Token);
+            // Navigate to the home page
             navigationManager.NavigateTo("/");
-        } else
+        }
+        else
         {
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
+
 
 }

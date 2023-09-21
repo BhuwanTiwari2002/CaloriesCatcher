@@ -16,7 +16,7 @@ namespace CaloriesCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = "https://localhost:7139/api/calories"
+                Url = "https://localhost:7005/api/calories"
             });
         }
     }

@@ -4,7 +4,7 @@
     {
         public static string CouponAPIBase { get; set; }
         public static string AuthAPIBase { get; set; }
-
+        public static string TokenCookie { get; set; } = "JWTToken";
         public enum ApiType
         {
             GET,

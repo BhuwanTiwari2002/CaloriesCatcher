@@ -33,6 +33,10 @@
     </MudItem>
 </div>
 
+<MudText>You are not Authorized</MudText>
+
+
+
 @code {
     [Inject]
     private ICalories caloriesService { get; set; } = default!;
@@ -50,7 +54,7 @@
         {
             snackBar.Add("Something went wrong", Severity.Error);
         }
-        
+
     }
     int i = -1;
     int dataSize = 4;
@@ -82,4 +86,4 @@
 
         }
     }
-    }
+}
