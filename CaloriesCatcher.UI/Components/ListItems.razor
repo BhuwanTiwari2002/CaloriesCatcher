@@ -14,8 +14,14 @@
     </MudTable>
 </div>
 @code {
+    @typeparam T /* The user needs to pass the type
+                    Then this compontent will use that 
+                    to display for that type */
     [Parameter]
     public string ListName { get; set; } = string.Empty;
+    [Parameter]
+    public List<T> List { get; set; } = default!;
+
     public class TestItem
     {
         public string Column1 { get; set; }
