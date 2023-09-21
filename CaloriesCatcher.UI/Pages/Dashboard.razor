@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Service.IService;
 <div style="float:left; width:40%; margin: 20px;">
     <MudText>Welcome</MudText>
     <MudPaper Class="pa-4">
@@ -10,39 +11,6 @@
         <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
         <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
     </MudPaper>
-
-    @code {
-        int i = -1;
-        int dataSize = 4;
-        double[] data = { 77, 25, 20, 5 };
-        string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks" };
-        // change to edit
-        void EditData()
-        {
-            /* var new_data = new double[dataSize];
-            for (int i = 0; i < new_data.Length; i++)
-            new_data[i] = random.NextDouble() * 100;
-            data = new_data;
-            StateHasChanged(); */
-        }
-
-        void AddDataSize()
-        {
-            if (dataSize < 20)
-            {
-                dataSize = dataSize + 1;
-
-            }
-        }
-        void RemoveDataSize()
-        {
-            if (dataSize > 0)
-            {
-                dataSize = dataSize - 1;
-
-            }
-        }
-    }
     <div style="text-align:center; margin-top:2%;">
         <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
         <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
@@ -59,8 +27,59 @@
                 <MudListItem Text="Pepsi" />
                 <MudListItem Text="Snack Bar" />
                 <MudListItem Text="Orange" />
+                <MudListItem Text="@Item" />
             </MudList>
         </MudPaper>
     </MudItem>
-
 </div>
+
+@code {
+    [Inject]
+    private ICalories caloriesService { get; set; } = default!;
+    [Inject]
+    private ISnackbar snackBar { get; set; } = default!;
+    public string Item { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await caloriesService.GetAllCouponAsync();
+        if (response != null && response.IsSuccess)
+        {
+            Item = response.Result.ToString();
+        }
+        else
+        {
+            snackBar.Add("Something went wrong", Severity.Error);
+        }
+        
+    }
+    int i = -1;
+    int dataSize = 4;
+    double[] data = { 77, 25, 20, 5 };
+    string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks" };
+    // change to edit
+    void EditData()
+    {
+        /* var new_data = new double[dataSize];
+        for (int i = 0; i < new_data.Length; i++)
+        new_data[i] = random.NextDouble() * 100;
+        data = new_data;
+        StateHasChanged(); */
+    }
+
+    void AddDataSize()
+    {
+        if (dataSize < 20)
+        {
+            dataSize = dataSize + 1;
+
+        }
+    }
+    void RemoveDataSize()
+    {
+        if (dataSize > 0)
+        {
+            dataSize = dataSize - 1;
+
+        }
+    }
+    }

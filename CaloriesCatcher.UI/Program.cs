@@ -12,8 +12,11 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 /* This injects HttpClient into AuthService */
 builder.Services.AddHttpClient<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddHttpClient<ICalories, CaloriesService>();
 builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICalories, CaloriesService>();
+
 
 builder.Services.AddMudServices();
 var app = builder.Build();

@@ -8,7 +8,7 @@ using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace Calories.API.Controllers
 {
-    [Route("api/coupon")]
+    [Route("api/calories")]
     [ApiController]
     public class CaloriesAPIController : ControllerBase
     {
