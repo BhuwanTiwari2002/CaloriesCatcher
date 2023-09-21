@@ -11,7 +11,7 @@ namespace CaloriesCatcher.UI.Service
         {
             _baseService = baseService;
         }
-        public async Task<ResponseDto> GetAllCouponAsync()
+        public async Task<ResponseDto> GetAllCaloriesAsync()
         {
             return await _baseService.SendAsync(new RequestDto()
             {

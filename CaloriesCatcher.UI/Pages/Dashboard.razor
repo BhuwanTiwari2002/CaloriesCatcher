@@ -10,6 +10,7 @@
         <MudButton OnClick="AddDataSize" Variant="Variant.Filled" Color="Color.Primary">Add Food</MudButton>
         <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
         <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+        <MudButton OnClick="OpenDialog">Log Calories</MudButton>
     </MudPaper>
     <div style="text-align:center; margin-top:2%;">
         <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
@@ -42,10 +43,13 @@
     private ICalories caloriesService { get; set; } = default!;
     [Inject]
     private ISnackbar snackBar { get; set; } = default!;
+    [Inject]
+    IDialogService dialogService { get; set; } = default!;
+
     public string Item { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        var response = await caloriesService.GetAllCouponAsync();
+        var response = await caloriesService.GetAllCaloriesAsync();
         if (response != null && response.IsSuccess)
         {
             Item = response.Result.ToString();
@@ -84,6 +88,24 @@
         {
             dataSize = dataSize - 1;
 
+        }
+    }
+
+    void OpenDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
+    }
+
+    private void Dialog_OnClose(DialogResult obj)
+    {
+        if (obj.Cancelled)
+        {
+            // The user cancelled the dialog
+        }
+        else
+        {
+            // Handle dialog close
         }
     }
 }

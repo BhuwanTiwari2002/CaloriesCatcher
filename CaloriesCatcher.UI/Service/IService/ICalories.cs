@@ -4,7 +4,7 @@ namespace CaloriesCatcher.UI.Service.IService
 {
     public interface ICalories
     {
-        Task<ResponseDto> GetAllCouponAsync();
+        Task<ResponseDto> GetAllCaloriesAsync();
 
     }
 }

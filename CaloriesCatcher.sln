@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.API", "CaloriesCatcher
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CaloriesCatcher.UI", "CaloriesCatcher.UI\CaloriesCatcher.UI.csproj", "{68B6DA7F-5439-4A2A-858E-CACA3DB18444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calories.API", "Calories.API\Calories.API.csproj", "{7A82E420-B636-464E-9ABE-E02F63CA5BCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calories.API", "Calories.API\Calories.API.csproj", "{7A82E420-B636-464E-9ABE-E02F63CA5BCA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
