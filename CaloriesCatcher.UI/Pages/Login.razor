@@ -2,8 +2,12 @@
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Identity;
 @using Newtonsoft.Json;
 @using System.Security.Claims;
+@using System.IdentityModel.Tokens.Jwt;
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
@@ -30,9 +34,10 @@
     private ITokenProvider tokenProvider { get; set; } = default!;
     [Inject]
     private NavigationManager navigationManager { get; set; } = default!;
-
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     protected override async Task OnInitializedAsync()
-    {}
+    { }
     private async Task OnLogin(EditContext context) // Note: Changed to Task instead of void
     {
         var response = await authService.LoginAsync(loginRequestDto);
@@ -40,15 +45,37 @@
         {
             // Gets the user Token and Information
             LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
+            await SignInUser(loginResponseDto);
             tokenProvider.SetToken(loginResponseDto.Token);
+
             // Navigate to the home page
             navigationManager.NavigateTo("/");
+            StateHasChanged();
         }
         else
         {
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
-
+    private async Task SignInUser(LoginResponseDto loginResponseDto)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        var jwt = handler.ReadJwtToken(loginResponseDto.Token);
+        var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+        /* Email */
+        identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
+            jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+        /* Sub */
+        identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
+            jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+        /* Name */
+        identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
+            jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+        /* Name */
+        identity.AddClaim(new Claim(ClaimTypes.Name,
+            jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+        var principal = new ClaimsPrincipal(identity);
+        //HttpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+    }
 
 }

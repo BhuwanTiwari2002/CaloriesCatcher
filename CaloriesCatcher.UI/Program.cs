@@ -23,6 +23,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICalories, CaloriesService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IJsInteropService, JsInteropService>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromHours(24);
+            options.LoginPath = "/Login";
+            options.AccessDeniedPath = "/Error";
+        });
 builder.Services.AddMudServices();
 var app = builder.Build();
 
@@ -37,9 +44,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

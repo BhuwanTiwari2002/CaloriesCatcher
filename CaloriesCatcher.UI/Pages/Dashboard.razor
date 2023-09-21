@@ -1,13 +1,15 @@
 ﻿@page "/"
 @using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
 <div style="float:left; width:40%; margin: 20px;">
     <MudText>Welcome</MudText>
     <MudPaper Class="pa-4">
         <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%" />
     </MudPaper>
     <MudPaper Class="pa-4 mt-2 d-flex justify-center">
-        <MudButton OnClick="OpenDialog"  Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
         <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
         <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
     </MudPaper>
@@ -27,14 +29,14 @@
                 <MudListItem Text="Pepsi" />
                 <MudListItem Text="Snack Bar" />
                 <MudListItem Text="Orange" />
-                <MudListItem Text="@Item" />
+                @foreach (var items in caloriesDtos)
+                {
+                    <MudListItem Text="@(items.CalorieName.ToString() + " " + items.Calorie)" />
+                }
             </MudList>
         </MudPaper>
     </MudItem>
 </div>
-
-<MudText>You are not Authorized</MudText>
-
 
 
 @code {
@@ -44,14 +46,17 @@
     private ISnackbar snackBar { get; set; } = default!;
     [Inject]
     IDialogService dialogService { get; set; } = default!;
-
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     public string Item { get; set; }
+    List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
     protected override async Task OnInitializedAsync()
     {
         var response = await caloriesService.GetAllCaloriesAsync();
         if (response != null && response.IsSuccess)
         {
-            Item = response.Result.ToString();
+            caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
+            StateHasChanged();
         }
         else
         {
