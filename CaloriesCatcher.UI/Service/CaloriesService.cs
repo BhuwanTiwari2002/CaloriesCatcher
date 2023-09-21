@@ -1,6 +1,8 @@
-﻿using CaloriesCatcher.UI.Service.IService;
+﻿using CaloriesCatcher.UI.Model;
+using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
 using KitchenComfort.Web.Models.Utility;
+using static System.Net.WebRequestMethods;
 
 namespace CaloriesCatcher.UI.Service
 {
@@ -11,6 +13,17 @@ namespace CaloriesCatcher.UI.Service
         {
             _baseService = baseService;
         }
+
+        public async Task<ResponseDto> CreateCaloriesAsync(CaloriesDto caloriesDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = caloriesDto,
+                Url = "https://localhost:7005/api/calories"
+            });
+        }
+
         public async Task<ResponseDto> GetAllCaloriesAsync()
         {
             return await _baseService.SendAsync(new RequestDto()

@@ -2,8 +2,8 @@
 @using CaloriesCatcher.UI.Service.IService;
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Date="caloriesDto.CalorieName" T="string" Label="Calories"></MudTextField>
-        <MudTextField @bind-Date="caloriesDto.Calorie" T="double" Label="CalorieName"></MudTextField>
+        <MudTextField @bind-Value="caloriesDto.CalorieName" T="string" Label="Calories"></MudTextField>
+        <MudTextField @bind-Value="caloriesDto.Calorie" T="double" Label="CalorieName"></MudTextField>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="LogCalories">Log Calorie</MudButton>
@@ -19,8 +19,9 @@
     private CaloriesDto caloriesDto = new CaloriesDto();
     void LogCalories()
     {
-        var test = caloriesDto.Calorie;
-        var test2 = caloriesDto.CalorieName;
+        caloriesDto.Date = DateTime.Now;
+        caloriesDto.UserId = "testId";
+        caloriesService.CreateCaloriesAsync(caloriesDto);
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         MudDialog.Close(DialogResult.Ok(true));
     }
