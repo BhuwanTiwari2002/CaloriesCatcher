@@ -4,6 +4,7 @@ using Calories.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Calories.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230922000226_AddedBirthDateToUserDetailModel")]
+    partial class AddedBirthDateToUserDetailModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,20 +89,6 @@ namespace Calories.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserDetails");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            BirthDate = new DateTime(2023, 9, 21, 19, 4, 46, 949, DateTimeKind.Local).AddTicks(1829),
-                            CalorieId = 1,
-                            DailyCalories = 1,
-                            Gender = "Male",
-                            Height = 100.0,
-                            RecipeFoodId = 1,
-                            UserId = "Test",
-                            Weight = 100.0
-                        });
                 });
 #pragma warning restore 612, 618
         }

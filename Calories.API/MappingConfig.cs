@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Calories.API.Models;
 using Calories.API.Models.Dto;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -13,6 +14,8 @@ namespace Calories.API
                 /* Source -> Destination */
                 config.CreateMap<CaloriesDto, Calories.API.Models.Calories>();
                 config.CreateMap<Calories.API.Models.Calories, CaloriesDto>();
+                config.CreateMap<UserDetailDto, UserDetail>();
+                config.CreateMap<UserDetail, UserDetailDto>();
             });
             return mappingConfig;
         }
