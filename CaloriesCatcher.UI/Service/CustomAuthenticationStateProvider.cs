@@ -1,33 +1,59 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
+using CaloriesCatcher.UI.Service.IService;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using KitchenComfort.Web.Models;
 using KitchenComfort.Web.Models.Utility;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace CaloriesCatcher.UI.Service
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ProtectedSessionStorage _sessionStorage;
-        private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
+        private readonly ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
+        private readonly IJsInteropService _jsInteropService;
 
-        public CustomAuthenticationStateProvider(ProtectedSessionStorage sessionStorage)
+        public CustomAuthenticationStateProvider(ProtectedSessionStorage sessionStorage, IJsInteropService jsInteropService)
         {
             _sessionStorage = sessionStorage;
+            _jsInteropService = jsInteropService;
         }
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
-                var userSessionStorageResult = await _sessionStorage.GetAsync<LoginResponseDto>(StaticType.LoginSession);
-                var userSession = userSessionStorageResult.Success ? userSessionStorageResult.Value : null;
-                if (userSession == null)
-                    return await Task.FromResult(new AuthenticationState(_anonymous));
-                var claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
+                // Read token from the cookie
+                var token = await _jsInteropService.GetCookieAsync(StaticType.TokenCookie);
+
+                if (string.IsNullOrEmpty(token))
                 {
-                    new Claim(ClaimTypes.Name, userSession.User.Id),
-                    new Claim(ClaimTypes.Email, userSession.User.Email)
-                }, "CalorieCatcherAuth"));
+                    return await Task.FromResult(new AuthenticationState(_anonymous));
+                }
+
+                // Decode the token and build the ClaimsPrincipal
+                var handler = new JwtSecurityTokenHandler();
+                var jwt = handler.ReadJwtToken(token);
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                // Add claims from JWT
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)?.Value));
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name)?.Value));
+                identity.AddClaim(new Claim(ClaimTypes.Name,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+
+                var claimsPrincipal = new ClaimsPrincipal(identity);
+
                 return await Task.FromResult(new AuthenticationState(claimsPrincipal));
             }
             catch
@@ -38,7 +64,6 @@ namespace CaloriesCatcher.UI.Service
 
         public async Task UpdateAuthenticationState(LoginResponseDto loginResponse)
         {
-            ClaimsPrincipal claimsPrincipal;
             if (loginResponse != null)
             {
                 // Check if User object or its properties are null
@@ -48,18 +73,42 @@ namespace CaloriesCatcher.UI.Service
                     throw new ArgumentNullException("User object or its properties are null");
                 }
 
+                // Store JWT token and user details in session storage
                 await _sessionStorage.SetAsync(StaticType.LoginSession, loginResponse);
-                claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, loginResponse.User.Id),
-                    new Claim(ClaimTypes.Email, loginResponse.User.Email)
-                }));
+                await _sessionStorage.SetAsync(StaticType.TokenCookie, loginResponse.Token);
+
+                // Decode JWT and create ClaimsIdentity
+                var handler = new JwtSecurityTokenHandler();
+                var jwt = handler.ReadJwtToken(loginResponse.Token);
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                // Add claims from JWT
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)?.Value));
+                identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name)?.Value));
+                identity.AddClaim(new Claim(ClaimTypes.Name,
+                    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+
+                var claimsPrincipal = new ClaimsPrincipal(identity);
+
+                // Set the JWT token as a persistent cookie that lasts for 7 days
+                await _jsInteropService.SetCookieAsync(StaticType.TokenCookie, loginResponse.Token, 7);
+
+                // Notify the authentication state has changed
+                NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
             }
             else
             {
+                // Delete session storage and session cookie
                 await _sessionStorage.DeleteAsync(StaticType.LoginSession);
+                await _jsInteropService.DeleteCookieAsync(StaticType.TokenCookie);
+
+                // Notify the authentication state has changed
+                NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
             }
         }
-
     }
 }

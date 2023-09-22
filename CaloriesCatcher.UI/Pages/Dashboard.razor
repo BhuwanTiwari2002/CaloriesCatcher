@@ -6,7 +6,7 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
         <div style="float:left; width:40%; margin: 20px;">
-            <MudText>Welcome</MudText>
+            <MudText>Welcome @context.User.Identity.Name</MudText>
             <MudPaper Class="pa-4">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%" />
             </MudPaper>

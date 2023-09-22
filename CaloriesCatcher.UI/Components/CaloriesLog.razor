@@ -10,17 +10,23 @@
     </DialogActions>
 </MudDialog>
 
+
 @code {
     [Inject]
     IDialogService dialogService { get; set; } = default!;
     [Inject]
     private ICalories caloriesService { get; set; } = default!;
+
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationState { get; set; } = default!;
+    
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private CaloriesDto caloriesDto = new CaloriesDto();
-    void LogCalories()
+    private async Task LogCalories()
     {
         caloriesDto.Date = DateTime.Now;
-        caloriesDto.UserId = "testId";
+        var authState = await authenticationState;
+        caloriesDto.UserId = authState.User.Identity.Name;
         caloriesService.CreateCaloriesAsync(caloriesDto);
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         MudDialog.Close(DialogResult.Ok(true));

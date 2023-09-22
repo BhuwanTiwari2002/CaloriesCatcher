@@ -1,5 +1,5 @@
-﻿using CaloriesCatcher.UI.Service.IService;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
+using CaloriesCatcher.UI.Service.IService;
 
 namespace CaloriesCatcher.UI.Service
 {
@@ -16,9 +16,21 @@ namespace CaloriesCatcher.UI.Service
         {
             await _jsRuntime.InvokeVoidAsync("setCookie", name, value, days);
         }
+
         public async Task DeleteCookieAsync(string name)
         {
             await _jsRuntime.InvokeVoidAsync("deleteCookie", name);
         }
+
+        public async Task SetSessionCookieAsync(string name, string value)
+        {
+            await _jsRuntime.InvokeVoidAsync("setSessionCookie", name, value);
+        }
+        
+        public async Task<string> GetCookieAsync(string name)
+        {
+            return await _jsRuntime.InvokeAsync<string>("getCookie", name);
+        }
+
     }
 }

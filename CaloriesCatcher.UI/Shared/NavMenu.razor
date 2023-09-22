@@ -1,41 +1,42 @@
 ﻿@using CaloriesCatcher.UI.Service.IService;
-<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    @if(!IsLoggedIn)
-    {
-        <MudNavGroup Title="User" Expanded="true">
-            <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
-            <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
-        </MudNavGroup>
-    }
-    <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
+@using CaloriesCatcher.UI.Service
+<AuthorizeView>
+    <Authorized>
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+            <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
+            <MudNavGroup Title="User" Expanded="true">
+                <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
+                <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
+            </MudNavGroup>
 
-    @if(IsLoggedIn)
-    {
-        <MudNavGroup Title="User" Expanded="true">
-            <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
-            <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
-        </MudNavGroup>
-    }
-</MudNavMenu>
+        </MudNavMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+            <MudNavGroup Title="User" Expanded="true">
+                <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
+                <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
+            </MudNavGroup>
+            <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
+        </MudNavMenu>
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
-    [Inject]
-    private ITokenProvider tokenProvider { get; set; } = default!;
+    
+
     [Inject]
     private NavigationManager navigationManager { get; set; } = default!;
-    public bool IsLoggedIn { get; set; } = false;
-    protected override async Task OnInitializedAsync()
-    {
-        var token = tokenProvider.GetToken();
-        if(token != null)
-        {
-            IsLoggedIn = true;
-        }
-    }
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     private async Task Logout()
     {
-        tokenProvider.ClearToken();
+        var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+        await customAuthenticationStateProvider.UpdateAuthenticationState(null);
         navigationManager.NavigateTo("/", true);
     }
+
 }
