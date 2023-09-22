@@ -38,7 +38,7 @@ namespace Calories.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{userId}")]
         public ResponseDto GetByUser(string userId)
         {
             try
