@@ -8,6 +8,7 @@ namespace Calories.API.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Calories.API.Models.Calories> Calories { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
+        public DbSet<RecipeFood> RecipeFoods { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

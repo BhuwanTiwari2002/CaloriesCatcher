@@ -4,6 +4,7 @@ using Calories.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Calories.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230922213900_AddedRecipeFoodTable")]
+    partial class AddedRecipeFoodTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,29 +50,6 @@ namespace Calories.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Calories");
-                });
-
-            modelBuilder.Entity("Calories.API.Models.RecipeFood", b =>
-                {
-                    b.Property<int>("RecipeFoodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeFoodId"));
-
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RecipeFoodId");
-
-                    b.ToTable("RecipeFoods");
                 });
 
             modelBuilder.Entity("Calories.API.Models.UserDetail", b =>
@@ -114,7 +94,7 @@ namespace Calories.API.Migrations
                         new
                         {
                             Id = 1,
-                            BirthDate = new DateTime(2023, 9, 22, 16, 41, 46, 365, DateTimeKind.Local).AddTicks(1402),
+                            BirthDate = new DateTime(2023, 9, 22, 16, 39, 0, 81, DateTimeKind.Local).AddTicks(2897),
                             CalorieId = 1,
                             DailyCalories = 1,
                             Gender = "Male",
