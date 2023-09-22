@@ -44,7 +44,6 @@
         if (response != null && response.IsSuccess)
         {
             // Gets the user Token and Information
-            
             LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
             loginResponseDto.User.Name = "User";
             loginResponseDto.User.PhoneNumber = "920213123";

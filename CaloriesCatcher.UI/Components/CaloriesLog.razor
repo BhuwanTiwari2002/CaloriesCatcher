@@ -2,31 +2,27 @@
 @using CaloriesCatcher.UI.Service.IService;
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="caloriesDto.CalorieName" T="string" Label="Calories"></MudTextField>
-        <MudTextField @bind-Value="caloriesDto.Calorie" T="double" Label="CalorieName"></MudTextField>
+        <MudTextField @bind-Value="caloriesDto.CalorieName" T="string" Label="Calorie Name"></MudTextField>
+        <MudTextField @bind-Value="caloriesDto.Calorie" T="double" Label="Calories"></MudTextField>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="LogCalories">Log Calorie</MudButton>
     </DialogActions>
 </MudDialog>
-
-
 @code {
     [Inject]
     IDialogService dialogService { get; set; } = default!;
     [Inject]
     private ICalories caloriesService { get; set; } = default!;
-
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
-    
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private CaloriesDto caloriesDto = new CaloriesDto();
     private async Task LogCalories()
     {
         caloriesDto.Date = DateTime.Now;
         var authState = await authenticationState;
-        caloriesDto.UserId = authState.User.Identity.Name;
+        caloriesDto.UserId = authState.User.FindFirst("sub")?.Value;
         caloriesService.CreateCaloriesAsync(caloriesDto);
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         MudDialog.Close(DialogResult.Ok(true));

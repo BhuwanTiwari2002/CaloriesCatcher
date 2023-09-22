@@ -9,7 +9,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Brightness6" Color="Color.Inherit" Edge="Edge.End" OnClick="@ToggleTheme" />
-        <MudText Style="padding-left: 20px;">Welcome @user</MudText>
+        <MudText Style="padding-left: 20px;">@user</MudText>
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
@@ -35,7 +35,7 @@
         if (firstRender)
         {
             var authState = await authenticationState;
-            user = authState.User.Identity.Name;
+            user = $"Welcome {authState.User.Identity.Name}";
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             StateHasChanged();
         }
