@@ -44,8 +44,14 @@
         if (response != null && response.IsSuccess)
         {
             // Gets the user Token and Information
+            
             LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
-            await SignInUser(loginResponseDto);
+            loginResponseDto.User.Name = "User";
+            loginResponseDto.User.PhoneNumber = "920213123";
+            var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+            await customAuthenticationStateProvider.UpdateAuthenticationState(loginResponseDto);
+            
+          //   await SignInUser(loginResponseDto);
             tokenProvider.SetToken(loginResponseDto.Token);
 
             // Navigate to the home page

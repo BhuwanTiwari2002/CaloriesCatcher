@@ -1,4 +1,4 @@
-﻿<MudText Typo="Typo.h4" Color="Color.Primary">List Of @ListName</MudText>
+﻿@*<MudText Typo="Typo.h4" Color="Color.Primary">List Of @ListName</MudText>*@
 <div style="margin-top:3%; margin-bottom:3%">
     <MudTable Items="_items" Height="500px" Breakpoint="Breakpoint.Sm" Virtualize="true" FixedHeader="true">
         <HeaderContent>
@@ -14,14 +14,15 @@
     </MudTable>
 </div>
 @code {
+    /*
     @typeparam T /* The user needs to pass the type
                     Then this compontent will use that 
-                    to display for that type */
+                    to display for that type 
     [Parameter]
     public string ListName { get; set; } = string.Empty;
     [Parameter]
     public List<T> List { get; set; } = default!;
-
+    */
     public class TestItem
     {
         public string Column1 { get; set; }

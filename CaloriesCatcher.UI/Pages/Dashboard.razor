@@ -1,42 +1,49 @@
-﻿@page "/"
-@using CaloriesCatcher.UI.Components;
-@using CaloriesCatcher.UI.Model;
-@using CaloriesCatcher.UI.Service.IService;
-@using Newtonsoft.Json;
-<div style="float:left; width:40%; margin: 20px;">
-    <MudText>Welcome</MudText>
-    <MudPaper Class="pa-4">
-        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%" />
-    </MudPaper>
-    <MudPaper Class="pa-4 mt-2 d-flex justify-center">
-        <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-        <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
-        <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
-    </MudPaper>
-    <div style="text-align:center; margin-top:2%;">
-        <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
-        <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
-    </div>
-</div>
-<div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
-    <MudItem xs="12" md="6">
-        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
-        <MudPaper Width="100%">
-            <MudList>
-                <MudListItem Text="Apple" />
-                <MudListItem Text="Qdoba Bowl" />
-                <MudListItem Text="Water" />
-                <MudListItem Text="Pepsi" />
-                <MudListItem Text="Snack Bar" />
-                <MudListItem Text="Orange" />
-                @foreach (var items in caloriesDtos)
-                {
-                    <MudListItem Text="@(items.CalorieName.ToString() + " " + items.Calorie)" />
-                }
-            </MudList>
-        </MudPaper>
-    </MudItem>
-</div>
+﻿<AuthorizeView>
+    <Authorized>
+        @page "/"
+        @using CaloriesCatcher.UI.Components;
+        @using CaloriesCatcher.UI.Model;
+        @using CaloriesCatcher.UI.Service.IService;
+        @using Newtonsoft.Json;
+        <div style="float:left; width:40%; margin: 20px;">
+            <MudText>Welcome</MudText>
+            <MudPaper Class="pa-4">
+                <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%" />
+            </MudPaper>
+            <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+                <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
+                <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+            </MudPaper>
+            <div style="text-align:center; margin-top:2%;">
+                <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
+            </div>
+        </div>
+        <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
+            <MudItem xs="12" md="6">
+                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
+                <MudPaper Width="100%">
+                    <MudList>
+                        <MudListItem Text="Apple" />
+                        <MudListItem Text="Qdoba Bowl" />
+                        <MudListItem Text="Water" />
+                        <MudListItem Text="Pepsi" />
+                        <MudListItem Text="Snack Bar" />
+                        <MudListItem Text="Orange" />
+                        @foreach (var items in caloriesDtos)
+                        {
+                            <MudListItem Text="@(items.CalorieName.ToString() + " " + items.Calorie)" />
+                        }
+                    </MudList>
+                </MudPaper>
+            </MudItem>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <MudText>Sorry You need to Login</MudText>
+    </NotAuthorized>
+</AuthorizeView>
 
 
 @code {
