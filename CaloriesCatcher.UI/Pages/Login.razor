@@ -25,17 +25,12 @@
 
 @code {
 
+    [Inject]private IAuthService authService { get; set; } = default!;
+    [Inject]private ISnackbar snackBar { get; set; } = default!;
+    [Inject]private ITokenProvider tokenProvider { get; set; } = default!;
+    [Inject]private NavigationManager navigationManager { get; set; } = default!;
+    [Inject]AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     LoginRequestDto loginRequestDto = new LoginRequestDto();
-    [Inject]
-    private IAuthService authService { get; set; } = default!;
-    [Inject]
-    private ISnackbar snackBar { get; set; } = default!;
-    [Inject]
-    private ITokenProvider tokenProvider { get; set; } = default!;
-    [Inject]
-    private NavigationManager navigationManager { get; set; } = default!;
-    [Inject]
-    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     protected override async Task OnInitializedAsync()
     { }
     private async Task OnLogin(EditContext context) // Note: Changed to Task instead of void
@@ -58,5 +53,4 @@
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
-
 }

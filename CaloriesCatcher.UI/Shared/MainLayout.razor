@@ -24,8 +24,7 @@
 </MudLayout>
 
 @code {
-    [CascadingParameter]
-    Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     bool _drawerOpen = true;
     bool _isDarkMode = false;  // By default, set to light mode
     string user = string.Empty;

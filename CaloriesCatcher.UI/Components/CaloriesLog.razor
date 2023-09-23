@@ -10,14 +10,13 @@
     </DialogActions>
 </MudDialog>
 @code {
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
-    [Inject]
-    private ICalories caloriesService { get; set; } = default!;
-    [CascadingParameter]
-    Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private ICalories caloriesService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private CaloriesDto caloriesDto = new CaloriesDto();
+    
     private async Task LogCalories()
     {
         caloriesDto.Date = DateTime.Now;

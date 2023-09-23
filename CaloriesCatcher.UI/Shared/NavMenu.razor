@@ -26,17 +26,12 @@
 
 
 @code {
-    
-
-    [Inject]
-    private NavigationManager navigationManager { get; set; } = default!;
-    [Inject]
-    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
+    [Inject]private NavigationManager navigationManager { get; set; } = default!;
+    [Inject]AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     private async Task Logout()
     {
         var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
         await customAuthenticationStateProvider.UpdateAuthenticationState(null);
         navigationManager.NavigateTo("/", true);
     }
-
 }

@@ -46,28 +46,16 @@
 
 
 @code {
-    [Inject]
-    private ICalories caloriesService { get; set; } = default!;
-    [Inject]
-    private ISnackbar snackBar { get; set; } = default!;
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
-    [Inject]
-    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
+    [Inject] private ICalories caloriesService { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationState { get; set; } = default!;
     public string Item { get; set; }
     List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
     protected override async Task OnInitializedAsync()
     {
-        var response = await caloriesService.GetAllCaloriesAsync();
-        if (response != null && response.IsSuccess)
-        {
-            caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
-            StateHasChanged();
-        }
-        else
-        {
-            snackBar.Add("Something went wrong", Severity.Error);
-        }
+        RefreshCaloriesData();
     }
     int i = -1;
     int dataSize = 4;
@@ -96,6 +84,20 @@
         {
             dataSize = dataSize - 1;
 
+        }
+    }
+    async Task RefreshCaloriesData()
+    {
+        var authState = await authenticationState;
+        var response = await caloriesService.GetCaloriesByUserAsync(authState.User.FindFirst("sub")?.Value);
+        if (response != null && response.IsSuccess)
+        {
+            caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
+            StateHasChanged();
+        }
+        else
+        {
+            snackBar.Add("Something went wrong", Severity.Error);
         }
     }
     void OpenDialog()

@@ -20,12 +20,9 @@
 </div>
 
 @code {
-
+    [Inject]private IAuthService authService { get; set; } = default!;
+    [Inject]private ISnackbar snackBar { get; set; } = default!;
     RegisterationRequestDto registerationRequestDto = new RegisterationRequestDto();
-    [Inject]
-    private IAuthService authService { get; set; } = default!;
-    [Inject]
-    private ISnackbar snackBar { get; set; } = default!;
     protected override async Task OnInitializedAsync()
     {}
     private async void OnRegister(EditContext context)

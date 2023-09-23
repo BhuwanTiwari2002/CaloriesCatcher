@@ -7,6 +7,6 @@ namespace CaloriesCatcher.UI.Service.IService
     {
         Task<ResponseDto> GetAllCaloriesAsync();
         Task<ResponseDto> CreateCaloriesAsync(CaloriesDto caloriesDto);
-
+        Task<ResponseDto> GetCaloriesByUserAsync(string UserId);
     }
 }
