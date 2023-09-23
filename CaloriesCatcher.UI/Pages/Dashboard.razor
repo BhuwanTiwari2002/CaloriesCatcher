@@ -6,6 +6,8 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
         <div style="float:left; width:40%; margin: 20px;">
+            <MudText>User Id: @UserId</MudText>
+            <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
             <MudPaper Class="pa-4">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
             </MudPaper>
@@ -23,18 +25,16 @@
             <MudItem xs="12" md="6">
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
                 <MudPaper Width="100%">
-                    <MudList>
-                        <MudListItem Text="Apple" />
-                        <MudListItem Text="Qdoba Bowl" />
-                        <MudListItem Text="Water" />
-                        <MudListItem Text="Pepsi" />
-                        <MudListItem Text="Snack Bar" />
-                        <MudListItem Text="Orange" />
-                        @foreach (var items in caloriesDtos)
-                        {
-                            <MudListItem Text="@(items.CalorieName.ToString() + " " + items.Calorie)" />
-                        }
-                    </MudList>
+                    <MudTable Items="caloriesDtos" Class="calories-table">
+                        <HeaderContent>
+                            <MudTh>Calorie Name</MudTh>
+                            <MudTh>Calorie Value</MudTh>
+                        </HeaderContent>
+                        <RowTemplate Context="items">
+                            <MudTd>@items.CalorieName</MudTd>
+                            <MudTd>@items.Calorie</MudTd>
+                        </RowTemplate>
+                    </MudTable>
                 </MudPaper>
             </MudItem>
         </div>
@@ -43,19 +43,17 @@
         <MudText>Sorry You need to Login</MudText>
     </NotAuthorized>
 </AuthorizeView>
-
-
 @code {
     [Inject] private ICalories caloriesService { get; set; } = default!;
     [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IDialogService dialogService { get; set; } = default!;
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
-    public string Item { get; set; }
+    public string UserId { get; set; }
     List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
     protected override async Task OnInitializedAsync()
     {
-        RefreshCaloriesData();
+        await RefreshCaloriesData();
     }
     int i = -1;
     int dataSize = 4;
@@ -89,7 +87,8 @@
     async Task RefreshCaloriesData()
     {
         var authState = await authenticationState;
-        var response = await caloriesService.GetCaloriesByUserAsync(authState.User.FindFirst("sub")?.Value);
+        var response = await caloriesService.GetCaloriesByUserAsync(authState.User.FindFirst("Sub")?.Value);
+        UserId =  authState.User.FindFirst("sub")?.Value;
         if (response != null && response.IsSuccess)
         {
             caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));

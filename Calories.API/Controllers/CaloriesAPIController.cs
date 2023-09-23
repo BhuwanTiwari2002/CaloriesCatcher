@@ -43,8 +43,8 @@ namespace Calories.API.Controllers
         {
             try
             {
-                Calories.API.Models.Calories obj = _db.Calories.First(x => x.UserId == userId);
-                _response.Result = _mapper.Map<CaloriesDto>(obj);
+                List<Calories.API.Models.Calories> obj = _db.Calories.Where(x => x.UserId == userId).ToList();
+                _response.Result = _mapper.Map<List<CaloriesDto>>(obj);
             }
             catch (Exception ex)
             {

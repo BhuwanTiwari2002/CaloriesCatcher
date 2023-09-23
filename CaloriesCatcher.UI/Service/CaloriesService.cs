@@ -24,13 +24,13 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
-        public async Task<ResponseDto> GetCaloriesByUserAsync(string UserId)
+        public async Task<ResponseDto> GetCaloriesByUserAsync(string userId)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Data = UserId,
-                Url = "https://localhost:7005/api/calories"
+                Data = userId,
+                Url = $"https://localhost:7005/api/calories"
             });
         }
 
