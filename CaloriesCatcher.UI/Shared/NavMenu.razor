@@ -9,19 +9,8 @@
                 <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
                 <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
             </MudNavGroup>
-
         </MudNavMenu>
     </Authorized>
-    <NotAuthorized>
-        <MudNavMenu>
-            <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-            <MudNavGroup Title="User" Expanded="true">
-                <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
-                <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
-            </MudNavGroup>
-            <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
-        </MudNavMenu>
-    </NotAuthorized>
 </AuthorizeView>
 
 
