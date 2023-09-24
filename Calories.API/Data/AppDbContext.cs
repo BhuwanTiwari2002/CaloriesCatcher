@@ -9,6 +9,7 @@ namespace Calories.API.Data
         public DbSet<Calories.API.Models.Calories> Calories { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
         public DbSet<RecipeFood> RecipeFoods { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -1,13 +1,13 @@
-﻿namespace Calories.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Calories.API.Models
 {
     public class Recipe
     {
+        [Key]
         public int RecipeId { get; set; }
-        public string RecipeName { get; set; }
-        //
+        [Required]
+        public string RecipeName { get; set; } = string.Empty;
         //public double RecipeCalories { get; set; }
-        //public int Protein { get; set; }
-        //public int Carbs { get; set; }
-        //public int Fats { get; set; }
     }
 }

@@ -18,6 +18,8 @@ namespace Calories.API
                 config.CreateMap<UserDetail, UserDetailDto>();
                 config.CreateMap<RecipeFoodDto, RecipeFood>();
                 config.CreateMap<RecipeFood, RecipeFoodDto>();
+                config.CreateMap<RecipeDto, Recipe>();
+                config.CreateMap<Recipe, RecipeFoodDto>();
             });
             return mappingConfig;
         }
