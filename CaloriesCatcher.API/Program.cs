@@ -6,6 +6,7 @@ using AuthApi.API.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,17 +17,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-builder.Services.AddAuthentication().AddGoogle("Google", options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle("Google", options =>
 {
     options.ClientId = builder.Configuration["ApiSettings:GoogleAuth:Client-Id"];
     options.ClientSecret = builder.Configuration["ApiSettings:GoogleAuth:Client-Secret"];
     options.Events.OnTicketReceived = context =>
     {
-        // Do something when the user is authenticated, e.g., create a JWT token.
-        // You can access the user info from context.Principal
         return Task.CompletedTask;
     };
-    options.CallbackPath = new PathString("/signin-google");  // The URL to return the user to after Google authentication
 });
 
 

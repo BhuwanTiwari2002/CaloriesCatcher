@@ -22,13 +22,20 @@ public class GoogleAuthController : ControllerBase
         return Challenge(new AuthenticationProperties
         {
             RedirectUri = "/api/signin-google/GoogleLogin"
-        }, GoogleDefaults.AuthenticationScheme);
+        }, "Google");
     }
 
     [HttpGet("GoogleLogin")]
-    public IActionResult GoogleLogin()
+    public async Task<IActionResult> GoogleLogin()
     {
-        var claimsPrincipal = HttpContext.User;
+        var authResult = await HttpContext.AuthenticateAsync("Google");
+        if (!authResult.Succeeded)
+        {
+            var error = authResult.Failure?.Message;
+            return BadRequest($"Google authentication failed. Reason: {error}");
+        }
+
+        var claimsPrincipal = authResult.Principal;
 
         if (claimsPrincipal?.Identity?.IsAuthenticated == true)
         {
@@ -38,12 +45,10 @@ public class GoogleAuthController : ControllerBase
                 UserName = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value,
                 Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value
             };
-
             var jwtToken = _jwtTokenGenerator.GenerateToken(applicationUser);
             return Redirect($"https://localhost:7024/?token={jwtToken}");
         }
 
-        // Handle the error appropriately here
         return BadRequest("Google authentication failed.");
     }
 }
