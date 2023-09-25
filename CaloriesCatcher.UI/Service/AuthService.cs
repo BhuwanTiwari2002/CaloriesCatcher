@@ -26,6 +26,18 @@ namespace CaloriesCatcher.UI.Service
                 Url = "https://localhost:7002/api/auth/login"
             });
         }
+        public void StartGoogleLogin()
+        {
+            // Redirect to the API's Google Login endpoint to start the Google authentication process
+            var googleLoginUrl = "https://localhost:7002/api/signin-google/StartGoogleLogin";
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = googleLoginUrl,
+                UseShellExecute = true
+            });
+        }
+
+
 
         public async Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto)
         {

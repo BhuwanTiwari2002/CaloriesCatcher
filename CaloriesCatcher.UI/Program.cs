@@ -2,10 +2,13 @@ using CaloriesCatcher.UI.Service;
 using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models.Utility;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 

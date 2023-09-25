@@ -18,6 +18,7 @@
             <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" InputType="InputType.Password" FullWidth />
             <div class="text-center mt-4">
                 <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
+                <MudButton ButtonType="ButtonType.Button" Class="mt-2 ml-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.LockOpen" Color="Color.Secondary" Size="Size.Large" @onclick="OnGoogleLogin">Login with Google</MudButton>
             </div>
         </EditForm>
     </MudPaper>
@@ -52,5 +53,9 @@
         {
             snackBar.Add("Something went wrong", Severity.Error);
         }
+    }
+    private void OnGoogleLogin()
+    {
+        authService.StartGoogleLogin();
     }
 }

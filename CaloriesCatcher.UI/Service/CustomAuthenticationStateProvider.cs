@@ -24,7 +24,6 @@ namespace CaloriesCatcher.UI.Service
             _sessionStorage = sessionStorage;
             _jsInteropService = jsInteropService;
         }
-
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
@@ -60,7 +59,6 @@ namespace CaloriesCatcher.UI.Service
                 return await Task.FromResult(new AuthenticationState(_anonymous));
             }
         }
-
         public async Task UpdateAuthenticationState(LoginResponseDto loginResponse)
         {
             if (loginResponse != null)
@@ -109,5 +107,38 @@ namespace CaloriesCatcher.UI.Service
                 NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(_anonymous)));
             }
         }
+        public async Task HandleGoogleLogin(string googleJwtToken)
+        {
+            if (string.IsNullOrEmpty(googleJwtToken))
+            {
+                // Log the error or throw an exception
+                throw new ArgumentNullException("Token is null or empty");
+            }
+
+            // Decode JWT and create ClaimsIdentity
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(googleJwtToken);
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Add claims from JWT
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)?.Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name)?.Value));
+            identity.AddClaim(new Claim(ClaimTypes.Name,
+                jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+
+            var claimsPrincipal = new ClaimsPrincipal(identity);
+
+            // Set the JWT token as a persistent cookie that lasts for 7 days
+            await _jsInteropService.SetCookieAsync(StaticType.TokenCookie, googleJwtToken, 7);
+
+            // Notify the authentication state has changed
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
+        }
+
+
     }
 }
