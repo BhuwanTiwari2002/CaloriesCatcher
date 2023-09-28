@@ -30,7 +30,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 // Read token from the cookie
                 var token = await _jsInteropService.GetCookieAsync(StaticType.TokenCookie);
-
+                var token2 = await _jsInteropService.GetCookieAsync(".AspNetCore.Cookies");
                 if (string.IsNullOrEmpty(token))
                 {
                     return await Task.FromResult(new AuthenticationState(_anonymous));

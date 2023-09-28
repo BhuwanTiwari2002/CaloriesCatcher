@@ -14,7 +14,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Content Include="..\..\..\..\Downloads\background.jpg">
+      <Link>wwwroot\images\background.jpg</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\background2.jpg">
+      <Link>wwwroot\images\background2.jpg</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\calories.png">
+      <Link>wwwroot\images\calories.png</Link>
+    </Content>
+    <Content Include="..\..\..\..\Downloads\logo.png">
+      <Link>wwwroot\images\logo.png</Link>
+    </Content>
   </ItemGroup>
 
 </Project>
