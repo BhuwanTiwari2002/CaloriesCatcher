@@ -46,7 +46,7 @@ public class GoogleAuthController : ControllerBase
                 Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value
             };
             var jwtToken = _jwtTokenGenerator.GenerateToken(applicationUser);
-            return Redirect($"https://localhost:7024/?token={jwtToken}");
+            return Redirect($"https://localhost:7024/login?token={jwtToken}");
         }
 
         return BadRequest("Google authentication failed.");

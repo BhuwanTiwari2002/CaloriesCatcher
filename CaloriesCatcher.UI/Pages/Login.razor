@@ -8,6 +8,8 @@
 @using Newtonsoft.Json;
 @using System.Security.Claims;
 @using System.IdentityModel.Tokens.Jwt;
+@using System.Web
+
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
@@ -25,27 +27,47 @@
 </div>
 
 @code {
-
-    [Inject]private IAuthService authService { get; set; } = default!;
-    [Inject]private ISnackbar snackBar { get; set; } = default!;
-    [Inject]private ITokenProvider tokenProvider { get; set; } = default!;
-    [Inject]private NavigationManager navigationManager { get; set; } = default!;
-    [Inject]AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
+    [Inject] private IAuthService authService { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] private ITokenProvider tokenProvider { get; set; } = default!;
+    [Inject] private NavigationManager navigationManager { get; set; } = default!;
+    [Inject] AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     LoginRequestDto loginRequestDto = new LoginRequestDto();
-    protected override async Task OnInitializedAsync()
-    { }
-    private async Task OnLogin(EditContext context) // Note: Changed to Task instead of void
+
+    private string token;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+            var url = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+            var tokenParam = "token=";
+            var tokenIndex = url.IndexOf(tokenParam);
+            if (tokenIndex >= 0)
+            {
+                var tokenValueStartIndex = tokenIndex + tokenParam.Length;
+                token = url.Substring(tokenValueStartIndex);
+                var ampersandIndex = token.IndexOf('&');
+                if (ampersandIndex >= 0)
+                {
+                    token = token.Substring(0, ampersandIndex);
+                }
+                var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+                customAuthenticationStateProvider.HandleGoogleLogin(token);
+                navigationManager.NavigateTo("/", true);
+            }
+            StateHasChanged();  // Notify Blazor that the state has changed and a re-render is necessary
+    }
+
+
+    private async Task OnLogin(EditContext context)
     {
         var response = await authService.LoginAsync(loginRequestDto);
         if (response != null && response.IsSuccess)
         {
-            // Gets the user Token and Information
             LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
             loginResponseDto.User.Name = "User";
             loginResponseDto.User.PhoneNumber = "920213123";
             var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
             await customAuthenticationStateProvider.UpdateAuthenticationState(loginResponseDto);
-            // Navigate to the home page
             navigationManager.NavigateTo("/", true);
             StateHasChanged();
         }
@@ -54,8 +76,14 @@
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
+
     private void OnGoogleLogin()
     {
         authService.StartGoogleLogin();
     }
 }
+<script>
+    window.reloadPage = function () {
+        location.reload();
+    }
+</script>
