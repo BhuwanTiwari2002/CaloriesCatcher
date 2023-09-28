@@ -40,21 +40,32 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        <NotAuthorzied />
+        <NotAuthorzied/>
     </NotAuthorized>
 </AuthorizeView>
+
 @code {
-    [Inject] private ICalories caloriesService { get; set; } = default!;
-    [Inject] private ISnackbar snackBar { get; set; } = default!;
-    [Inject] IDialogService dialogService { get; set; } = default!;
+
+    [Inject]
+    private ICalories caloriesService { get; set; } = default!;
+
+    [Inject]
+    private ISnackbar snackBar { get; set; } = default!;
+
+    [Inject]
+    IDialogService dialogService { get; set; } = default!;
+
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
+
     public string UserId { get; set; }
     List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
+
     protected override async Task OnInitializedAsync()
     {
         await RefreshCaloriesData();
     }
+
     int i = -1;
     int dataSize = 4;
     double[] data = { 77, 25, 20, 5 };
@@ -62,33 +73,34 @@
     // change to edit
     void EditData()
     {
-        /* var new_data = new double[dataSize];
+    /* var new_data = new double[dataSize];
         for (int i = 0; i < new_data.Length; i++)
         new_data[i] = random.NextDouble() * 100;
         data = new_data;
         StateHasChanged(); */
     }
+
     void AddDataSize()
     {
         if (dataSize < 20)
         {
             dataSize = dataSize + 1;
-
         }
     }
+
     void RemoveDataSize()
     {
         if (dataSize > 0)
         {
             dataSize = dataSize - 1;
-
         }
     }
+
     async Task RefreshCaloriesData()
     {
         var authState = await authenticationState;
         var response = await caloriesService.GetCaloriesByUserAsync(authState.User.FindFirst("Sub")?.Value);
-        UserId =  authState.User.FindFirst("sub")?.Value;
+        UserId = authState.User.FindFirst("sub")?.Value;
         if (response != null && response.IsSuccess)
         {
             caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
@@ -99,9 +111,12 @@
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
-    void OpenDialog()
+
+    async void OpenDialog()
     {
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
+        var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
+        var result = await dialog.Result;
     }
+
 }

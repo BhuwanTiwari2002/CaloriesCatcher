@@ -24,7 +24,6 @@
         caloriesService.CreateCaloriesAsync(caloriesDto);
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         MudDialog.Close(DialogResult.Ok(true));
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
 }
