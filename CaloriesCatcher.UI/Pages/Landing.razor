@@ -1,39 +1,54 @@
 @page "/landing" 
-<link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 
-<body style="background-image:url(images/calories.png)">
-
-<div style="text-align:center; float:left; width:30%; margin-top:20%; margin-bottom:10%; margin-right:3%">
-    <MudImage Src="images/logo.png" Alt="Duck Logo" Elevation="25" Class="rounded-lg" Width="100" Height="100" />
-    <div style="background-color:rgba(206,210,207,0.5); color:rgb(10,71,26)">
-       
-        <MudText Typo="Typo.h3">Catching Your Calories</MudText>
-        <MudText Typo="Typo.h5">Detailed Description of Calorie Catcher and why its better than the other apps</MudText>
-    </div>
-</div>
-
-@* <div style="float:right; width:50%; margin:auto;margin-top:20%; margin-bottom:10%;">
-       <MudImage Src="images/calories.jpg" Alt="calories" Elevation="25" Class="rounded-lg"/>
-   
-    </div> *@
-
-</body>
-<div style="margin-top:20%">
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Sign Up Today!</MudButton>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 mt-5 d-md-flex align-items-md-stretch">
-            <div class="count-box">
-                
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full" Style="height: 50vh; background: linear-gradient(135deg, #56CCF2, #2F80ED);">
+            <div style="position: absolute; top: 20%; left: 15%; transform: translateY(-30%); text-align: left; z-index: 2;">
+                <MudText Color="Color.Default" Typo="Typo.h1">Calorie Catcher</MudText>
+                <MudText Color="Color.Default" Typo="Typo.h3">Track, Analyze & Reach Your Nutritional Goals</MudText>
             </div>
-        </div>
+            <div style="position: absolute; top: 30%; right: 10%; transform: translateY(-50%); z-index: 2;">
+                <MudImage Src="images/logo.png" Alt="Duck Logo" Width="300" Height="300" /> <!-- Adjust the path, alt text, and dimensions as needed -->
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+
+<!-- Features of the App -->
+<MudGrid Class="mt-5">
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h4">Easy Tracking</MudText>
+            <MudText>Log your meals in seconds with our intuitive interface.</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h4">Comprehensive Analysis</MudText>
+            <MudText>Get detailed insights into your calorie and nutrient intake.</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h4">Personalized Plans</MudText>
+            <MudText>Create goals tailored to your unique dietary needs.</MudText>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<!-- About the App -->
+<div class="mt-7 mb-4 ms-3 align-content-center">
+    <MudText Typo="Typo.h2">Why Calorie Catcher?</MudText>
+    <MudPaper Style="background-color:rgba(206,210,207,0.5); color:rgb(10,71,26);" Class="p-4">
+        <MudImage Src="images/logo.png" Alt="Duck Logo" Elevation="25" Class="rounded-lg mr-3" Width="100" Height="100" style="float: left;"/>
+        <MudText Typo="Typo.h3">Leading the Way in Nutritional Tracking</MudText>
+        <MudText Typo="Typo.h5">Calorie Catcher is not just another calorie counting app. We understand the challenges of maintaining a healthy lifestyle. That's why we've crafted an app that not only tracks your intake but also provides actionable insights to help you stay on the right path. With our advanced algorithms, expansive food database, and user-friendly design, making healthier choices has never been easier.</MudText>
+    </MudPaper>
+    <div class="mt-3" style="width: 30%">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Get Started - It's Free!</MudButton>
     </div>
 </div>
 
-<Footer></Footer>
-        
-@code {
-
-}
+<!-- Footer -->
+<CalorieFooter/>
