@@ -1,4 +1,5 @@
-﻿using CaloriesCatcher.UI.Service.IService;
+﻿using CaloriesCatcher.UI.Model;
+using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
 using KitchenComfort.Web.Models.Utility;
 
@@ -36,9 +37,6 @@ namespace CaloriesCatcher.UI.Service
                 UseShellExecute = true
             });
         }
-
-
-
         public async Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
@@ -47,6 +45,29 @@ namespace CaloriesCatcher.UI.Service
                 Data = registerationRequestDto,
                 Url = "https://localhost:7002/api/auth/register"
             });
+        }
+        public async Task<ResponseDto?> ForgotPasswordAsync(string email)
+        {
+            var requestDto = new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = new { Email = email },  // An anonymous type for the request body
+                Url = "https://localhost:7002/api/auth/forgot-password"
+            };
+
+            return await _baseService.SendAsync(requestDto);
+        }
+
+        public async Task<ResponseDto?> ResetPasswordAsync(PasswordResetRequest request)
+        {
+            var requestDto = new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = request,
+                Url = "https://localhost:7002/api/auth/reset-password"
+            };
+
+            return await _baseService.SendAsync(requestDto);
         }
     }
 }

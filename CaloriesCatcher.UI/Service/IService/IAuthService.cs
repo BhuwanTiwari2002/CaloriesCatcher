@@ -1,4 +1,5 @@
-﻿using KitchenComfort.Web.Models;
+﻿using CaloriesCatcher.UI.Model;
+using KitchenComfort.Web.Models;
 
 namespace CaloriesCatcher.UI.Service.IService
 {
@@ -8,5 +9,7 @@ namespace CaloriesCatcher.UI.Service.IService
         Task<ResponseDto?> RegisterAsync(RegisterationRequestDto registerationRequestDto);
         Task<ResponseDto?> AssignRoleAsync(RegisterationRequestDto registerationRequestDto);
         public void StartGoogleLogin();
+        Task<ResponseDto?> ForgotPasswordAsync(string email);
+        Task<ResponseDto?> ResetPasswordAsync(PasswordResetRequest request);
     }
 }
