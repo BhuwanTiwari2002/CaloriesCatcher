@@ -2,7 +2,8 @@ namespace AuthApi.API.Models;
 
 public class PasswordResetRequest
 {
-    public string Email { get; set; } 
+    public string Email { get; set; }
     public string ResetCode { get; set; }
-    public string Token { get; set; } = string.Empty;
+    public string NewPassword { get; set; }
+    public string Token { get; set; }
 }

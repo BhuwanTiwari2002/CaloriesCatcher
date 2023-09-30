@@ -120,15 +120,13 @@ namespace AuthApi.API.Service
                     return "User not found";
                 }
 
-                // Generate the long token for Identity:
+                var resetCode = GenerateUserCode();
+                user.PasswordResetCode = resetCode;
                 user.IdentityResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                // Generate and store the short code for the user:
-                user.PasswordResetCode = GenerateUserCode();
                 user.ResetTokenExpires = DateTime.Now.AddHours(1);
 
                 await _db.SaveChangesAsync();
-                // Send only the short code to the user's email:
-                await SendForgotPasswordEmail(user, user.PasswordResetCode);
+                await SendForgotPasswordEmail(user, resetCode);
 
                 return "Success";
             }
@@ -137,34 +135,9 @@ namespace AuthApi.API.Service
                 return $"Failed {ex}";
             }
         }
-
-        public async Task<string> ResetPassword(PasswordResetRequest request)
-        {
-            var user = _db.Users.FirstOrDefault(u =>
-                u.Email == request.Email && u.PasswordResetCode == request.ResetCode);
-            if (user == null || user.ResetTokenExpires < DateTime.Now)
-            {
-                return "Invalid or expired code";
-            }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result =
-                await _userManager.ResetPasswordAsync(user, token, request.Token); // Using Token as the new password
-
-            if (result.Succeeded)
-            {
-                user.PasswordResetCode = null; // Clear the reset code
-                user.ResetTokenExpires = null; // Clear the expiration
-                await _db.SaveChangesAsync();
-
-                return "Password reset successfully";
-            }
-
-            return "Failed to reset password";
-        }
-
         public async Task SendForgotPasswordEmail(ApplicationUser applicationUser, string resetCode)
         {
+            var resetLink = $"https://localhost:7024/reset-password?token={applicationUser.IdentityResetToken}";
             var message = $@"
                 <html>
                 <head>
@@ -178,13 +151,38 @@ namespace AuthApi.API.Service
                     <div class='container'>
                         <div class='header'>Calories Tracker</div>
                         <div class='content'>
-                            <p>Your password reset code is:</p>
+                            <p>Click the link below to reset your password:</p>
+                            <a href='{resetLink}'>Reset Password</a>
+                            <p>Once on the page, enter the following code:</p>
                             <h2>{resetCode}</h2>
                         </div>
                     </div>
                 </body>
                 </html>";
             await _emailSender.SendEmailAsync(applicationUser.Email, "Reset Password for Calories Tracker", message);
+        }
+        public async Task<string> ResetPassword(PasswordResetRequest request)
+        {
+            var user = _db.Users.FirstOrDefault(u =>
+                u.Email == request.Email && u.PasswordResetCode == request.ResetCode && u.IdentityResetToken == request.Token);
+
+            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            {
+                return "Invalid or expired code/token";
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, user.IdentityResetToken, request.NewPassword);
+
+            if (result.Succeeded)
+            {
+                user.IdentityResetToken = string.Empty;
+                user.PasswordResetCode = string.Empty;
+                user.ResetTokenExpires = null;
+                await _db.SaveChangesAsync();
+                return "Password reset successfully";
+            }
+
+            return "Failed to reset password";
         }
 
         private string GenerateUserCode()
