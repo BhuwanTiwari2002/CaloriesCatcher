@@ -1,4 +1,5 @@
-﻿using AuthApi.API.Service.IService;
+﻿using AuthApi.API.Models;
+using AuthApi.API.Service.IService;
 using CaloriesCatcher.API.Models.Dto;
 using KitchenComfort.Services.AuthAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -53,5 +54,36 @@ namespace Auth.API.Controllers
             }
             return Ok(_responseDto);
         }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        {
+            var response = await _authService.ForgotPassword(dto.Email);
+            if (response == "Success")
+            {
+                return Ok(new { Message = "An email with a reset code has been sent. Please check your email." });
+            }
+            else
+            {
+                return BadRequest(new { Message = response });
+            }
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetRequest request)
+        {
+            var response = await _authService.ResetPassword(request);
+            if (response == "Password reset successfully")
+            {
+                return Ok(new { Message = response });
+            }
+            else
+            {
+                return BadRequest(new { Message = response });
+            }
+        }
     }
+    public class ForgotPasswordDto
+    {
+        public string Email { get; set; }
+    }
+    
 }

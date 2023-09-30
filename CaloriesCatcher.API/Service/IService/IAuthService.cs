@@ -1,4 +1,5 @@
-﻿using CaloriesCatcher.API.Models.Dto;
+﻿using AuthApi.API.Models;
+using CaloriesCatcher.API.Models.Dto;
 using KitchenComfort.Services.AuthAPI.Models.Dto;
 
 namespace AuthApi.API.Service.IService
@@ -8,5 +9,7 @@ namespace AuthApi.API.Service.IService
         Task<string> Register(RegisterationRequestDto registerationRequestDto);
         Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
         Task<bool> AssignRole(string email, string roleName);
+        Task<string> ForgotPassword(string email);
+        Task<string> ResetPassword(PasswordResetRequest request);
     }
 }

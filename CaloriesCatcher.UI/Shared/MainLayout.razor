@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using CaloriesCatcher.UI.Service.IService
+@inherits LayoutComponentBase
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
@@ -32,7 +33,7 @@
                 <MudText Typo="Typo.h6" Style="flex-shrink: 0;">Calories Tracker</MudText>
                 <div style="flex-grow: 1;"></div>
                 <div style="display: flex; align-items: center; flex-wrap: nowrap;">
-                    <MudNavLink Href="/home" Match="NavLinkMatch.Prefix">Home</MudNavLink>
+                    <MudNavLink Href="/landing" Match="NavLinkMatch.Prefix">Home</MudNavLink>
                     <div style="width: 40px;"></div>
                     <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
                     <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
@@ -48,8 +49,10 @@
 
 @code {
 
-    [CascadingParameter]
-    Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+    [Inject]
+    IJsInteropService JsInteropService { get; set; } = default!;
 
     bool _drawerOpen = true;
     bool _isDarkMode = false; // By default, set to light mode
@@ -62,7 +65,15 @@
         {
             var authState = await authenticationState;
             user = $"Welcome {authState.User.Identity.Name}";
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            string isCookieSet =  await JsInteropService.GetCookieAsync("_darkMode");
+            if(!(string.IsNullOrEmpty(isCookieSet)))
+            {
+                _isDarkMode = bool.Parse(isCookieSet);
+            }
+            else
+            {
+                _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            }
             StateHasChanged();
         }
     }
@@ -102,6 +113,7 @@
     void ToggleTheme()
     {
         _isDarkMode = !_isDarkMode;
+        JsInteropService.SetCookieAsync("_darkMode", _isDarkMode.ToString(), 365);
     }
 
 }
