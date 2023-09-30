@@ -2,61 +2,70 @@
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
-@using Microsoft.AspNetCore.Authentication.Cookies;
-@using Microsoft.AspNetCore.Authentication;
-@using Microsoft.AspNetCore.Identity;
 @using Newtonsoft.Json;
-@using System.Security.Claims;
-@using System.IdentityModel.Tokens.Jwt;
-@using System.Web
-
-<div class="mud-container">
-    <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
-        <div class="text-center">
-            <MudText Typo="Typo.h3" Color="Color.Primary">Login</MudText>
+<MudContainer Class="pt-lg-7" Style="height: 1900px; margin: auto;">
+    <MudPaper Elevation="3" Class="mud-theme-background" Style="padding: 2.5rem; height: 30%; border-radius: 15px; display: flex;">
+        <div Style="flex: 1; padding-right: 2rem; margin-top: 5%;">
+            <!-- Added a subtle border between the sections -->
+            <MudText Typo="Typo.h3" Color="Color.Primary" Class="mb-lg-4 fw-bold">Welcome back.</MudText>
+            <MudText Typo="Typo.body1" Color="Color.Default" Class="mb-lg-12">Don't have an account? <MudLink Href="/Register" Color="Color.Secondary">Sign up</MudLink></MudText>
+            <EditForm Model="loginRequestDto" OnValidSubmit="OnLogin" Class="mt-lg-7 mb-lg-6">
+                <MudTextField @bind-Value="loginRequestDto.UserName" Label="Email" Variant="Variant.Outlined" InputType="InputType.Text" FullWidth Class="mb-lg-5" Rounded="true"/>
+                <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" FullWidth Class="mb-4" Rounded="true"/>
+                <div class="mt-lg-9">
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Outlined.Login" Color="Color.Primary" Size="Size.Large" Class="mr-4">Sign in</MudButton>
+                    <MudButton ButtonType="ButtonType.Button" Variant="Variant.Filled" StartIcon="@Icons.Custom.Brands.Google" Color="Color.Primary" Size="Size.Large" @onclick="OnGoogleLogin">Login with Google</MudButton>
+                </div>
+            </EditForm>
         </div>
-        <EditForm Model="loginRequestDto" OnValidSubmit="OnLogin">
-            <MudTextField @bind-Value="loginRequestDto.UserName" Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" Class="mt-4" FullWidth />
-            <MudTextField @bind-Value="loginRequestDto.Password" Label="Password" Variant="Variant.Outlined" Class="mt-4" InputType="InputType.Password" FullWidth />
-            <div class="text-center mt-4">
-                <MudButton ButtonType="ButtonType.Submit" Class="mt-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Send" Color="Color.Info" Size="Size.Large">Save</MudButton>
-                <MudButton ButtonType="ButtonType.Button" Class="mt-2 ml-2" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.LockOpen" Color="Color.Secondary" Size="Size.Large" @onclick="OnGoogleLogin">Login with Google</MudButton>
-            </div>
-        </EditForm>
+        <!-- Image Section -->
+        <div Style="flex: 1; display: flex; justify-content: center; align-items: center;">
+            <MudImage Src="images/LoginSideImage.jpg" Width="700" Alt="Graphic Details" Style="border-radius: 15px;"/>
+        </div>
     </MudPaper>
-</div>
+</MudContainer>
+
 
 @code {
-    [Inject] private IAuthService authService { get; set; } = default!;
-    [Inject] private ISnackbar snackBar { get; set; } = default!;
-    [Inject] private ITokenProvider tokenProvider { get; set; } = default!;
-    [Inject] private NavigationManager navigationManager { get; set; } = default!;
-    [Inject] AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
-    LoginRequestDto loginRequestDto = new LoginRequestDto();
 
+    [Inject]
+    private IAuthService authService { get; set; } = default!;
+
+    [Inject]
+    private ISnackbar snackBar { get; set; } = default!;
+
+    [Inject]
+    private ITokenProvider tokenProvider { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; } = default!;
+
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
+
+    LoginRequestDto loginRequestDto = new LoginRequestDto();
     private string token;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-            var url = navigationManager.ToBaseRelativePath(navigationManager.Uri);
-            var tokenParam = "token=";
-            var tokenIndex = url.IndexOf(tokenParam);
-            if (tokenIndex >= 0)
+        var url = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        var tokenParam = "token=";
+        var tokenIndex = url.IndexOf(tokenParam);
+        if (tokenIndex >= 0)
+        {
+            var tokenValueStartIndex = tokenIndex + tokenParam.Length;
+            token = url.Substring(tokenValueStartIndex);
+            var ampersandIndex = token.IndexOf('&');
+            if (ampersandIndex >= 0)
             {
-                var tokenValueStartIndex = tokenIndex + tokenParam.Length;
-                token = url.Substring(tokenValueStartIndex);
-                var ampersandIndex = token.IndexOf('&');
-                if (ampersandIndex >= 0)
-                {
-                    token = token.Substring(0, ampersandIndex);
-                }
-                var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
-                customAuthenticationStateProvider.HandleGoogleLogin(token);
-                navigationManager.NavigateTo("/", true);
+                token = token.Substring(0, ampersandIndex);
             }
-            StateHasChanged();  // Notify Blazor that the state has changed and a re-render is necessary
+            var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+            customAuthenticationStateProvider.HandleGoogleLogin(token);
+            navigationManager.NavigateTo("/", true);
+        }
+        StateHasChanged(); // Notify Blazor that the state has changed and a re-render is necessary
     }
-
 
     private async Task OnLogin(EditContext context)
     {
@@ -81,4 +90,5 @@
     {
         authService.StartGoogleLogin();
     }
+
 }

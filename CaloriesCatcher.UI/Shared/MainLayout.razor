@@ -36,6 +36,7 @@
                     <div style="width: 40px;"></div>
                     <MudNavLink Href="/login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
                     <MudNavLink Href="/register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Brightness6" Color="Color.Inherit" Edge="Edge.End" OnClick="@ToggleTheme"/>
                 </div>
             </div>
         </MudAppBar>
@@ -84,13 +85,14 @@
         Palette = new MudBlazor.Palette
         {
             Black = "#ffffff",
-            Background = "#1e1e2d",
+            Background = "#1a1a24",  // Made this slightly darker
             AppbarBackground = "#7e6fff",
-            DrawerBackground = "#1e1e2d",
-            DrawerText = "#ffffff",
+            DrawerBackground = "#1a1a24", // Made this slightly darker
+            DrawerText = "#f5f5f5",  // Made this whiter (instead of pure white to retain a bit of contrast)
             DrawerIcon = "#ffffff"
         }
     };
+
 
     void DrawerToggle()
     {

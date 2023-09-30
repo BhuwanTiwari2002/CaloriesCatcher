@@ -3,11 +3,13 @@
 <AuthorizeView>
     <Authorized>
         <MudNavMenu>
-            <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-            <MudNavLink Href="/about" Match="NavLinkMatch.All">About</MudNavLink>
-            <MudNavGroup Title="User" Expanded="true">
-                <MudNavLink Href="/profile" Match="NavLinkMatch.Prefix">Profile</MudNavLink>
-                <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.SpaceDashboard">Dashboard</MudNavLink>
+            <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Fastfood" Match="NavLinkMatch.All">Recipe</MudNavLink>
+            <MudNavGroup Title="User" Expanded="true" Icon="@Icons.Material.Filled.SupervisedUserCircle">
+                <MudNavLink Href="/profile" Icon="@Icons.Material.Outlined.VerifiedUser" Match="NavLinkMatch.Prefix">
+                    Profile
+                </MudNavLink>
+                <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
             </MudNavGroup>
         </MudNavMenu>
     </Authorized>
