@@ -120,12 +120,15 @@ namespace AuthApi.API.Service
                     return "User not found";
                 }
 
-                var resetCode = GenerateUserCode();
-                user.PasswordResetToken = resetCode;
+                // Generate the long token for Identity:
+                user.IdentityResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                // Generate and store the short code for the user:
+                user.PasswordResetCode = GenerateUserCode();
                 user.ResetTokenExpires = DateTime.Now.AddHours(1);
 
                 await _db.SaveChangesAsync();
-                await SendForgotPasswordEmail(user, resetCode);
+                // Send only the short code to the user's email:
+                await SendForgotPasswordEmail(user, user.PasswordResetCode);
 
                 return "Success";
             }
@@ -138,7 +141,7 @@ namespace AuthApi.API.Service
         public async Task<string> ResetPassword(PasswordResetRequest request)
         {
             var user = _db.Users.FirstOrDefault(u =>
-                u.Email == request.UserId && u.PasswordResetToken == request.ResetCode);
+                u.Email == request.Email && u.PasswordResetCode == request.ResetCode);
             if (user == null || user.ResetTokenExpires < DateTime.Now)
             {
                 return "Invalid or expired code";
@@ -150,7 +153,7 @@ namespace AuthApi.API.Service
 
             if (result.Succeeded)
             {
-                user.PasswordResetToken = null; // Clear the reset code
+                user.PasswordResetCode = null; // Clear the reset code
                 user.ResetTokenExpires = null; // Clear the expiration
                 await _db.SaveChangesAsync();
 

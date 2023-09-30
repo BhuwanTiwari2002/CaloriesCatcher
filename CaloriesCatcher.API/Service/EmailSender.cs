@@ -18,12 +18,13 @@ public class EmailSender : IEmailSender
         var client = new SmtpClient(_emailCredentials.SmtpHost, 587)
         {
             EnableSsl = true,
-            Credentials = new NetworkCredential(_emailCredentials.Email,_emailCredentials.Password)
+            Credentials = new NetworkCredential(_emailCredentials.Email, _emailCredentials.Password)
         };
-        return client.SendMailAsync(
-            new MailMessage(from: _emailCredentials.Email
-                , to: email
-                , subject
-                , message));
+        var mailMessage = new MailMessage(from: _emailCredentials.Email, to: email, subject, message)
+        {
+            IsBodyHtml = true
+        };
+        return client.SendMailAsync(mailMessage);
     }
+
 }
