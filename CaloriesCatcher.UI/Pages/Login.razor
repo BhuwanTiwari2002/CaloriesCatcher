@@ -19,11 +19,7 @@
                     <MudButton ButtonType="ButtonType.Button" Variant="Variant.Filled" StartIcon="@Icons.Custom.Brands.Google" Color="Color.Primary" Size="Size.Large" @onclick="OnGoogleLogin">Login with Google</MudButton>
                 </div>
             </EditForm>
-
-            @if(IsLoading)
-            {
-                <MudProgressLinear Color="Color.Primary" Value="@Value" Class="my-7" />
-            }
+            
         </div>
         <div Style="flex: 1; display: flex; justify-content: center; align-items: center;">
             <MudImage Src="images/LoginSideImage.jpg" Width="700" Alt="Graphic Details" Style="border-radius: 15px;"/>
@@ -44,13 +40,32 @@
     AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     
     LoginRequestDto loginRequestDto = new LoginRequestDto();
-    private bool IsLoading = false;
-    public int Value { get; set; }
+    private string token;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var url = navigationManager.ToBaseRelativePath(navigationManager.Uri);
+        var tokenParam = "token=";
+        var tokenIndex = url.IndexOf(tokenParam);
+        if (tokenIndex >= 0)
+        {
+            var tokenValueStartIndex = tokenIndex + tokenParam.Length;
+            token = url.Substring(tokenValueStartIndex);
+            var ampersandIndex = token.IndexOf('&');
+            if (ampersandIndex >= 0)
+            {
+                token = token.Substring(0, ampersandIndex);
+            }
+            var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+            customAuthenticationStateProvider.HandleGoogleLogin(token);
+            navigationManager.NavigateTo("/", true);
+        }
+        StateHasChanged(); // Notify Blazor that the state has changed and a re-render is necessary
+    }
+
     private async Task OnLogin(EditContext context)
     {
-        IsLoading = true; // Start loading indication
         var response = await authService.LoginAsync(loginRequestDto);
-        IsLoading = false; // End loading indication
         if (response != null && response.IsSuccess)
         {
             LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(response.Result));
@@ -63,8 +78,7 @@
         }
         else
         {
-            var errorMessage = response.Message ?? "Something went wrong";
-            snackBar.Add(errorMessage, Severity.Error);
+            snackBar.Add("Something went wrong", Severity.Error);
         }
     }
 
@@ -72,28 +86,4 @@
     {
         authService.StartGoogleLogin();
     }
-
-    public async void SimulateProgress()
-    {
-        Value = 0;
-        do
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            Value += 4;
-            StateHasChanged();
-            await Task.Delay(500);
-
-        } while (Value < 100);
-
-        SimulateProgress();
-    }
-
-    protected override void OnInitialized() => SimulateProgress();
-
-    bool _disposed;
-    public void Dispose() => _disposed = true;
 }
