@@ -6,7 +6,9 @@
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 <MudGrid>
     <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">Create a recipe</MudPaper>
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudText  Typo="Typo.h2">Create a Recipe</MudText>
+        </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
@@ -45,17 +47,17 @@
             <MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
         </MudPaper>
     </MudItem>
-    <MudItem xs="6" sm="3">
+    <MudItem xs="6" sm="4">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
             <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
         </MudPaper>
     </MudItem>
-    <MudItem xs="6" sm="3">
+    <MudItem xs="6" sm="4">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
             <MudButton Variant="Variant.Filled" Class="mx-4">Save Recipe & Add to Day</MudButton>
         </MudPaper>
     </MudItem>
-    <MudItem xs="6" sm="3">
+    <MudItem xs="6" sm="4">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
             <MudButton Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
         </MudPaper>
