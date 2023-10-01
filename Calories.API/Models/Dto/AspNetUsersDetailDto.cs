@@ -1,14 +1,14 @@
 ﻿
+
 namespace Calories.API.Models.Dto
 {
-    public class UserDetailDto
+    public class AspNetUsersDetailDto
     {
         public int Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
-        public double Height { get; set; }
-        public double Weight { get; set; }
+        public int UserId { get; set; }
+        public int Height { get; set; }
+        public int Weight { get; set; }
         public int DailyCalories { get; set; }
-        public int Age { get; set; }
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; } = string.Empty;
         public int CalorieId { get; set; }

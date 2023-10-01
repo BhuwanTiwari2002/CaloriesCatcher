@@ -8,8 +8,11 @@ namespace Calories.API.Models
         [Key]
         public int Id { get; set; }
         [ForeignKey("UserId")]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(450)]
         public string UserId { get; set; } = string.Empty;
         [Required]
+        [Column(TypeName = "DECIMAL")]
         public double Calorie { get; set; }
         [Required]
         public string CalorieName { get; set; } = string.Empty;

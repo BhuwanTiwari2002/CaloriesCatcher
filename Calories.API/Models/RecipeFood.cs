@@ -12,6 +12,8 @@ namespace Calories.API.Models
         [ForeignKey("RecipeId")]
         public int RecipeId { get; set; }
         [ForeignKey("UserId")]
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(450)]
         public string UserId { get; set; } = string.Empty;
     }
 }

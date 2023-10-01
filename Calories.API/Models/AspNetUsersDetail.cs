@@ -3,16 +3,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Calories.API.Models
 {
-    public class UserDetail
+    public class AspNetUsersDetail
     {
         [Key]
         public int Id { get; set; }
         [ForeignKey("UserId")]
-        public string UserId { get; set; } = string.Empty;
-        public double Height { get; set; }
-        public double Weight { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(450)]
+        public int UserId { get; set; }
+        public int Height { get; set; }
+        public int Weight { get; set; }
+        [Column(TypeName = "DECIMAL")]
         public int DailyCalories { get; set; }
         public DateTime BirthDate { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(50)]
         public string Gender { get; set; } = string.Empty;
         [ForeignKey("CalorieId")]
         public int CalorieId { get; set; }
