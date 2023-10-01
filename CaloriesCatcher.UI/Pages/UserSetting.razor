@@ -1,0 +1,48 @@
+﻿@page "/usersetting"
+
+<link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+
+<MudText Typo="Typo.h2" Align="Align.Center">User Setiings</MudText>
+<div style="float:left; width:40%; margin-left: 20%;">
+    
+    <MudItem xs="12" md="6">
+        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
+        
+            <MudList>
+                <MudListItem Text="Apple" />
+                <MudListItem Text="Banana" />
+                <MudListItem Text="Water" />
+                <MudListItem Text="Chicken" />
+                <MudListItem Text="Garlic" />
+                <MudListItem Text="Orange" />
+
+            </MudList>
+       
+    </MudItem>
+</div>
+
+
+
+<div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
+    
+        <div style=" height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            padding:10px;">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton><br />
+            <MudButton Variant="Variant.Filled" Class="mx-4">Edit Item</MudButton><br />
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete Item</MudButton><br />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Add a Step</MudButton><br />
+            <MudButton Variant="Variant.Filled" Class="mx-4">Edit a Step</MudButton><br />
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete a Step</MudButton>
+        </div>
+   
+
+</div>
+
+
+@code {
+
+}

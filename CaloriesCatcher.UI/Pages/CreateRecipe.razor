@@ -6,25 +6,18 @@
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 
 <MudText Typo="Typo.h2" Align="Align.Center">Create a recipe</MudText>
-<div style="float:left; width:40%; margin: 20px;">
-    
-       
-    
-        <MudPaper Class="pa-4 mt-2 d-flex justify-center">
-            <div style=" height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-direction: column;
-            padding:10px;">
-            <MudButton  Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton><br  />
-            <MudButton Variant="Variant.Filled" Class="mx-4">Edit Item</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete Item</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Add a Step</MudButton><br />
-            <MudButton Variant="Variant.Filled" Class="mx-4">Edit a Step</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete a Step</MudButton>
-            </div>
-        </MudPaper>
+<div style="float:left; width:40%; margin-left: 20px;">
+
+
+
+    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
+        <MudButton>Add an Item</MudButton>
+        <MudButton>Edit an Item</MudButton>
+        <MudButton>Delete an Item</MudButton>
+        <MudButton>Add an Step</MudButton>
+        <MudButton>Edit an Step</MudButton>
+        <MudButton>Delete an Step</MudButton>
+    </MudButtonGroup>
     
 </div>
 <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
