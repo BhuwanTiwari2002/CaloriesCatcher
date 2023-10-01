@@ -30,7 +30,6 @@ namespace CaloriesCatcher.UI.Service
             {
                 // Read token from the cookie
                 var token = await _jsInteropService.GetCookieAsync(StaticType.TokenCookie);
-                var token2 = await _jsInteropService.GetCookieAsync(".AspNetCore.Cookies");
                 if (string.IsNullOrEmpty(token))
                 {
                     return await Task.FromResult(new AuthenticationState(_anonymous));
@@ -44,6 +43,8 @@ namespace CaloriesCatcher.UI.Service
                 // Add claims from JWT
                 identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email,
                     jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
+                identity.AddClaim(new Claim(ClaimTypes.Email,
+    jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
                 identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub,
                     jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub)?.Value));
                 identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name,

@@ -68,7 +68,7 @@ namespace CaloriesCatcher.UI.Service
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
                         /* Converting the response json back into the Response Data Transfer Object */
-                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                            var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
                         return apiResponseDto;
                 }
 

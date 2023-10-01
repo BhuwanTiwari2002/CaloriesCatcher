@@ -5,6 +5,7 @@ using CaloriesCatcher.API.Models.Dto;
 using KitchenComfort.Services.AuthAPI.Models.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace AuthApi.API.Service
 {
@@ -123,8 +124,8 @@ namespace AuthApi.API.Service
                 var resetCode = GenerateUserCode();
                 user.PasswordResetCode = resetCode;
                 user.IdentityResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+                user.IdentityResetToken = ToBase64UrlString(user.IdentityResetToken);
                 user.ResetTokenExpires = DateTime.Now.AddHours(1);
-
                 await _db.SaveChangesAsync();
                 await SendForgotPasswordEmail(user, resetCode);
 
@@ -171,7 +172,8 @@ namespace AuthApi.API.Service
                 return "Invalid or expired code/token";
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, user.IdentityResetToken, request.NewPassword);
+            var decodedToken = FromBase64UrlString(user.IdentityResetToken);
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
             if (result.Succeeded)
             {
@@ -184,11 +186,31 @@ namespace AuthApi.API.Service
 
             return "Failed to reset password";
         }
-
         private string GenerateUserCode()
         {
             var rng = new Random();
             return rng.Next(100000, 999999).ToString(); // Generates a 6-digit code.
+        }
+
+        public static string ToBase64UrlString(string input)
+        {
+            var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+            var base64Encoded = Convert.ToBase64String(inputBytes);
+            return base64Encoded.TrimEnd('=').Replace('+', '-').Replace('/', '_');
+        }
+
+        public static string FromBase64UrlString(string base64Url)
+        {
+            base64Url = base64Url.Replace('-', '+').Replace('_', '/');
+
+            switch (base64Url.Length % 4)
+            {
+                case 2: base64Url += "=="; break;
+                case 3: base64Url += "="; break;
+            }
+
+            var base64Bytes = Convert.FromBase64String(base64Url);
+            return System.Text.Encoding.UTF8.GetString(base64Bytes);
         }
     }
 }
