@@ -4,56 +4,73 @@
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">Create a recipe</MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
-<MudText Typo="Typo.h2" Align="Align.Center">Create a recipe</MudText>
-<div style="float:left; width:40%; margin-left: 20px;">
-
-
-
-    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-        <MudButton>Add an Item</MudButton>
-        <MudButton>Edit an Item</MudButton>
-        <MudButton>Delete an Item</MudButton>
-        <MudButton>Add an Step</MudButton>
-        <MudButton>Edit an Step</MudButton>
-        <MudButton>Delete an Step</MudButton>
-    </MudButtonGroup>
-    
-</div>
-<div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
-    <MudItem xs="12" md="6">
-        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
-        <MudPaper Width="100%">
-            <MudList>
-                <MudListItem Text="Apple" />
-                <MudListItem Text="Banana" />
-                <MudListItem Text="Water" />
-                <MudListItem Text="Chicken" />
-                <MudListItem Text="Garlic" />
-                <MudListItem Text="Orange" />
-             
-            </MudList>
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
+            <MudButton>Add an Item</MudButton>
+            <MudButton>Edit an Item</MudButton>
+            <MudButton>Delete an Item</MudButton>
+            <MudButton>Add an Step</MudButton>
+            <MudButton>Edit an Step</MudButton>
+            <MudButton>Delete an Step</MudButton>
+        </MudButtonGroup>
         </MudPaper>
     </MudItem>
-</div>
-<div style="width:100%; margin-top:30%">
-<MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
-</div>
+    <MudItem xs="12" sm="6">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+        <MudItem xs="12" md="6">
+            <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
+            <MudPaper Width="100%">
+                <MudList>
+                    <MudListItem Text="Apple" />
+                    <MudListItem Text="Banana" />
+                    <MudListItem Text="Water" />
+                    <MudListItem Text="Chicken" />
+                    <MudListItem Text="Garlic" />
+                    <MudListItem Text="Orange" />
+
+                </MudList>
+                </MudPaper>
+
+            </MudItem>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Class="mx-4">Save Recipe & Add to Day</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="3">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+        </MudPaper>
+    </MudItem>
+    
+</MudGrid>
+
+
+
+
+
+    
+
+
 @code
 {
     string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 }
-<div style="margin-top:10%; width:100%">
-<div style=" height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding:10px;">
-<MudButton Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
-<br />
-<MudButton Variant="Variant.Filled" Class="mx-4">Save Recipe & Add to Day</MudButton>
-<br />
-<MudButton Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
-<br />
-    </div>
-</div>
