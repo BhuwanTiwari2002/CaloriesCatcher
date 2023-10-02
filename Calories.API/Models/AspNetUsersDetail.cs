@@ -10,7 +10,7 @@ namespace Calories.API.Models
         [ForeignKey("UserId")]
         [Column(TypeName = "VARCHAR")]
         [StringLength(450)]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
         [Column(TypeName = "DECIMAL")]

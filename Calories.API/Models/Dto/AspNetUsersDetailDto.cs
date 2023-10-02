@@ -5,7 +5,7 @@ namespace Calories.API.Models.Dto
     public class AspNetUsersDetailDto
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
         public int DailyCalories { get; set; }

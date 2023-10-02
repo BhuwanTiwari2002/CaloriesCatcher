@@ -22,6 +22,8 @@
 @code {
     [Inject]private IAuthService authService { get; set; } = default!;
     [Inject]private ISnackbar snackBar { get; set; } = default!;
+    [Inject]
+    private NavigationManager navigationManager { get; set; } = default!;
     RegisterationRequestDto registerationRequestDto = new RegisterationRequestDto();
     protected override async Task OnInitializedAsync()
     {}
@@ -32,6 +34,7 @@
         if(response != null && response.IsSuccess)
         {
             snackBar.Add("The account has been registered", Severity.Success);
+            navigationManager.NavigateTo("/login", true);
         } else
         {
             snackBar.Add("Something went wrong", Severity.Error);

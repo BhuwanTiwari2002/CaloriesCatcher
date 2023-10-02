@@ -40,7 +40,7 @@
     AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     
     LoginRequestDto loginRequestDto = new LoginRequestDto();
-    private string token;
+    private string token = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
