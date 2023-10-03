@@ -20,11 +20,11 @@
     </MudItem>
     <MudItem xs="3">
         <MudList Class=" align-center justify-center">
-            <MudListItem><MudText @bind-Value="Height" Label="Height" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Weight" Label="Weight" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="DailyGoal" Label="DailyGoal" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Age" Label="Age" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Gender" Label="Gender" Variant="Variant.Text"></MudText></MudListItem>
+            <MudListItem><MudText>@Height</MudText></MudListItem>
+            <MudListItem><MudText>@Weight</MudText></MudListItem>
+            <MudListItem><MudText>@DailyGoal</MudText></MudListItem>
+            <MudListItem><MudText>@Age</MudText></MudListItem>
+            <MudListItem><MudText>@Gender</MudText></MudListItem>
         </MudList>
     </MudItem>
     <MudItem xs="3">
@@ -51,6 +51,10 @@
     protected override async Task OnInitializedAsync()
     {
         Height = "5";
+        Weight = "150";
+        DailyGoal = "2000";
+        Age = 22;
+        Gender = "Penguin";
 
     }
 }
