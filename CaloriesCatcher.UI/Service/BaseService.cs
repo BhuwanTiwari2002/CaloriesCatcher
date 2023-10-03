@@ -1,6 +1,8 @@
-﻿using CaloriesCatcher.UI.Service.IService;
+﻿using CaloriesCatcher.UI.Model;
+using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
 using Newtonsoft.Json;
+using System.Net;
 using System.Text;
 using static KitchenComfort.Web.Models.Utility.StaticType;
 
@@ -68,12 +70,12 @@ namespace CaloriesCatcher.UI.Service
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
                         /* Converting the response json back into the Response Data Transfer Object */
-                            var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
                         return apiResponseDto;
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var dto = new ResponseDto
                 {
@@ -81,6 +83,78 @@ namespace CaloriesCatcher.UI.Service
                     IsSuccess = false
                 };
                 return dto;
+            }
+        }
+        public async Task<Nutrition?> SendAsyncEdamam(RequestDto requestDto)
+        {
+            try
+            {
+                using HttpClient client = _httpClientFactory.CreateClient("CalorieCatcherAPI");
+
+
+
+                // Create HttpRequestMessage
+                var message = new HttpRequestMessage
+                {
+                    Headers = { { "Accept", "application/json" } },
+                    RequestUri = new Uri(requestDto.Url),
+                    Method = requestDto.ApiType switch
+                    {
+                        ApiType.POST => HttpMethod.Post,
+                        ApiType.PUT => HttpMethod.Put,
+                        ApiType.DELETE => HttpMethod.Delete,
+                        _ => HttpMethod.Get
+                    }
+                };
+
+
+
+                if (requestDto.Data != null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+                }
+
+
+
+                var apiResponse = await client.SendAsync(message);
+
+
+
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    var apiContent = await apiResponse.Content.ReadAsStringAsync();
+                    Nutrition nutrition = JsonConvert.DeserializeObject<Nutrition>(apiContent);
+                    nutrition.IsSuccess = true;
+                    return nutrition;
+                }
+
+
+
+                // Handle error response
+                var errorResponse = new Nutrition
+                {
+                    IsSuccess = false,
+                    Message = apiResponse.StatusCode switch
+                    {
+                        HttpStatusCode.NotFound => "Not Found",
+                        HttpStatusCode.Forbidden => "Access Denied",
+                        HttpStatusCode.Unauthorized => "Unauthorized",
+                        HttpStatusCode.InternalServerError => "InternalServerError",
+                        _ => "Unknown Error"
+                    }
+                };
+
+
+
+                return errorResponse;
+            }
+            catch (Exception ex)
+            {
+                return new Nutrition
+                {
+                    Message = ex.Message,
+                    IsSuccess = false
+                };
             }
         }
     }
