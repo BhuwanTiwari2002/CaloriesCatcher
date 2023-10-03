@@ -1,4 +1,8 @@
 ﻿@page "/usersetting"
+@using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
@@ -16,11 +20,11 @@
     </MudItem>
     <MudItem xs="3">
         <MudList Class=" align-center justify-center">
-                <MudListItem>Height</MudListItem>
-                <MudListItem>Weight</MudListItem>
-                <MudListItem>Daily Calorie Goal</MudListItem>
-                <MudListItem>Age</MudListItem>
-                <MudListItem>Gender</MudListItem>
+            <MudListItem><MudText @bind-Value="Height" Label="Height" Variant="Variant.Text"></MudText></MudListItem>
+            <MudListItem><MudText @bind-Value="Weight" Label="Weight" Variant="Variant.Text"></MudText></MudListItem>
+            <MudListItem><MudText @bind-Value="DailyGoal" Label="DailyGoal" Variant="Variant.Text"></MudText></MudListItem>
+            <MudListItem><MudText @bind-Value="Age" Label="Age" Variant="Variant.Text"></MudText></MudListItem>
+            <MudListItem><MudText @bind-Value="Gender" Label="Gender" Variant="Variant.Text"></MudText></MudListItem>
             </MudList>
     </MudItem>
     <MudItem xs="3">
@@ -38,4 +42,15 @@
     </MudItem>
 </MudGrid>
 @code {
+    public string Height { get; set; }
+    public string Weight { get; set; }
+    public string DailyGoal { get; set; }
+    public int Age { get; set; }
+    public string Gender { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+       Height = "5";
+
+    }
 }
