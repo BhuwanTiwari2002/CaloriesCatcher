@@ -1,48 +1,41 @@
 ﻿@page "/usersetting"
-
-<link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-
-<MudText Typo="Typo.h2" Align="Align.Center">User Setiings</MudText>
-<div style="float:left; width:40%; margin-left: 20%;">
-    
-    <MudItem xs="12" md="6">
-        <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
-        
-            <MudList>
-                <MudListItem Text="Apple" />
-                <MudListItem Text="Banana" />
-                <MudListItem Text="Water" />
-                <MudListItem Text="Chicken" />
-                <MudListItem Text="Garlic" />
-                <MudListItem Text="Orange" />
-
-            </MudList>
-       
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h3">User Settings</MudText>
+        </MudPaper>
     </MudItem>
-</div>
-
-
-
-<div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
-    
-        <div style=" height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-direction: column;
-            padding:10px;">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton><br />
-            <MudButton Variant="Variant.Filled" Class="mx-4">Edit Item</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete Item</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Add a Step</MudButton><br />
-            <MudButton Variant="Variant.Filled" Class="mx-4">Edit a Step</MudButton><br />
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Delete a Step</MudButton>
-        </div>
-   
-
-</div>
-
-
+    <MudItem xs="4">
+        <MudList Class=" align-center justify-center">
+                <MudListItem>Height</MudListItem>
+                <MudListItem>Weight</MudListItem>
+                <MudListItem>Daily Calorie Goal</MudListItem>
+                <MudListItem>Age</MudListItem>
+                <MudListItem>Gender</MudListItem>
+            </MudList>
+    </MudItem>
+    <MudItem xs="4">
+        <MudList Class=" align-center justify-center">
+                <MudListItem>Height</MudListItem>
+                <MudListItem>Weight</MudListItem>
+                <MudListItem>Daily Calorie Goal</MudListItem>
+                <MudListItem>Age</MudListItem>
+                <MudListItem>Gender</MudListItem>
+            </MudList>
+    </MudItem>
+    <MudItem xs="4">
+        <MudList Class=" align-center justify-center">
+                <MudListItem><MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton></MudListItem>
+                <MudListItem><MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton></MudListItem>
+                <MudListItem><MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton></MudListItem>
+                <MudListItem><MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton></MudListItem>
+                <MudListItem><MudButton Variant="Variant.Text" Color="Color.Primary">Edit</MudButton></MudListItem>
+            </MudList>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Class="d-flex align-left  mud-width-full py-8">User Name:</MudPaper>
+        <MudPaper Class="d-flex align-left  mud-width-full py-8">Password:</MudPaper>
+    </MudItem>
+</MudGrid>
 @code {
-
 }
