@@ -12,7 +12,7 @@ namespace CaloriesCatcher.UI.Service
         {
             _baseService = baseService;
         }
-        public Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto)
+        public async Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto)
         {
             return await _baseService.SendAsyncEdamam(new RequestDto()
             {
