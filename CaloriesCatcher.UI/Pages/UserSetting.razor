@@ -9,23 +9,15 @@
             <MudText Typo="Typo.h3">User Settings</MudText>
         </MudPaper>
     </MudItem>
+ 
     <MudItem xs="3">
         <MudList Class=" align-center justify-center">
-                <MudListItem>Height</MudListItem>
-                <MudListItem>Weight</MudListItem>
-                <MudListItem>Daily Calorie Goal</MudListItem>
-                <MudListItem>Age</MudListItem>
-                <MudListItem>Gender</MudListItem>
-            </MudList>
-    </MudItem>
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudText @bind-Value="Height" Label="Height" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Weight" Label="Weight" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="DailyGoal" Label="DailyGoal" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Age" Label="Age" Variant="Variant.Text"></MudText></MudListItem>
-            <MudListItem><MudText @bind-Value="Gender" Label="Gender" Variant="Variant.Text"></MudText></MudListItem>
-            </MudList>
+            <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+            <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+            <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+            <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+            <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+        </MudList>
     </MudItem>
     <MudItem xs="3">
         <MudList Class=" align-center justify-center">
