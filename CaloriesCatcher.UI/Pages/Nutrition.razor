@@ -1,0 +1,98 @@
+﻿@page "/nutrition"
+@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
+
+<MudForm @ref="_foodNameForm" Style="margin: auto; width: 30%;">
+    <MudText Class="mt-2" Typo="Typo.h6">Enter Food Name</MudText>
+    <MudTextField @bind-Value="_foodName" Variant="Variant.Outlined"></MudTextField>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Submit</MudButton>
+</MudForm>
+
+@if (loading)
+{
+    <div class="center-progress">
+        <MudProgressCircular Style="margin:auto;" Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    </div>
+}
+else if (_nutrition != null)
+{
+    <div class="nutrition-label">
+        <div class="nutrition-header">Nutrition Facts</div>
+        <MudExpansionPanels MultiExpansion="true">
+            <MudExpansionPanel Text="Total Nutrients">
+                @foreach (var nutrient in _nutrition.TotalNutrients)
+                {
+                    <div class="nutrition-row">
+                        <span class="nutrition-label-name">@nutrient.Value.Label</span>
+                        <span class="nutrition-label-value">@nutrient.Value.Quantity @nutrient.Value.Unit</span>
+                    </div>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </div>
+}
+
+
+@code {
+    [Inject]
+    private IEdamamAPI edamamService { get; set; } = default!;
+    public string _foodName { get; set; }
+    private MudForm _foodNameForm;
+    private CaloriesCatcher.UI.Model.Nutrition _nutrition;
+    private bool loading = false;
+
+    public async void searchByFoodName()
+    {
+        loading = true;
+        if (_foodNameForm.IsValid)
+        {
+            _nutrition = await edamamService.GetNutrition(new EdamamRequestDto(_foodName));
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}
+
+<style>
+    .nutrition-label {
+        width: 350px;
+        font-family: Arial, sans-serif;
+        border: 1px solid var(--mud-palette-surface);
+        padding: 20px;
+        margin: 20px auto;
+        background-color: var(--mud-palette-background);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nutrition-header {
+        font-weight: bold;
+        font-size: 22px;
+        text-align: center;
+        border-bottom: 1px solid var(--mud-palette-surface);
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+    }
+
+    .nutrition-row {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--mud-palette-surface);
+        padding: 8px 0;
+    }
+
+        .nutrition-row:last-child {
+            border-bottom: none;
+        }
+
+    .nutrition-label-name {
+        font-weight: bold;
+        color: var(--mud-palette-text-primary);
+    }
+
+    .nutrition-label-value {
+        text-align: right;
+        color: var(--mud-palette-text-secondary);
+    }
+
+</style>
