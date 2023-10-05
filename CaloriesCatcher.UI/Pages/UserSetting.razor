@@ -9,29 +9,29 @@
             <MudText Typo="Typo.h3">User Settings</MudText>
         </MudPaper>
     </MudItem>
- 
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-        </MudList>
-    </MudItem>
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+    <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
+        <MudItem>
+            <MudList>
+                <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
             </MudList>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">User Name:</MudPaper>
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">Password:</MudPaper>
-    </MudItem>
+        </MudItem>
+        <MudItem>
+        
+            <MudList>
+                <MudListItem Class="mt-4"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+           
+            </MudList>
+
+        </MudItem>
+    </MudPaper>
 </MudGrid>
 @code {
     public string Height { get; set; }
