@@ -1,4 +1,5 @@
 ﻿@page "/usersetting"
+@using KitchenComfort.Web.Models;
 @using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
@@ -10,28 +11,20 @@
         </MudPaper>
     </MudItem>
    
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-        </MudList>
-    </MudItem>
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-        </MudList>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">User Name:</MudPaper>
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">Password:</MudPaper>
-    </MudItem>
+    <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
+        <MudItem>
+            <MudList>
+                <MudIcon Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditData" />
+                <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+
+            </MudList>
+        </MudItem>
+       
+    </MudPaper>
 </MudGrid>
 @code {
     public string Height { get; set; }
@@ -48,5 +41,10 @@
         Age = 22;
         Gender = "Penguin";
 
+    }
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    void EditData()
+    {
+        snackBar.Add("Edit Btn Working");
     }
 }
