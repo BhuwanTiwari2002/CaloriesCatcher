@@ -1,4 +1,5 @@
 ﻿@page "/usersetting"
+@using KitchenComfort.Web.Models;
 @using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
@@ -12,16 +13,18 @@
     <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
         <MudItem>
             <MudList>
+                <MudIcon Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditData" />
                 <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                
             </MudList>
         </MudItem>
         <MudItem>
         
-            <MudList>
+           @*  <MudList>
                 <MudListItem Class="mt-4"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
                 <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
                 <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
@@ -29,7 +32,7 @@
                 <MudListItem Class="mt-8"><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
            
             </MudList>
-
+ *@
         </MudItem>
     </MudPaper>
 </MudGrid>
@@ -39,10 +42,9 @@
     public string DailyGoal { get; set; }
     public int Age { get; set; }
     public string Gender { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    void EditData()
     {
-       Height = "5";
-
+        snackBar.Add("Edit Btn Working");
     }
 }
