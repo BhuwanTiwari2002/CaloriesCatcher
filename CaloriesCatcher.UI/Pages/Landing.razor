@@ -2,53 +2,115 @@
 
 <MudGrid>
     <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full" Style="height: 50vh; background: linear-gradient(135deg, #56CCF2, #2F80ED);">
-            <div style="position: absolute; top: 20%; left: 15%; transform: translateY(-30%); text-align: left; z-index: 2;">
-                <MudText Color="Color.Default" Typo="Typo.h1">Calorie Catcher</MudText>
-                <MudText Color="Color.Default" Typo="Typo.h3">Track, Analyze & Reach Your Nutritional Goals</MudText>
+        <MudPaper Class="d-flex align-center justify-center mud-width-full" Style="height: 45vh; background: linear-gradient(135deg, #56CCF2, #2F80ED);">
+            <div style="position: absolute; top: 25%; left: 10%; transform: translateY(-30%); text-align: left; z-index: 2;">
+                <MudText Color="Color.Default" Typo="Typo.h2">Calorie Catcher</MudText>
+                <MudText Color="Color.Default" Typo="Typo.h3">Track, Analyze & Reach <br> Your Nutritional Goals</MudText>
+                <MudButton Variant="Variant.Filled" Class="mt-3" Color="Color.Primary" Href="/login">Login</MudButton>
+                <MudButton Variant="Variant.Filled" Class="mt-3 ms-4" Color="Color.Primary" Href="/register">Get Started</MudButton>
             </div>
-            <div style="position: absolute; top: 30%; right: 10%; transform: translateY(-50%); z-index: 2;">
-                <MudImage Src="images/logo.png" Alt="Duck Logo" Width="300" Height="300" /> 
+            <div style="position: absolute; top: 30%; right: 7%; transform: translateY(-50%); z-index: 2;">
+                <MudImage Src="images/CaloriesTrackingInfo.png" Alt="Duck Logo" Width="700"  /> 
             </div>
         </MudPaper>
     </MudItem>
 </MudGrid>
-
-
-<!-- Features of the App -->
-<MudGrid Class="mt-5">
+<MudGrid Class="mt-5 px-5"> 
+    <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
+        <MudText Typo="Typo.h3" Class="mb-5">Our tools for your goals</MudText>
+    </MudItem>
     <MudItem xs="12" sm="4">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            <MudIcon Icon="@Icons.Material.Filled.BarChart" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
             <MudText Typo="Typo.h4">Easy Tracking</MudText>
             <MudText>Log your meals in seconds with our intuitive interface.</MudText>
-        </MudPaper>
+        </div>
     </MudItem>
+
     <MudItem xs="12" sm="4">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            <MudIcon Icon="@Icons.Material.Filled.AreaChart" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
             <MudText Typo="Typo.h4">Comprehensive Analysis</MudText>
             <MudText>Get detailed insights into your calorie and nutrient intake.</MudText>
-        </MudPaper>
+        </div>
     </MudItem>
+
     <MudItem xs="12" sm="4">
-        <MudPaper Class="d-flex flex-column align-center justify-center mud-width-full py-8">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            <MudIcon Icon="@Icons.Material.Filled.PieChart" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
             <MudText Typo="Typo.h4">Personalized Plans</MudText>
             <MudText>Create goals tailored to your unique dietary needs.</MudText>
+        </div>
+    </MudItem>
+</MudGrid>
+
+<MudGrid Class="mt-lg-5 px-5">
+    <MudItem xs="12" Class="d-flex flex-column align-center justify-center mb-4 mt-5">
+        <MudText Typo="Typo.h4" Class="opacity-75" Color="Color.Primary">Stats about our platform.</MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="3" Class="d-flex flex-column align-center justify-center text-center">
+        <MudText Typo="Typo.h2" Class="mb-1" Color="Color.Primary">50,000+</MudText>
+        <MudText Typo="Typo.h6">Registered Users</MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="3" Class="d-flex flex-column align-center justify-center text-center">
+        <MudText Typo="Typo.h2" Class="mb-1" Color="Color.Primary">300,000+</MudText>
+        <MudText Typo="Typo.h6">Meals Tracked</MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="3" Class="d-flex flex-column align-center justify-center text-center">
+        <MudText Typo="Typo.h2" Class="mb-1" Color="Color.Primary">4.9/5</MudText>
+        <MudText Typo="Typo.h6">User Satisfaction Rating</MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="3" Class="d-flex flex-column align-center justify-center text-center">
+        <MudText Typo="Typo.h2" Class="mb-1" Color="Color.Primary">7</MudText>
+        <MudText Typo="Typo.h6">Awards Won</MudText>
+    </MudItem>
+</MudGrid>
+
+<MudDivider Class="my-5" />
+<MudGrid Class="mt-5 px-5">
+    <MudItem xs="12" Class="d-flex flex-column align-center justify-center mb-5">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Class="opacity-75">
+            User Testimonials
+        </MudText>
+    </MudItem>
+
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudPaper Elevation="8" Class="p-5" Rounded>
+            <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Dark">
+                "The interface is so intuitive! Tracking my meals has never been easier."
+            </MudText>
+            <MudText Typo="Typo.h6" Color="Color.Secondary">- Alex D.</MudText>
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudPaper Elevation="8" Class="p-5" Rounded>
+            <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Dark">
+                "I've achieved my dietary goals thanks to Calorie Catcher. Highly recommended!"
+            </MudText>
+            <MudText Typo="Typo.h6" Color="Color.Secondary">- Morgan L.</MudText>
+        </MudPaper>
+    </MudItem>
+    
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudPaper Elevation="8" Class="p-5" Rounded>
+            <MudText Typo="Typo.h5" Class="mb-3" Color="Color.Dark">
+                "The comprehensive analysis is a game changer. Every detail I need is right there."
+            </MudText>
+            <MudText Typo="Typo.h6" Color="Color.Secondary">- Jamie R.</MudText>
         </MudPaper>
     </MudItem>
 </MudGrid>
 
-<!-- About the App -->
-<div class="mt-7 mb-4 ms-3 align-content-center">
-    <MudText Typo="Typo.h2">Why Calorie Catcher?</MudText>
-    <MudPaper Style="background-color:rgba(206,210,207,0.5); color:rgb(10,71,26);" Class="p-4">
-        <MudImage Src="images/logo.png" Alt="Duck Logo" Elevation="25" Class="rounded-lg mr-3" Width="100" Height="100" style="float: left;"/>
-        <MudText Typo="Typo.h3">Leading the Way in Nutritional Tracking</MudText>
-        <MudText Typo="Typo.h5">Calorie Catcher is not just another calorie counting app. We understand the challenges of maintaining a healthy lifestyle. That's why we've crafted an app that not only tracks your intake but also provides actionable insights to help you stay on the right path. With our advanced algorithms, expansive food database, and user-friendly design, making healthier choices has never been easier.</MudText>
-    </MudPaper>
-    <div class="mt-3" style="width: 30%">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">Get Started - It's Free!</MudButton>
-    </div>
-</div>
+<!-- Aesthetic Divider -->
+<MudDivider Class="my-5" />
+
+
+
 
 <!-- Footer -->
 <CalorieFooter/>
