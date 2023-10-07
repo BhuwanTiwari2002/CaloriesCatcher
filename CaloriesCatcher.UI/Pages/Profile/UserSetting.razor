@@ -1,52 +1,78 @@
-﻿@page "/profile"
-@using CaloriesCatcher.UI.Components;
-@using CaloriesCatcher.UI.Model;
-@using CaloriesCatcher.UI.Service.IService;
-@using Newtonsoft.Json;
-<MudGrid>
-    <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h3">User Settings</MudText>
-        </MudPaper>
-    </MudItem>
-   
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-        </MudList>
-    </MudItem>
-    <MudItem xs="3">
-        <MudList Class=" align-center justify-center">
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-            <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
-        </MudList>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">User Name:</MudPaper>
-        <MudPaper Class="d-flex align-left  mud-width-full py-8">Password:</MudPaper>
-    </MudItem>
-</MudGrid>
+﻿<AuthorizeView>
+    <Authorized>
+        @page "/profile"
+        @using CaloriesCatcher.UI.Components;
+        @using CaloriesCatcher.UI.Model;
+        @using CaloriesCatcher.UI.Service.IService;
+        @using Newtonsoft.Json;
+        <MudGrid>
+            <MudItem xs="12">
+                <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                    <MudText Typo="Typo.h3">User Settings</MudText>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="3">
+                <MudList Class=" align-center justify-center">
+                    <MudListItem><MudTextField @bind-Value="userDetail.Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.DailyCalories" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.BirthDate" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                </MudList>
+            </MudItem>
+            <MudItem xs="3">
+                <MudList Class=" align-center justify-center">
+                    <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                    <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                    <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                    <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                    <MudListItem><MudIcon Icon="@Icons.Material.Filled.Edit" Title="Edit" /></MudListItem>
+                </MudList>
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudPaper Class="d-flex align-left  mud-width-full py-8">User Name:</MudPaper>
+                <MudPaper Class="d-flex align-left  mud-width-full py-8">Password:</MudPaper>
+            </MudItem>
+        </MudGrid>
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
+
 @code {
-    public string Height { get; set; }
-    public string Weight { get; set; }
-    public string DailyGoal { get; set; }
-    public int Age { get; set; }
-    public string Gender { get; set; }
+    [Inject] IUserDetailService userDetailService { get; set; } = default!;
+
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+
+    public UserDetail userDetail { get; set; } = default!;
+
 
     protected override async Task OnInitializedAsync()
     {
-        Height = "5";
-        Weight = "150";
-        DailyGoal = "2000";
-        Age = 22;
-        Gender = "Penguin";
 
+        var authState = await authenticationState;
+        var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
+        if (response.IsSuccess)
+        {
+            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            StateHasChanged();
+
+        }
+        else
+        {
+            userDetail = new UserDetail
+                {
+                    Weight = "0",
+                    Height = "0",
+                    DailyCalories = "0",
+                    BirthDate = DateTime.Now.ToString(),
+                    Gender = "Turtle"
+                };
+        }
     }
 }
+
