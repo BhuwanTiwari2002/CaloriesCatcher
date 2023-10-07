@@ -24,7 +24,6 @@ builder.Services.AddHttpClient<ICalories, CaloriesService>();
 builder.Services.AddHttpClient<IEdamamAPI, EdamamAPI>();
 builder.Services.AddHttpClient<IUserDetailService, UserDetailService>();
 
-
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICalories, CaloriesService>();

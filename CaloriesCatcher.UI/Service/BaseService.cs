@@ -49,6 +49,7 @@ namespace CaloriesCatcher.UI.Service
                         }
                 }
                 apiResponse = await client.SendAsync(message);
+                var test = apiResponse;
                 switch (apiResponse.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:

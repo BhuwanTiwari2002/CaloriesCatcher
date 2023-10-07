@@ -4,12 +4,13 @@ using Calories.API.Data;
 using Calories.API.Models;
 using Calories.API.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Calories.API.Controllers
 {
     [Route("api/profile")]
     [ApiController]
-    public class AspNetUsersDetailController : Controller
+    public class AspNetUsersDetailController : ControllerBase
     {
         private readonly AppDbContext _db;
         private ResponseDto _response;
@@ -22,12 +23,12 @@ namespace Calories.API.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        public ResponseDto GetByUser(string userId)
+        public async Task<ResponseDto> GetByUser(string userId)
         {
             try
             {
-                AspNetUsersDetail obj = _db.AspNetUsersDetails.FirstOrDefault(x => x.UserId == userId);
-                _response.Result = _mapper.Map<AspNetUsersDetailDto>(obj);
+                List<AspNetUsersDetail> obj = await _db.AspNetUsersDetails.Where(x => x.UserId == userId).ToListAsync();
+                _response.Result = _mapper.Map<List<AspNetUsersDetailDto>>(obj);
             }
             catch (Exception ex)
             {

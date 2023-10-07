@@ -1,4 +1,5 @@
-﻿@using CaloriesCatcher.UI.Service
+﻿@page "/profile"
+@using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
 
@@ -25,7 +26,10 @@
         [Inject] private IAuthService authService { get; set; } = default!;
         [Inject] private ISnackbar snackBar { get; set; } = default!;
         UserDto userDto = new UserDto();
+    [Inject] IUserDetailService userDetailService { get; set; } = default!;
 
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationState { get; set; } = default!;
     public string UserId { get; set; } = string.Empty;
     public double Height { get; set; }
     public double Weight { get; set; }
@@ -36,5 +40,25 @@
     void EditData()
     {
         snackBar.Add("Edit Btn Working");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await GetUserDetailData();
+
+    }
+
+    async Task GetUserDetailData()
+    {
+        var authState = await authenticationState;
+
+        var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
+        if (response.IsSuccess)
+        {
+            var t = response;
+            // var test = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            StateHasChanged();
+        }
     }
 }

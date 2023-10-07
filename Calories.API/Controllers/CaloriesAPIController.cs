@@ -3,6 +3,7 @@ using Calories.API.Data;
 using Calories.API.Models.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static Azure.Core.HttpHeader;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -22,11 +23,11 @@ namespace Calories.API.Controllers
             _response = new ResponseDto();
         }
         [HttpGet]
-        public ResponseDto Get()
+        public async Task<ResponseDto> Get()
         {
             try
             {
-                IEnumerable<Calories.API.Models.Calories> objList = _db.Calories.ToList();
+                IEnumerable<Calories.API.Models.Calories> objList = await _db.Calories.ToListAsync();
                 _response.Result = _mapper.Map<IEnumerable<CaloriesDto>>(objList);
             }
             catch (Exception ex)
@@ -39,11 +40,11 @@ namespace Calories.API.Controllers
 
         [HttpGet]
         [Route("{userId}")]
-        public ResponseDto GetByUser(string userId)
+        public async Task<ResponseDto> GetByUser(string userId)
         {
             try
             {
-                List<Calories.API.Models.Calories> obj = _db.Calories.Where(x => x.UserId == userId).ToList();
+                List<Calories.API.Models.Calories> obj = await _db.Calories.Where(x => x.UserId == userId).ToListAsync();
                 _response.Result = _mapper.Map<List<CaloriesDto>>(obj);
             }
             catch (Exception ex)

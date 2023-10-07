@@ -2,10 +2,14 @@
 {
     public class UserDetail
     {
-        public string Height { get; set; }
-        public string Weight { get; set; }
-        public string DailyCalories { get; set; }
-        public string BirthDate { get; set; }
-        public string Gender { get; set; }
+        public int Id { get; set; }
+        public string UserId { get; set; }
+        public int Height { get; set; }
+        public int Weight { get; set; }
+        public int DailyCalories { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Gender { get; set; } = string.Empty;
+        public int CalorieId { get; set; }
+        public int RecipeFoodId { get; set; }
     }
 }

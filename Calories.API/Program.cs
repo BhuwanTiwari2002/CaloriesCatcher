@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+}, ServiceLifetime.Transient);
 
 /* Auto Mapper */
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

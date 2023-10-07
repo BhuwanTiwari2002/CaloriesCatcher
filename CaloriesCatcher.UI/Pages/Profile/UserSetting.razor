@@ -1,10 +1,11 @@
-﻿<AuthorizeView>
+﻿@*@page "/profile"
+*@@using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
+@using System.Security.Claims
+<AuthorizeView>
     <Authorized>
-        @page "/profile"
-        @using CaloriesCatcher.UI.Components;
-        @using CaloriesCatcher.UI.Model;
-        @using CaloriesCatcher.UI.Service.IService;
-        @using Newtonsoft.Json;
         <MudGrid>
             <MudItem xs="12">
                 <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
@@ -14,11 +15,11 @@
 
             <MudItem xs="3">
                 <MudList Class=" align-center justify-center">
-                    <MudListItem><MudTextField @bind-Value="userDetail.Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                    <MudListItem><MudTextField @bind-Value="userDetail.Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                    <MudListItem><MudTextField @bind-Value="userDetail.DailyCalories" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                    <MudListItem><MudTextField @bind-Value="userDetail.BirthDate" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                    <MudListItem><MudTextField @bind-Value="userDetail.Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.Height" Label="Height" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.Weight" Label="Weight" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.DailyCalories" Label="DailyGoal" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.BirthDate" Label="Age" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="userDetail.Gender" Label="Gender" Variant="Variant.Text" /></MudListItem>
                 </MudList>
             </MudItem>
             <MudItem xs="3">
@@ -54,25 +55,22 @@
     protected override async Task OnInitializedAsync()
     {
 
+        await GetUserDetailData();
+
+    }
+
+    async Task GetUserDetailData()
+    {
         var authState = await authenticationState;
+
         var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
         if (response.IsSuccess)
         {
-            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            var t = response;
+            // var test = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
             StateHasChanged();
-
-        }
-        else
-        {
-            userDetail = new UserDetail
-                {
-                    Weight = "0",
-                    Height = "0",
-                    DailyCalories = "0",
-                    BirthDate = DateTime.Now.ToString(),
-                    Gender = "Turtle"
-                };
         }
     }
+
 }
 
