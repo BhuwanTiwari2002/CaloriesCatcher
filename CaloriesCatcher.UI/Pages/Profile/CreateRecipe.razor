@@ -1,0 +1,78 @@
+﻿@page "/createrecipe"
+@using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
+<link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h2">Create a Recipe</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+
+            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
+                <MudButton>Add an Item</MudButton>
+                <MudButton>Edit an Item</MudButton>
+                <MudButton>Delete an Item</MudButton>
+                <MudButton>Add an Step</MudButton>
+                <MudButton>Edit an Step</MudButton>
+                <MudButton>Delete an Step</MudButton>
+            </MudButtonGroup>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudItem xs="12" md="6">
+                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
+                <MudPaper Width="100%">
+                    <MudList>
+                        <MudListItem Text="Apple" />
+                        <MudListItem Text="Banana" />
+                        <MudListItem Text="Water" />
+                        <MudListItem Text="Chicken" />
+                        <MudListItem Text="Garlic" />
+                        <MudListItem Text="Orange" />
+
+                    </MudList>
+                </MudPaper>
+
+            </MudItem>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="4">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="4">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Class="mx-4">Save Recipe & Add to Day</MudButton>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="6" sm="4">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+        </MudPaper>
+    </MudItem>
+
+</MudGrid>
+
+
+
+
+
+
+
+
+@code
+{
+    string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+}
