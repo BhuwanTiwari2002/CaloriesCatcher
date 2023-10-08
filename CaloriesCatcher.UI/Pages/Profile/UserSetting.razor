@@ -15,36 +15,55 @@
         <MudItem>
             <MudList>
                 <MudIcon Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditData" />
-                <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="DailyGoal" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="Age" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-
+                <MudListItem><MudTextField @bind-Value="UserDetail.Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="UserDetail.Gender" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="UserDetail.DailyCalories" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="UserDetail.Weight" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="UserDetail.BirthDate" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
             </MudList>
         </MudItem>
        
     </MudPaper>
 </MudGrid>
 @code {
-    public string Height { get; set; }
-    public string Weight { get; set; }
-    public string DailyGoal { get; set; }
-    public int Age { get; set; }
-    public string Gender { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        Height = "5";
-        Weight = "150";
-        DailyGoal = "2000";
-        Age = 22;
-        Gender = "Penguin";
-
-    }
+    [Inject] private IAuthService authService { get; set; } = default!;
     [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] IUserDetailService userDetailService { get; set; } = default!;
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+    public UserDetail UserDetail { get; set; }
+    bool isLoading = true;
+
+    
+
+    public string UserId { get; set; } = string.Empty;
+    public int Height { get; set; }
+    public int Weight { get; set; }
+    public Decimal DailyCalories { get; set; }
+    public DateTime BirthDay { get; set; }
+    public string Gender { get; set; } = string.Empty;
+
     void EditData()
     {
         snackBar.Add("Edit Btn Working");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUserDetailData(); 
+        isLoading = false;
+    }
+
+    async Task GetUserDetailData()
+    {
+        var authState = await authenticationState;
+        var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
+
+        if (response != null && response.IsSuccess)
+        {
+            UserDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            
+        }
     }
 }
