@@ -27,8 +27,8 @@ namespace Calories.API.Controllers
         {
             try
             {
-                List<AspNetUsersDetail> obj = await _db.AspNetUsersDetails.Where(x => x.UserId == userId).ToListAsync();
-                _response.Result = _mapper.Map<List<AspNetUsersDetailDto>>(obj);
+                AspNetUsersDetail obj = await _db.AspNetUsersDetails.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                _response.Result = _mapper.Map<AspNetUsersDetailDto>(obj);
             }
             catch (Exception ex)
             {

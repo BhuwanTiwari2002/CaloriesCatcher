@@ -5,25 +5,32 @@
 @using CaloriesCatcher.UI.Model;
 @using Newtonsoft.Json;
 
-<div class="mud-container">
-    <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
-        <div class="text-center">
-            <MudText Typo="Typo.h3" Color="Color.Primary">Your Profile</MudText>
-        </div>
-        <EditForm Model="userDetail">
-            <MudText>User Id: @UserId </MudText>
-            <MudText>Height: @Height </MudText>
-            <MudText>Weight: @Weight </MudText>
-            <MudText>Daily Calories: @DailyCalories </MudText>
-            <MudText>Birthday: @BirthDay </MudText>
-            <MudText>Gender: @Gender </MudText>
+@if(isLoading)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <div class="mud-container">
+        <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
+            <div class="text-center">
+                <MudText Typo="Typo.h3" Color="Color.Primary">Your Profile</MudText>
+            </div>
+            <EditForm Model="userDetail">
+                <MudText>User Id: @UserId </MudText>
+                <MudText>Height: @Height </MudText>
+                <MudText>Weight: @Weight </MudText>
+                <MudText>Daily Calories: @DailyCalories </MudText>
+                <MudText>Birthday: @BirthDay.ToShortDateString() </MudText>
+                <MudText>Gender: @Gender </MudText>
 
-            <MudText>UserName: @UserId </MudText>
-            @*Add Reset Password Btn Here *@
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
-         </EditForm>
-     </MudPaper>
- </div>
+                <MudText>UserName: @UserId </MudText>
+                @*Add Reset Password Btn Here *@
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
+            </EditForm>
+        </MudPaper>
+    </div>
+}
 
 @code {
     [Inject] private IAuthService authService { get; set; } = default!;
@@ -33,10 +40,9 @@
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
 
-    //UserDto userDto = new UserDto();
-    //UserDetail userDetail = new UserDetail();
+    bool isLoading = true;
 
-    List<UserDetail> userDetail = new List<UserDetail>();
+    UserDetail userDetail = new UserDetail();
 
     public string UserId { get; set; } = string.Empty;
     public int Height { get; set; }
@@ -52,7 +58,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await GetUserDetailData();
+        await GetUserDetailData(); 
+        isLoading = false;
     }
 
     async Task GetUserDetailData()
@@ -60,18 +67,22 @@
         var authState = await authenticationState;
         var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
 
-        UserId = authState.User.FindFirst("sub")?.Value;
-        Height = Convert.ToInt32(authState.User.FindFirst("sub")?.Value);
-        Weight = Convert.ToInt32(authState.User.FindFirst("sub")?.Value);
-        //DailyCalories = Decimal.Parse(authState.User.FindFirst("sub")?.Value);
-        //BirthDay = DateTime.Parse(authState.User.FindFirst("sub")?.Value);
-        Gender = authState.User.FindFirst("sub")?.Value;
-
         if (response != null && response.IsSuccess)
         {
-           // var t = response;
-            userDetail = JsonConvert.DeserializeObject<List<UserDetail>>(Convert.ToString(response.Result));
-            StateHasChanged();
+            //var t = response;
+            var t = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            //StateHasChanged();
+            if (t != null)
+            {
+                UserId = t.UserId;
+                Height = t.Height;
+                Weight = t.Weight;
+                DailyCalories = t.DailyCalories;
+                BirthDay = t.BirthDate;
+                Gender = t.Gender;
+
+                //userDetail = t;                
+            }
         }
     }
 }

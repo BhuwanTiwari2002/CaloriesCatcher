@@ -9,7 +9,7 @@
         public Decimal DailyCalories { get; set; }
         public DateTime BirthDate { get; set; }
         public string Gender { get; set; } = string.Empty;
-        public int CalorieId { get; set; }
-        public int RecipeFoodId { get; set; }
+        public int? CalorieId { get; set; }
+        public int? RecipeFoodId { get; set; }
     }
 }
