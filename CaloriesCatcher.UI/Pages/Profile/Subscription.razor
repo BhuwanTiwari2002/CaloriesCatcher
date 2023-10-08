@@ -1,0 +1,42 @@
+﻿@page "/subscription"
+@using KitchenComfort.Web.Models;
+@using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+@using Newtonsoft.Json;
+<MudGrid>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+            <MudText Typo="Typo.h3">User Settings</MudText>
+        </MudPaper>
+    </MudItem>
+    <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
+        <MudItem>
+            <MudList>
+                <MudListItem><MudTextField @bind-Value="Free" Label="1 week" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Month" Label="1 Month" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="Year" Label="1 Year" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudButton Class="ml-8 mt-4" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Subscribe Now</MudButton>
+            </MudList>
+        </MudItem>
+
+    </MudPaper>
+</MudGrid>
+@code {
+    public string Free { get; set; }
+    public string Month { get; set; }
+    public string Year { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Free = "Free!";
+        Month = "$9.99";
+        Year = "$99.99";
+
+    }
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    void EditData()
+    {
+        snackBar.Add("Edit Btn Working");
+    }
+}
