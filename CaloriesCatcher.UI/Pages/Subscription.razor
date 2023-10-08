@@ -16,7 +16,7 @@
                 <MudListItem><MudTextField @bind-Value="Free" Label="1 week" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="Month" Label="1 Month" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="Year" Label="1 Year" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudButton Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Subscribe Now</MudButton>
+                <MudButton Class="ml-8 mt-4" Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary">Subscribe Now</MudButton>
             </MudList>
         </MudItem>
       
@@ -26,6 +26,14 @@
     public string Free { get; set; }
     public string Month { get; set; }
     public string Year { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Free = "Free!";
+        Month = "$9.99";
+        Year = "$99.99";
+
+    }
     [Inject] private ISnackbar snackBar { get; set; } = default!;
     void EditData()
     {
