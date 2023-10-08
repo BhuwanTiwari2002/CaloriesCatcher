@@ -31,8 +31,7 @@
     [Inject] IUserDetailService userDetailService { get; set; } = default!;
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
-
-    public UserDetail UserDetail { get; set; }
+    public UserDetail UserDetail { get; set; } = default!;
     bool isLoading = true;
 
     

@@ -1,41 +1,53 @@
 ﻿@page "/profile"
+@using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
+@using Newtonsoft.Json;
 
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
             <MudText Typo="Typo.h3" Color="Color.Primary">Your Profile</MudText>
         </div>
-        <EditForm Model="userDto">
-            <MudText>Height: @Height </MudText>
-            <MudText>Weight: @Weight </MudText>
-            <MudText>Daily Calories: @DailyCalories </MudText>
-            <MudText>Age: @Age </MudText>
-            <MudText>Gender: @Gender </MudText>
-
-            <MudText>UserName: @UserId </MudText>
-             @* Add Reset Password Buttn Here *@
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
-         </EditForm>
-     </MudPaper>
+        <MudItem>
+            <MudList>
+            <MudText>Height: @userDetail.Height </MudText>
+            <MudText>Weight: @userDetail.Weight </MudText>
+            <MudText>Daily Calories: @userDetail.DailyCalories </MudText>
+            <MudText>Age: @userDetail.BirthDate </MudText>
+            <MudText>Gender: @userDetail.Gender </MudText>
+            <MudText>UserName: @userDetail.UserId </MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
+            </MudList>
+        </MudItem>
+        </MudPaper>
  </div>
 
 @code {
-        [Inject] private IAuthService authService { get; set; } = default!;
-        [Inject] private ISnackbar snackBar { get; set; } = default!;
-        UserDto userDto = new UserDto();
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] IUserDetailService userDetailService { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    public UserDetail userDetail { get; set; } = new UserDetail();
 
-    public string UserId { get; set; } = string.Empty;
-    public double Height { get; set; }
-    public double Weight { get; set; }
-    public int DailyCalories { get; set; }
-    public int Age { get; set; }
-    public string Gender { get; set; } = string.Empty;
-
-    void EditData()
+    protected override async Task OnInitializedAsync()
     {
-        snackBar.Add("Edit Btn Working");
+        await GetUserDetailData();
     }
+    async Task GetUserDetailData()
+    {
+        var authState = await authenticationState;
+        var response = await userDetailService.GetByUser(authState.User.FindFirst("Sub")?.Value);
+
+        if (response != null && response.IsSuccess)
+        {
+            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+
+        }
+    }
+    private async Task OnEditUserDetail(EditContext context)
+    {
+        
+    }
+
 }
