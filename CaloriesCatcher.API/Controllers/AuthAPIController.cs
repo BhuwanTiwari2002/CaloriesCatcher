@@ -20,8 +20,10 @@ namespace Auth.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDto registerationRequestDto)
         {
+            // Rrgister
             var errorMessage = await _authService.Register(registerationRequestDto);
-            if (!string.IsNullOrEmpty(errorMessage))
+            var assignRoleSuccessful = await _authService.AssignRole(registerationRequestDto.Email, registerationRequestDto.RoleName.ToUpper());
+            if (!string.IsNullOrEmpty(errorMessage) || assignRoleSuccessful == false)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = errorMessage;
