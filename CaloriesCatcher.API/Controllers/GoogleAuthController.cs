@@ -48,11 +48,14 @@ public class GoogleAuthController : ControllerBase
                 UserName = claimsPrincipal.FindFirst(ClaimTypes.Name)?.Value,
                 Id = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value
             };
-            var roles = await _userManager.GetRolesAsync(applicationUser);
+        
+            // Add the "Basic" role to the user.
+            List<string> roles = new List<string> { "BASIC" };
             var jwtToken = _jwtTokenGenerator.GenerateToken(applicationUser, roles);
             return Redirect($"https://localhost:7024/login?token={jwtToken}");
         }
 
         return BadRequest("Google authentication failed.");
     }
+
 }
