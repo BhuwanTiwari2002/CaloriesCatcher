@@ -38,11 +38,9 @@ namespace AuthApi.API.Service
                     // Create role if it does not exist
                     _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
                 }
-
                 await _userManager.AddToRoleAsync(user, roleName);
                 return true;
             }
-
             return false;
         }
 
@@ -57,7 +55,8 @@ namespace AuthApi.API.Service
             }
 
             // Generate JWT Token
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
             UserDto userDto = new()
             {
                 Email = user.Email,
