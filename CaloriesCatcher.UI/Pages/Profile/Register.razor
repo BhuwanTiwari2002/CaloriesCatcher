@@ -2,6 +2,7 @@
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models;
+@using Newtonsoft.Json
 <div class="mud-container">
     <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
         <div class="text-center">
@@ -24,6 +25,8 @@
     [Inject]private ISnackbar snackBar { get; set; } = default!;
     [Inject]
     private NavigationManager navigationManager { get; set; } = default!;
+    [Inject]
+    AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     RegisterationRequestDto registerationRequestDto = new RegisterationRequestDto();
     protected override async Task OnInitializedAsync()
     {}
@@ -34,7 +37,25 @@
         if(response != null && response.IsSuccess)
         {
             snackBar.Add("The account has been registered", Severity.Success);
-            navigationManager.NavigateTo("/login", true);
+            snackBar.Add("Now Logging you in", Severity.Success);
+            var login = await authService.LoginAsync(new LoginRequestDto()
+            {
+                UserName = registerationRequestDto.Email,
+                Password = registerationRequestDto.Password
+            });
+            if (login != null && login.IsSuccess)
+            {
+                LoginResponseDto loginResponseDto = JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(login.Result));
+                loginResponseDto.User.Name = "User";
+                loginResponseDto.User.PhoneNumber = "920213123";
+                var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
+                await customAuthenticationStateProvider.UpdateAuthenticationState(loginResponseDto);
+                navigationManager.NavigateTo("/", true);
+                StateHasChanged();
+            } else
+            {
+                snackBar.Add(response.Message, Severity.Error);
+            }
         } else
         {
             snackBar.Add("Something went wrong", Severity.Error);
