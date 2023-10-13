@@ -190,14 +190,12 @@ namespace AuthApi.API.Service
             var rng = new Random();
             return rng.Next(100000, 999999).ToString(); // Generates a 6-digit code.
         }
-
         public static string ToBase64UrlString(string input)
         {
             var inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
             var base64Encoded = Convert.ToBase64String(inputBytes);
             return base64Encoded.TrimEnd('=').Replace('+', '-').Replace('/', '_');
         }
-
         public static string FromBase64UrlString(string base64Url)
         {
             base64Url = base64Url.Replace('-', '+').Replace('_', '/');
@@ -211,5 +209,16 @@ namespace AuthApi.API.Service
             var base64Bytes = Convert.FromBase64String(base64Url);
             return System.Text.Encoding.UTF8.GetString(base64Bytes);
         }
+
+        public  List<UserDto> getAllUsers()
+        {
+            return _db.ApplicationUsers.ToList().Select(user => new UserDto
+            {
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                Email = user.Email,
+                Id = user.Id
+            }).ToList();
+        } 
     }
 }

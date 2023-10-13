@@ -12,25 +12,30 @@ namespace Auth.API.Controllers
     {
         private readonly IAuthService _authService;
         protected ResponseDto _responseDto;
+
         public AuthAPIController(IAuthService authService)
         {
             _authService = authService;
             _responseDto = new();
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDto registerationRequestDto)
         {
             // Rrgister
             var errorMessage = await _authService.Register(registerationRequestDto);
-            var assignRoleSuccessful = await _authService.AssignRole(registerationRequestDto.Email, registerationRequestDto.RoleName.ToUpper());
+            var assignRoleSuccessful = await _authService.AssignRole(registerationRequestDto.Email,
+                registerationRequestDto.RoleName.ToUpper());
             if (!string.IsNullOrEmpty(errorMessage) || assignRoleSuccessful == false)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = errorMessage;
                 return BadRequest(_responseDto);
             }
+
             return Ok(_responseDto);
         }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
@@ -41,9 +46,11 @@ namespace Auth.API.Controllers
                 _responseDto.Message = "Username or password is incorrect";
                 return BadRequest(_responseDto);
             }
+
             _responseDto.Result = loginResponse;
             return Ok(_responseDto);
         }
+
         [HttpPost("AssignRole")]
         public async Task<IActionResult> AssignRole([FromBody] RegisterationRequestDto model)
         {
@@ -54,8 +61,10 @@ namespace Auth.API.Controllers
                 _responseDto.Message = "Error encountered";
                 return BadRequest(_responseDto);
             }
+
             return Ok(_responseDto);
         }
+
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
         {
@@ -69,6 +78,7 @@ namespace Auth.API.Controllers
                 return BadRequest(new { Message = response });
             }
         }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] PasswordResetRequest request)
         {
@@ -82,7 +92,22 @@ namespace Auth.API.Controllers
                 return BadRequest(new { Message = response });
             }
         }
+
+        [HttpGet("AllUsers")]
+        public IActionResult GetAllUsers()
+        {
+            var response =  _authService.getAllUsers();
+            if (response == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Cannot Find users";
+                return BadRequest(_responseDto);
+            }
+            _responseDto.Result = response;
+            return Ok(_responseDto);
+        }
     }
+
     public class ForgotPasswordDto
     {
         public string Email { get; set; }

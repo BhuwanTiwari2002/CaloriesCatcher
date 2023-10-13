@@ -13,6 +13,14 @@
                 <MudNavLink OnClick="Logout" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
             </MudNavGroup>
         </MudNavMenu>
+            <AuthorizeView Roles="Admin">
+               <Authorized Context="adminContext">
+                   <MudNavGroup Title="Admin" Expanded="true" Icon="@Icons.Material.Filled.AdminPanelSettings">
+                       <MudNavLink Href="/admin" Icon="@Icons.Material.Filled.Settings" Match="NavLinkMatch.All">Settings</MudNavLink>
+                       <MudNavLink Href="/users" Icon="@Icons.Material.Filled.People" Match="NavLinkMatch.All">Users</MudNavLink>
+                   </MudNavGroup>
+               </Authorized>
+           </AuthorizeView>
     </Authorized>
 </AuthorizeView>
 
