@@ -127,12 +127,38 @@
     private TableApplyButtonPosition applyButtonPosition = TableApplyButtonPosition.End;
     private TableEditButtonPosition editButtonPosition = TableEditButtonPosition.End;
     private TableEditTrigger editTrigger = TableEditTrigger.RowClick;
-    private IEnumerable<Element> Elements = new List<Element>();
+    private List <Element> Elements = new List<Element>();
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     Elements = await httpClient.GetFromJsonAsync<List<Element>>("webapi/periodictable");
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        Elements.Add(new Element
+            {
+                Id = "1",
+                Calories = "100",
+                Name = "Grapes",
+                PrepTime = "1 min",
+                CookTime = "1 min"
+
+            });
+        Elements.Add(new Element
+            {
+                Id = "1",
+                Calories = "400",
+                Name = "Egg Salad",
+                PrepTime = "4 min",
+                CookTime = "6 min"
+
+            });
+        Elements.Add(new Element
+            {
+                Id = "1",
+                Calories = "100",
+                Name = "Grapes",
+                PrepTime = "1 min",
+                CookTime = "1 min"
+
+            });
+    }
 
     private void ClearEventLog()
     {
