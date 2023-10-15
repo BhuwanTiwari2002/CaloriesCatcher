@@ -1,0 +1,50 @@
+@page "/AdminDashboard"
+@using KitchenComfort.Web.Models
+@using CaloriesCatcher.UI.Service.IService
+@using Newtonsoft.Json
+
+<MudText Typo="Typo.h2">Admin</MudText>
+<MudDataGrid T="UserDto" MultiSelection="true" Items="@listOfUsers" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+    Hideable="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">List Of Users</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+        <SelectColumn T="UserDto" />
+        <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="false" Filterable="false" />
+        <PropertyColumn Property="x => x.Email" />
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.PhoneNumber" />
+    </Columns>
+</MudDataGrid>
+
+
+@code {
+    private string _searchString { get; set; }
+    List<UserDto> listOfUsers = new List<UserDto>();
+    [Inject] IAuthService _authService { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        var response = await _authService.GetAllUsers();
+        if (response != null)
+        {
+            listOfUsers = JsonConvert.DeserializeObject<List<UserDto>>(Convert.ToString(response.Result));
+            StateHasChanged();
+        }
+    }    
+    private Func<UserDto, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{x.Email} {x.PhoneNumber} {x.Name}".Contains(_searchString))
+            return true;
+        return false;
+    };
+}

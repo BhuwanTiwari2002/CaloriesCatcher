@@ -69,5 +69,16 @@ namespace CaloriesCatcher.UI.Service
 
             return await _baseService.SendAsync(requestDto);
         }
+
+        public async Task<ResponseDto?> GetAllUsers()
+        {
+            var requestDto = new RequestDto()
+            {
+                ApiType = StaticType.ApiType.GET,
+                Url = "https://localhost:7002/api/auth/reset-password"
+            };
+
+            return await _baseService.SendAsync(requestDto);
+        }
     }
 }

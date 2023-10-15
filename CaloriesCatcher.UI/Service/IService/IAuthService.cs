@@ -11,5 +11,6 @@ namespace CaloriesCatcher.UI.Service.IService
         public void StartGoogleLogin();
         Task<ResponseDto?> ForgotPasswordAsync(string email);
         Task<ResponseDto?> ResetPasswordAsync(PasswordResetRequest request);
+        Task<ResponseDto?> GetAllUsers();
     }
 }

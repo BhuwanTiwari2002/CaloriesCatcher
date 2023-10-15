@@ -13,6 +13,7 @@
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] private ICalories caloriesService { get; set; } = default!;
     [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private CaloriesDto caloriesDto = new CaloriesDto();
