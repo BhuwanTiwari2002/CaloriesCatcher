@@ -1,3 +1,4 @@
+using CaloriesCatcher.UI.Model;
 using CaloriesCatcher.UI.Service;
 using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models.Utility;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ApiTokenOptions>(builder.Configuration.GetSection("APIToken:Token"));
 
 // Add services to the container.
 builder.Services.AddRazorPages();

@@ -4,6 +4,8 @@ using KitchenComfort.Web.Models;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using static KitchenComfort.Web.Models.Utility.StaticType;
 
 namespace CaloriesCatcher.UI.Service
@@ -11,15 +13,19 @@ namespace CaloriesCatcher.UI.Service
     public class BaseService : IBaseService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BaseService(IHttpClientFactory httpClientFactory)
+        private readonly IOptions<ApiTokenOptions> _token;
+        public BaseService(IHttpClientFactory httpClientFactory, IOptions<ApiTokenOptions> token)
         {
             _httpClientFactory = httpClientFactory;
+            _token = token;
         }
+        
         public async Task<ResponseDto?> SendAsync(RequestDto requestDto)
         {
             try
             {
                 HttpClient client = _httpClientFactory.CreateClient("CaloriesCatcherAPI");
+               // requestDto.AccessToken = _token.ToString();
                 HttpRequestMessage message = new HttpRequestMessage();
                 message.Headers.Add("Accept", "application/json");
                 message.RequestUri = new Uri(requestDto.Url);

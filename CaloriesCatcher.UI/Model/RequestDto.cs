@@ -1,4 +1,5 @@
-﻿using static KitchenComfort.Web.Models.Utility.StaticType;
+﻿using Microsoft.AspNetCore.Components;
+using static KitchenComfort.Web.Models.Utility.StaticType;
 
 namespace KitchenComfort.Web.Models
 {
@@ -8,5 +9,6 @@ namespace KitchenComfort.Web.Models
         public string Url { get; set; } = default!;
         public object Data { get; set; } = default!;
         public string AccessToken { get; set; } = default!;
+        
     }
 }

@@ -3,6 +3,7 @@ using AuthApi.API.Data;
 using AuthApi.API.Models;
 using AuthApi.API.Service.IService;
 using AuthApi.API.Service;
+using CaloriesCatcher.UI.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.Configure<EmailAuthOptions>(builder.Configuration.GetSection("EmailCredentials"));
+builder.Services.Configure<ApiTokenOptions>(builder.Configuration.GetSection("APIToken:Token"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {

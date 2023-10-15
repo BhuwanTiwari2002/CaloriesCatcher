@@ -28,23 +28,35 @@
     [Inject] IAuthService _authService { get; set; }
     protected async override Task OnInitializedAsync()
     {
-        var response = await _authService.GetAllUsers();
-        if (response != null)
+        try
         {
-            listOfUsers = JsonConvert.DeserializeObject<List<UserDto>>(Convert.ToString(response.Result));
-            StateHasChanged();
+            await base.OnInitializedAsync();
+            var response = await _authService.GetAllUsers();
+            if (response != null)
+            {
+                listOfUsers = JsonConvert.DeserializeObject<List<UserDto>>(Convert.ToString(response.Result));
+                StateHasChanged();
+            }
         }
-    }    
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
     private Func<UserDto, bool> _quickFilter => x =>
     {
-        if (string.IsNullOrWhiteSpace(_searchString))
+        if (x == null || string.IsNullOrWhiteSpace(_searchString))
             return true;
-        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+    
+        if (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(x.Email) && x.Email.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{x.Email} {x.PhoneNumber} {x.Name}".Contains(_searchString))
+        if (!string.IsNullOrWhiteSpace(x.PhoneNumber) && x.PhoneNumber.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+
         return false;
     };
+
+
 }

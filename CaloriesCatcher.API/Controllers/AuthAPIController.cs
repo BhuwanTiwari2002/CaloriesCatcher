@@ -22,7 +22,6 @@ namespace Auth.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterationRequestDto registerationRequestDto)
         {
-            // Rrgister
             var errorMessage = await _authService.Register(registerationRequestDto);
             var assignRoleSuccessful = await _authService.AssignRole(registerationRequestDto.Email,
                 registerationRequestDto.RoleName.ToUpper());
@@ -39,6 +38,7 @@ namespace Auth.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
+            
             var loginResponse = await _authService.Login(loginRequestDto);
             if (loginResponse.User == null)
             {
@@ -93,7 +93,7 @@ namespace Auth.API.Controllers
             }
         }
 
-        [HttpGet("AllUsers")]
+        [HttpGet("GetAll")]
         public IActionResult GetAllUsers()
         {
             var response =  _authService.getAllUsers();
