@@ -14,9 +14,13 @@ namespace CaloriesCatcher.UI.Service
             _baseService = baseService;
         }
 
-        public Task<ResponseDto> CreateUserDetailsAsync(UserDetail userDetail)
+        public async Task<ResponseDto> CreateUserDetailsAsync(UserDetail userDetail)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.GET,
+                Url = $"https://localhost:7005/api/profile/{userId}"
+            });
         }
 
         public async Task<ResponseDto> GetByUser(string userId)

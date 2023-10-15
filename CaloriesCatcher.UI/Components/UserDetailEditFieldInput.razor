@@ -21,7 +21,7 @@
     private UserDetail userDetail = new UserDetail();
     private async Task EditUserDetail()
     {
-        userDetail.BirthDate = DateTime.Now;
+        //userDetail.BirthDate = DateTime.Now;
         var authState = await authenticationState;
         userDetail.UserId = authState.User.FindFirst("sub")?.Value;
         userDetailService.CreateUserDetailsAsync(userDetail);
