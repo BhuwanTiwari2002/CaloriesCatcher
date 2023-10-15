@@ -1,36 +1,51 @@
 @page "/AdminDashboard"
 @using KitchenComfort.Web.Models
 @using CaloriesCatcher.UI.Service.IService
+@using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Components.Dialogs
 @using Newtonsoft.Json
+<AuthorizeView Roles="ADMIN">
+    <Authorized>
+         <MudText Typo="Typo.h4" Class="mt-5 ms-5">Admin Dashboard</MudText>
+            <MudDataGrid Class="ms-5" T="UserDto" Items="@listOfUsers" Filterable="true" QuickFilter="@_quickFilter"
+                         Hideable="true">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Users</MudText>
+                    <MudSpacer/>
+                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </ToolBarContent>
+                <Columns>
+                    <PropertyColumn Property="x => x.Id" Title="Id" Sortable="false" Filterable="false"/>
+                    <PropertyColumn Property="x => x.Email"/>
+                    <PropertyColumn Property="x => x.UserName"/>
+                    <PropertyColumn Property="x => x.PhoneNumber"/>
+                     <TemplateColumn Filterable="false" CellClass="d-flex justify-end">
+                         <CellTemplate Context="user">
+                             <MudStack Row>
+                                 <MudButton @onclick="() => Subscription(user.Item.Id)" Variant="@Variant.Filled" Color="@Color.Primary">Subscription</MudButton>
+                                 <MudButton @onclick="() => DeleteUser(user.Item.Id)" Variant="Variant.Filled" Color="Color.Error">Delete</MudButton>
+                             </MudStack>
+                         </CellTemplate>
+                     </TemplateColumn>
 
-<MudText Typo="Typo.h2">Admin</MudText>
-<MudDataGrid T="UserDto" MultiSelection="true" Items="@listOfUsers" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-    Hideable="true">
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">List Of Users</MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-    </ToolBarContent>
-    <Columns>
-        <SelectColumn T="UserDto" />
-        <PropertyColumn Property="x => x.Id" Title="Nr" Sortable="false" Filterable="false" />
-        <PropertyColumn Property="x => x.Email" />
-        <PropertyColumn Property="x => x.Name" />
-        <PropertyColumn Property="x => x.PhoneNumber" />
-    </Columns>
-</MudDataGrid>
-
-
+                </Columns>
+            </MudDataGrid>
+    </Authorized>
+    <NotAuthorized>
+        <InSufficentRole/> 
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     private string _searchString { get; set; }
     List<UserDto> listOfUsers = new List<UserDto>();
     [Inject] IAuthService _authService { get; set; }
+    [Inject] IDialogService _dialogService { get; set; }
+    [Inject] ISnackbar _snackbar { get; set; }
     protected async override Task OnInitializedAsync()
     {
         try
         {
-            await base.OnInitializedAsync();
             var response = await _authService.GetAllUsers();
             if (response != null)
             {
@@ -48,7 +63,7 @@
         if (x == null || string.IsNullOrWhiteSpace(_searchString))
             return true;
     
-        if (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(x.UserName) && x.UserName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (!string.IsNullOrWhiteSpace(x.Email) && x.Email.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
@@ -57,6 +72,32 @@
 
         return false;
     };
+    private async Task DeleteUser(string userId)
+    {
+        if (string.IsNullOrEmpty(userId)) return;
+        var parameters = new DialogParameters();
+        parameters.Add("userId", userId);
+        var dialogResult = await _dialogService.Show<UserDeleteDialog>("Delete", parameters).Result;
+        if (dialogResult.Cancelled) return;
+        listOfUsers.RemoveAll(x => x.Id == userId);
+        _snackbar.Add($"The {userId} has been deleted", Severity.Warning);
+        StateHasChanged();
+    }
+
+
+    private async Task Subscription(string userId)
+    {
+        if (string.IsNullOrEmpty(userId)) return;
+        var parameters = new DialogParameters();
+        parameters.Add("userId", userId);
+        var dialogResult = await _dialogService.Show<SubscriptionDialog>("Subscription", parameters).Result;
+        if (dialogResult.Cancelled) return;
+        listOfUsers.RemoveAll(x => x.Id == userId);
+        _snackbar.Add($"The {userId} has been deleted", Severity.Warning);
+        StateHasChanged();
+    }
+
+
 
 
 }

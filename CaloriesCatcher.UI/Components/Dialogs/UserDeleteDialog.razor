@@ -1,0 +1,32 @@
+@using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Service.IService
+@using KitchenComfort.Web.Models
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.body1" Class="opacity-80 mb-4">Do you really want to delete @userId? This process cannot be undone.</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Close" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Cancel</MudButton>
+        <MudButton OnClick="DeleteUser" Color="Color.Error" Size="Size.Small" Class="ml-3">Delete</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public string userId { get; set; } = string.Empty;
+    [Inject] IAuthService _authService { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    async Task DeleteUser()
+    {
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var response = await _authService.DeleteUser(userId);
+            MudDialog.Close(DialogResult.Ok(true));   
+        }
+    }
+    void Close()
+    {
+        MudDialog.Close(DialogResult.Cancel());
+    }
+}

@@ -1,0 +1,34 @@
+@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+            <MudSelect T="string"  @bind-Value="SelectedSubscription">
+                <MudSelectItem Value="@Free">1 Week (Free)</MudSelectItem>
+                <MudSelectItem Value="@Month">1 Month ($9.99)</MudSelectItem>
+                <MudSelectItem Value="@Year">1 Year ($99.99)</MudSelectItem>
+            </MudSelect>
+    </DialogContent>
+    
+    <DialogActions>
+        <MudButton OnClick="CloseDialog" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Cancel</MudButton>
+        <MudButton OnClick="ConfirmSubscription" Color="Color.Primary" Size="Size.Small" Class="ml-3">Confirm</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public string Free { get; set; } = "Free!";
+    [Parameter] public string Month { get; set; } = "$9.99";
+    [Parameter] public string Year { get; set; } = "$99.99";
+    [Parameter] public string userId { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    string SelectedSubscription = "Free!"; // Default selected value
+
+    void CloseDialog() => MudDialog.Cancel();
+
+    void ConfirmSubscription()
+    {
+    // Handle confirmation logic, perhaps passing back the selected subscription
+        MudDialog.Close(DialogResult.Ok(SelectedSubscription));
+    }
+}

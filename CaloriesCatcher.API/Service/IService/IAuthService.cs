@@ -11,7 +11,7 @@ namespace AuthApi.API.Service.IService
         Task<bool> AssignRole(string email, string roleName);
         Task<string> ForgotPassword(string email);
         Task<string> ResetPassword(PasswordResetRequest request);
-        public List<UserDto> getAllUsers();
-
+        List<UserDto> getAllUsers();
+        Task<string> DeleteUser(string id);
     }
 }

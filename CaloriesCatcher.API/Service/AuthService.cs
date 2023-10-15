@@ -43,7 +43,6 @@ namespace AuthApi.API.Service
             }
             return false;
         }
-
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u =>
@@ -71,7 +70,6 @@ namespace AuthApi.API.Service
             };
             return loginResponseDto;
         }
-
         public async Task<string> Register(RegisterationRequestDto registerationRequestDto)
         {
             ApplicationUser applicationUser = new()
@@ -109,7 +107,6 @@ namespace AuthApi.API.Service
 
             return "Error Encountered";
         }
-
         public async Task<string> ForgotPassword(string email)
         {
             try
@@ -209,7 +206,6 @@ namespace AuthApi.API.Service
             var base64Bytes = Convert.FromBase64String(base64Url);
             return System.Text.Encoding.UTF8.GetString(base64Bytes);
         }
-
         public  List<UserDto> getAllUsers()
         {
             return _db.ApplicationUsers.ToList().Select(user => new UserDto
@@ -219,6 +215,23 @@ namespace AuthApi.API.Service
                 Email = user.Email,
                 Id = user.Id
             }).ToList();
-        } 
+        }
+        public async Task<string> DeleteUser(string id)
+        {
+            try
+            {
+                var user = _db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+                if (user == null)
+                {
+                    return "User Not Found";
+                }
+                var result = _userManager.DeleteAsync(user);
+                return result.Result.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString();
+            }
+        }
     }
 }

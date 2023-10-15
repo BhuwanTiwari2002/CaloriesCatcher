@@ -57,7 +57,6 @@ namespace CaloriesCatcher.UI.Service
 
             return await _baseService.SendAsync(requestDto);
         }
-
         public async Task<ResponseDto?> ResetPasswordAsync(PasswordResetRequest request)
         {
             var requestDto = new RequestDto()
@@ -69,7 +68,6 @@ namespace CaloriesCatcher.UI.Service
 
             return await _baseService.SendAsync(requestDto);
         }
-
         public async Task<ResponseDto?> GetAllUsers()
         {
             var requestDto = new RequestDto()
@@ -78,6 +76,16 @@ namespace CaloriesCatcher.UI.Service
                 Url = "https://localhost:7002/api/auth/GetAll"
             };
 
+            return await _baseService.SendAsync(requestDto);
+        }
+
+        public async Task<ResponseDto?> DeleteUser(string Id)
+        {
+            var requestDto = new RequestDto()
+            {
+                ApiType = StaticType.ApiType.DELETE,
+                Url = $"https://localhost:7002/api/auth/Delete/{Id}"
+            };
             return await _baseService.SendAsync(requestDto);
         }
     }

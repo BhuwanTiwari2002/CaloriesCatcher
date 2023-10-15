@@ -106,8 +106,23 @@ namespace Auth.API.Controllers
             _responseDto.Result = response;
             return Ok(_responseDto);
         }
+
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var response = _authService.DeleteUser(id);
+            if (response == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Something went wrong";
+                return BadRequest(_responseDto);
+            }
+            _responseDto.Result = response;
+            return Ok(_responseDto);
+        }
     }
 
+    
     public class ForgotPasswordDto
     {
         public string Email { get; set; }
