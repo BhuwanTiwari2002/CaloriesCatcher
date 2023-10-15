@@ -1,0 +1,32 @@
+﻿@using CaloriesCatcher.UI.Model
+@using CaloriesCatcher.UI.Service.IService;
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="userDetail.Height" T="int" Label="Your Height"></MudTextField>
+        <MudTextField @bind-Value="userDetail.Weight" T="int" Label="Your Weight"></MudTextField>
+        <MudTextField @bind-Value="userDetail.DailyCalories" T="Decimal" Label="Your DailyCalories"></MudTextField>
+        <MudTextField @bind-Value="userDetail.BirthDate" T="DateTime" Label="Your BirthDate"></MudTextField>
+        <MudTextField @bind-Value="userDetail.Gender" T="string" Label="Your Gender"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="EditUserDetail">Edit User Details</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private IUserDetailService userDetailService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private UserDetail userDetail = new UserDetail();
+    private async Task EditUserDetail()
+    {
+        userDetail.BirthDate = DateTime.Now;
+        var authState = await authenticationState;
+        userDetail.UserId = authState.User.FindFirst("sub")?.Value;
+        userDetailService.CreateUserDetailsAsync(userDetail);
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

@@ -18,7 +18,7 @@
             <MudText>Age: @userDetail.BirthDate </MudText>
             <MudText>Gender: @userDetail.Gender </MudText>
             <MudText>UserName: @userDetail.UserId </MudText>
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit" OnClick="OpenDialog"></MudIconButton>
             </MudList>
         </MudItem>
         </MudPaper>
@@ -27,6 +27,7 @@
 @code {
     [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IUserDetailService userDetailService { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     public UserDetail userDetail { get; set; } = new UserDetail();
 
@@ -48,6 +49,13 @@
     private async Task OnEditUserDetail(EditContext context)
     {
         
+    }
+
+    async void OpenDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog = dialogService.Show<UserSetting>("Edit User", closeOnEscapeKey);
+        var result = await dialog.Result;
     }
 
 }

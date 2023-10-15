@@ -1,8 +1,11 @@
+using CaloriesCatcher.UI.Model;
 using KitchenComfort.Web.Models;
 
-namespace CaloriesCatcher.UI.Service.IService;
-
-public interface IUserDetailService
+namespace CaloriesCatcher.UI.Service.IService
 {
-    public Task<ResponseDto> GetByUser(string userId);
+    public interface IUserDetailService
+    {
+        Task<ResponseDto> GetByUser(string userId);
+        Task<ResponseDto> CreateUserDetailsAsync(UserDetail userDetail);
+    }
 }

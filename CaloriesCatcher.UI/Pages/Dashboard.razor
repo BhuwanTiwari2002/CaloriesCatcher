@@ -115,7 +115,7 @@
     async void OpenDialog()
     {
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
+        var dialog = dialogService.Show<CaloriesCatcher.UI.Components.CaloriesLog>("Calories Log", closeOnEscapeKey);
         var result = await dialog.Result;
     }
 
