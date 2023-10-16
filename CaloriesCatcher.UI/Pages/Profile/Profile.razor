@@ -54,9 +54,11 @@
 
     async void OpenDialog()
     {
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var dialog = dialogService.Show<UserDetailEditFieldInput>("Edit User", closeOnEscapeKey);
-        var result = await dialog.Result;
+        var parameters = new DialogParameters();
+        parameters.Add("userDetail", userDetail);
+        var dialogResult = await dialogService.Show<UserDetailEditFieldInput>("Edit User", parameters).Result;
     }
+
+
 
 }

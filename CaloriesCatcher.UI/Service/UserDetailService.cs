@@ -18,8 +18,9 @@ namespace CaloriesCatcher.UI.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = StaticType.ApiType.GET,
-                Url = $"https://localhost:7005/api/profile/{userId}"
+                ApiType = StaticType.ApiType.POST,
+                Data = userDetail,
+                Url = $"https://localhost:7005/api/profile/"
             });
         }
 
@@ -31,6 +32,16 @@ namespace CaloriesCatcher.UI.Service
                 Url = $"https://localhost:7005/api/profile/{userId}"
             });
 
+        }
+
+        public async Task<ResponseDto> UpdateUserDetailsAsync(UserDetail userDetail)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.PUT,
+                Data = userDetail,
+                Url = $"https://localhost:7005/api/profile/"
+            });
         }
     }
 }

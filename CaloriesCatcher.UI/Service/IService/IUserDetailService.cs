@@ -7,5 +7,6 @@ namespace CaloriesCatcher.UI.Service.IService
     {
         Task<ResponseDto> GetByUser(string userId);
         Task<ResponseDto> CreateUserDetailsAsync(UserDetail userDetail);
+        Task<ResponseDto> UpdateUserDetailsAsync(UserDetail userDetail);
     }
 }
