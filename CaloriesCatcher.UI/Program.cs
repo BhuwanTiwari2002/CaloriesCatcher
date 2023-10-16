@@ -14,6 +14,7 @@ using MudBlazor.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<ApiTokenOptions>(builder.Configuration.GetSection("APIToken:Token"));
+builder.Services.Configure<PayPalSettings>(builder.Configuration.GetSection("PayPal"));
 
 // Add services to the container.
 builder.Services.AddRazorPages();

@@ -1,15 +1,17 @@
 @using MudBlazor
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models
+@using CaloriesCatcher.UI.Model
 
 <MudDialog>
     <DialogContent>
-            <MudSelect T="string"  @bind-Value="SelectedSubscription">
-                <MudSelectItem Value="@Turtle">Turtle</MudSelectItem>
-                <MudSelectItem Value="@Elephant">Elephant ($9.99)</MudSelectItem>
-                <MudSelectItem Value="@Parrots">Parrot ($29.99)</MudSelectItem>
-                <MudSelectItem Value="@Cat">Cat (Beta Tester)</MudSelectItem>
+            <MudSelect T="Subscription" @bind-Value="SelectedSubscription">
+                <MudSelectItem Value="@TurtleSubscription">Turtle</MudSelectItem>
+                <MudSelectItem Value="@ElephantSubscription">Elephant ($0.99)</MudSelectItem>
+                <MudSelectItem Value="@ParrotSubscription">Parrot ($1.99)</MudSelectItem>
+                <MudSelectItem Value="@CatSubscription">Cat (Beta Tester)</MudSelectItem>
             </MudSelect>
+
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="CloseDialog" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Cancel</MudButton>
@@ -18,15 +20,21 @@
 </MudDialog>
 
 @code {
-    public string Turtle { get; set; } = "Turtle";
-    public string Elephant { get; set; } = "Elephant";
-    public string Parrots { get; set; } = "Parrot";
-    public string Cat { get; set; } = "Cat";
+    public Subscription TurtleSubscription { get; set; } = new Subscription { Name = "Turtle", MonthlyPrice = 0.00M };
+    public Subscription ElephantSubscription { get; set; } = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M };
+    public Subscription ParrotSubscription { get; set; } = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M };
+    public Subscription CatSubscription { get; set; } = new Subscription { Name = "Cat", MonthlyPrice = 0.00M };  
+    
     [Parameter] public string userEmail { get; set; }
     [Inject] public IAuthService _authService { get; set; }
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    string SelectedSubscription = "Turtle"; // Default selected value
+    Subscription SelectedSubscription = null;  // This will be initialized in OnInitialized
+
+    protected override void OnInitialized()
+    {
+        SelectedSubscription = TurtleSubscription;  // Setting default selected value here
+    }
 
     void CloseDialog() => MudDialog.Cancel();
 
@@ -35,7 +43,7 @@
         var result = _authService.AssignRoleAsync(new RegisterationRequestDto()
         {
             Email = userEmail,
-            RoleName = SelectedSubscription,
+            RoleName = SelectedSubscription.Name,
             Password = "",
             PhoneNumber = "",
             UserName = ""
