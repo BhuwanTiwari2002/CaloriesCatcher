@@ -120,6 +120,8 @@ namespace Auth.API.Controllers
             _responseDto.Result = response;
             return Ok(_responseDto);
         }
+        
+     
     }
 
     

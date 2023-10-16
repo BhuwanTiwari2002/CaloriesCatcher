@@ -23,7 +23,7 @@
                      <TemplateColumn Filterable="false" CellClass="d-flex justify-end">
                          <CellTemplate Context="user">
                              <MudStack Row>
-                                 <MudButton @onclick="() => Subscription(user.Item.Id)" Variant="@Variant.Filled" Color="@Color.Primary">Subscription</MudButton>
+                                 <MudButton @onclick="() => Subscription(user.Item.Email)" Variant="@Variant.Filled" Color="@Color.Primary">Subscription</MudButton>
                                  <MudButton @onclick="() => DeleteUser(user.Item.Id)" Variant="Variant.Filled" Color="Color.Error">Delete</MudButton>
                              </MudStack>
                          </CellTemplate>
@@ -85,15 +85,15 @@
     }
 
 
-    private async Task Subscription(string userId)
+    private async Task Subscription(string email)
     {
-        if (string.IsNullOrEmpty(userId)) return;
+        if (string.IsNullOrEmpty(email)) return;
         var parameters = new DialogParameters();
-        parameters.Add("userId", userId);
+        parameters.Add("userEmail", email);
         var dialogResult = await _dialogService.Show<SubscriptionDialog>("Subscription", parameters).Result;
         if (dialogResult.Cancelled) return;
-        listOfUsers.RemoveAll(x => x.Id == userId);
-        _snackbar.Add($"The {userId} has been deleted", Severity.Warning);
+        listOfUsers.RemoveAll(x => x.Id == email);
+        _snackbar.Add($"The {email} has been updated with the role", Severity.Info);
         StateHasChanged();
     }
 

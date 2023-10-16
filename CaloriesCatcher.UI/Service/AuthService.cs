@@ -13,9 +13,14 @@ namespace CaloriesCatcher.UI.Service
             _baseService = baseService;
         }
 
-        public Task<ResponseDto?> AssignRoleAsync(RegisterationRequestDto registerationRequestDto)
+        public async Task<ResponseDto?> AssignRoleAsync(RegisterationRequestDto registerationRequestDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.POST,
+                Data = registerationRequestDto,
+                Url = "https://localhost:7002/api/auth/AssignRole"
+            });
         }
 
         public async Task<ResponseDto?> LoginAsync(LoginRequestDto loginRequestDto)

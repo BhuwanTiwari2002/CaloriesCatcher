@@ -1,14 +1,16 @@
 @using MudBlazor
+@using CaloriesCatcher.UI.Service.IService
+@using KitchenComfort.Web.Models
 
 <MudDialog>
     <DialogContent>
             <MudSelect T="string"  @bind-Value="SelectedSubscription">
-                <MudSelectItem Value="@Free">1 Week (Free)</MudSelectItem>
-                <MudSelectItem Value="@Month">1 Month ($9.99)</MudSelectItem>
-                <MudSelectItem Value="@Year">1 Year ($99.99)</MudSelectItem>
+                <MudSelectItem Value="@Turtle">Turtle</MudSelectItem>
+                <MudSelectItem Value="@Elephant">Elephant ($9.99)</MudSelectItem>
+                <MudSelectItem Value="@Parrots">Parrot ($29.99)</MudSelectItem>
+                <MudSelectItem Value="@Cat">Cat (Beta Tester)</MudSelectItem>
             </MudSelect>
     </DialogContent>
-    
     <DialogActions>
         <MudButton OnClick="CloseDialog" Color="Color.Default" Variant="Variant.Outlined" Size="Size.Small">Cancel</MudButton>
         <MudButton OnClick="ConfirmSubscription" Color="Color.Primary" Size="Size.Small" Class="ml-3">Confirm</MudButton>
@@ -16,19 +18,28 @@
 </MudDialog>
 
 @code {
-    [Parameter] public string Free { get; set; } = "Free!";
-    [Parameter] public string Month { get; set; } = "$9.99";
-    [Parameter] public string Year { get; set; } = "$99.99";
-    [Parameter] public string userId { get; set; }
+    public string Turtle { get; set; } = "Turtle";
+    public string Elephant { get; set; } = "Elephant";
+    public string Parrots { get; set; } = "Parrot";
+    public string Cat { get; set; } = "Cat";
+    [Parameter] public string userEmail { get; set; }
+    [Inject] public IAuthService _authService { get; set; }
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    string SelectedSubscription = "Free!"; // Default selected value
+    string SelectedSubscription = "Turtle"; // Default selected value
 
     void CloseDialog() => MudDialog.Cancel();
 
     void ConfirmSubscription()
     {
-    // Handle confirmation logic, perhaps passing back the selected subscription
+        var result = _authService.AssignRoleAsync(new RegisterationRequestDto()
+        {
+            Email = userEmail,
+            RoleName = SelectedSubscription,
+            Password = "",
+            PhoneNumber = "",
+            UserName = ""
+        });
         MudDialog.Close(DialogResult.Ok(SelectedSubscription));
     }
 }

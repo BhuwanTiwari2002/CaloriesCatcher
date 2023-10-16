@@ -50,7 +50,7 @@ public class GoogleAuthController : ControllerBase
             };
         
             // Add the "Basic" role to the user.
-            List<string> roles = new List<string> { "BASIC" };
+            List<string> roles = new List<string> { "TURTLE" };
             var jwtToken = _jwtTokenGenerator.GenerateToken(applicationUser, roles);
             return Redirect($"https://localhost:7024/login?token={jwtToken}");
         }

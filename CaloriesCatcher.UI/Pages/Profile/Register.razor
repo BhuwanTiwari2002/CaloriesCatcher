@@ -32,7 +32,7 @@
     {}
     private async void OnRegister(EditContext context)
     {
-        registerationRequestDto.RoleName = "Basic";
+        registerationRequestDto.RoleName = "TURTLE";
         var response = await authService.RegisterAsync(registerationRequestDto);
         if(response != null && response.IsSuccess)
         {
