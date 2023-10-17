@@ -6,22 +6,27 @@
 @using Newtonsoft.Json;
 
 <div class="mud-container">
-    <MudPaper Elevation="1" Square="false" Class="pa-4 mt-5" Style="max-width: 450px; margin: auto;">
-        <div class="text-center">
-            <MudText Typo="Typo.h3" Color="Color.Primary">Your Profile</MudText>
-        </div>
-        <MudItem>
-            <MudList>
-            <MudText>Height: @userDetail.Height </MudText>
-            <MudText>Weight: @userDetail.Weight </MudText>
-            <MudText>Daily Calories: @userDetail.DailyCalories </MudText>
-            <MudText>Age: @userDetail.BirthDate </MudText>
-            <MudText>Gender: @userDetail.Gender </MudText>
-            <MudText>UserName: @userDetail.UserId </MudText>
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit"></MudIconButton>
-            </MudList>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+                <MudText Typo="Typo.h3">User Settings</MudText>
+            </MudPaper>
         </MudItem>
+
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
+            <MudItem>
+                <MudList>
+                    <MudIcon Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditData" />
+                    <MudListItem><MudTextField @bind-Value="Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="Gender" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="DailyCalories" Label="DailyGoal" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="Weight" Label="Age" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                    <MudListItem><MudTextField @bind-Value="BirthDay" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                </MudList>
+            </MudItem>
+
         </MudPaper>
+    </MudGrid>
  </div>
 
 @code {
@@ -48,6 +53,18 @@
     private async Task OnEditUserDetail(EditContext context)
     {
         
+    }
+
+    public string UserId { get; set; } = string.Empty;
+    public int Height { get; set; }
+    public int Weight { get; set; }
+    public Decimal DailyCalories { get; set; }
+    public DateTime BirthDay { get; set; }
+    public string Gender { get; set; } = string.Empty;
+
+    void EditData()
+    {
+        snackBar.Add("Edit Btn Working");
     }
 
 }
