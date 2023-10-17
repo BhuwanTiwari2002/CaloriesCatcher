@@ -19,7 +19,7 @@
             <MudText>Age: @userDetail.BirthDate </MudText>
             <MudText>Gender: @userDetail.Gender </MudText>
             <MudText>UserName: @userDetail.UserId </MudText>
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit" OnClick="OpenDialog"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Submit" Color="Color.Primary" aria-label="Edit" OnClick="EditUserDetail"></MudIconButton>
             </MudList>
         </MudItem>
         </MudPaper>
@@ -47,18 +47,11 @@
 
         }
     }
-    private async Task OnEditUserDetail(EditContext context)
-    {
-        
-    }
-
-    async void OpenDialog()
+    private async Task EditUserDetail()
     {
         var parameters = new DialogParameters();
         parameters.Add("userDetail", userDetail);
         var dialogResult = await dialogService.Show<UserDetailEditFieldInput>("Edit User", parameters).Result;
     }
-
-
 
 }
