@@ -5,25 +5,52 @@
         @using CaloriesCatcher.UI.Model;
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
-        <div style="float:left; width:40%; margin: 20px;">
+       
             <MudText>User Id: @UserId</MudText>
-            <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
-            <MudPaper Class="pa-4">
+        
+        <MudGrid Class="mt-5 px-5">
+            <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
+                <MudText Typo="Typo.h3" Class="mb-5">Today's Overview</MudText>
+            </MudItem>
+            <MudItem xs="12" sm="4">
+                <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                    <MudIcon Icon="@Icons.Material.Filled.AddComment" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
+                    <MudText Typo="Typo.h4">Your Protein Goal!</MudText>
+                    <MudText>Amount of protein you have consumed today.</MudText>
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                    <MudIcon Icon="@Icons.Material.Filled.AddAPhoto" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
+                    <MudText Typo="Typo.h4">Your Best Meal Today!</MudText>
+                    <MudText>Take a snapshot of your best meal today and upload it here!</MudText>
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="4">
+                <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                    <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Size="Size.Large" Class="mb-3" Color="Color.Secondary" />
+                    <MudText Typo="Typo.h4">Overall Process</MudText>
+                    <MudText>You are at 70% of your total goal!</MudText>
+                </div>
+            </MudItem>
+       
+            <MudItem xs="12" sm="6" Class="mt-16 mx-16">
+                <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Progress</MudText>
+            <MudPaper Class="pa-4 ml-16">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
             </MudPaper>
-            <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+            <MudPaper Class="pa-4 mt-2 ml-16 d-flex justify-center">
                 <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
                 <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
                 <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
             </MudPaper>
-            <div style="text-align:center; margin-top:2%;">
-                <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
                 <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
-            </div>
-        </div>
-        <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
-            <MudItem xs="12" md="6">
-                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
+               
+            </MudItem>
+            <MudItem xs="6" sm="3" Class="ml-16 mt-16">
+                <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Details</MudText>
                 <MudPaper Width="100%">
                     <MudTable Items="caloriesDtos" Class="calories-table">
                         <HeaderContent>
@@ -37,7 +64,7 @@
                     </MudTable>
                 </MudPaper>
             </MudItem>
-        </div>
+        </MudGrid>
     </Authorized>
     <NotAuthorized>
         <NotAuthorzied/>
