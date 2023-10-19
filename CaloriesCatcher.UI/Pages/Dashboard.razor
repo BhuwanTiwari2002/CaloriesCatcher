@@ -9,39 +9,41 @@
             <MudText>User Id: @UserId</MudText>
         
         <MudGrid Class="mt-5 px-5">
+            
             <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
                 <MudText Typo="Typo.h3" Class="mb-5">Today's Overview</MudText>
             </MudItem>
-            <MudItem xs="12" sm="4">
-                <div style="background-color: #4527A0; color: #BEAFC2; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="100%">
+            <MudItem xs="12" sm="4" Class="my-8 mx-6">
+                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
                     <MudIcon Icon="@Icons.Material.Filled.AddComment" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
                     <MudText Typo="Typo.h4">Your Protein Goal!</MudText>
                     <MudText>Amount of protein you have consumed today.</MudText>
                 </div>
             </MudItem>
 
-            <MudItem xs="12" sm="4">
-                <div style="background-color: #4527A0; color: #BEAFC2; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                <MudItem xs="12" sm="4" Class="my-8 mx-6">
+                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
                     <MudIcon Icon="@Icons.Material.Filled.AddAPhoto" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
                     <MudText Typo="Typo.h4">Your Best Meal Today!</MudText>
                     <MudText>Take a snapshot of your best meal today and upload it here!</MudText>
                 </div>
             </MudItem>
 
-            <MudItem xs="12" sm="4">
-                <div style="background-color: #4527A0; color: #BEAFC2; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                <MudItem xs="12" sm="4" Class="my-8 mx-6">
+                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
                     <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
                     <MudText Typo="Typo.h4">Overall Process</MudText>
                     <MudText>You are at 70% of your total goal!</MudText>
                 </div>
             </MudItem>
-       
+            </MudPaper>
             <MudItem xs="12" sm="6" Class="mt-16 mx-16">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Progress</MudText>
-            <MudPaper Class="pa-4 ml-16">
+                <MudPaper Class="pa-4 ml-16" Elevation=" 3">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
             </MudPaper>
-            <MudPaper Class="pa-4 mt-2 ml-16 d-flex justify-center">
+                <MudPaper Class="pa-4 mt-2 ml-16 d-flex justify-center" Elevation=" 3">
                 <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
                 <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
                 <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
@@ -51,7 +53,7 @@
             </MudItem>
             <MudItem xs="6" sm="3" Class="ml-16 mt-16">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Details</MudText>
-                <MudPaper Width="100%">
+                <MudPaper Width="100%" Elevation=" 3">
                     <MudTable Items="caloriesDtos" Class="calories-table">
                         <HeaderContent>
                             <MudTh>Calorie Name</MudTh>
