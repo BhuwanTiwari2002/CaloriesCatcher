@@ -1,0 +1,17 @@
+@page "/paypalTest"
+@using CaloriesCatcher.UI.Service.IService
+@using CaloriesCatcher.UI.Model
+<h3>Subscription</h3>
+
+@code {
+
+    [Inject]
+    public IPaypalService _paypalService { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        var test = await _paypalService.CreatePayment(new PayPalRequestDto());
+        var test2 = test;
+    }
+
+}
