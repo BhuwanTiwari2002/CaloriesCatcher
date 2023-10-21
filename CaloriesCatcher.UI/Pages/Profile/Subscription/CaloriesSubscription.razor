@@ -39,7 +39,7 @@
     private async Task RedirectToCheckout(string sessionId)
     {
         var redirectToCheckoutJs = @"
-        var stripe = Stripe('your-publishable-key-here');
+        var stripe = Stripe('pk_test_51O3fPDCvoZQgmYDTRoDrsWYa9NgWUX9M9D8869kD1ri4ZcYkp7MQ2IZXceMPNTqStZL69RtyTu788baZrUYJGrOq00WaUNTWY1');
         stripe.redirectToCheckout({ sessionId: '" + sessionId + @"' })
             .then(function (result) {
                 if (result.error) {

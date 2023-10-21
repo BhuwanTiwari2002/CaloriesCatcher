@@ -64,8 +64,8 @@ namespace CaloriesCatcher.UI.Service
                     },
                 },
                 Mode = "subscription",
-                SuccessUrl = "https://localhost:7024/subscription?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://localhost:7024/subscription/cancel",
+                SuccessUrl = "https://localhost:7024/payment-success?session_id={CHECKOUT_SESSION_ID}",
+                CancelUrl = "https://localhost:7024/payment-success",
             };
             var service = new SessionService();
             var session = await service.CreateAsync(options);
