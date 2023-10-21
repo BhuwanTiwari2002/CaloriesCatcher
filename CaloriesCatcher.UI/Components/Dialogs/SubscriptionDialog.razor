@@ -21,8 +21,8 @@
 
 @code {
     public Subscription TurtleSubscription { get; set; } = new Subscription { Name = "Turtle", MonthlyPrice = 0.00M };
-    public Subscription ElephantSubscription { get; set; } = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M };
-    public Subscription ParrotSubscription { get; set; } = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M };
+    public Subscription ElephantSubscription { get; set; } = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M, PriceId = "price_1O3kU6CvoZQgmYDTz2m2Q4Sx" };
+    public Subscription ParrotSubscription { get; set; } = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M, PriceId = "price_1O3kVYCvoZQgmYDTLLokRW7M" };
     public Subscription CatSubscription { get; set; } = new Subscription { Name = "Cat", MonthlyPrice = 0.00M };  
     
     [Parameter] public string userEmail { get; set; }

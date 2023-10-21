@@ -11,18 +11,16 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<ApiTokenOptions>(builder.Configuration.GetSection("APIToken:Token"));
-builder.Services.Configure<PayPalSettings>(builder.Configuration.GetSection("PayPal"));
-
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor(); /* We need this for cookies */
-/* This injects HttpClient into AuthService */
-
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICalories, CaloriesService>();
 builder.Services.AddHttpClient<IEdamamAPI, EdamamAPI>();
@@ -37,6 +35,8 @@ builder.Services.AddScoped<IEdamamAPI, EdamamAPI>();
 builder.Services.AddScoped<IJsInteropService, JsInteropService>();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<StripePaymentsService>();
+
 builder.Services.AddMudServices();
 
 
