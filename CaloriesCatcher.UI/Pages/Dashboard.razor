@@ -13,32 +13,8 @@
             <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
                 <MudText Typo="Typo.h3" Class="mb-5">Today's Overview</MudText>
             </MudItem>
-            <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="100%">
-            <MudItem xs="12" sm="4" Class="my-8 mx-6">
-                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
-                    <MudIcon Icon="@Icons.Material.Filled.AddComment" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
-                    <MudText Typo="Typo.h4">Your Protein Goal!</MudText>
-                    <MudText>Amount of protein you have consumed today.</MudText>
-                </div>
-            </MudItem>
-
-                <MudItem xs="12" sm="4" Class="my-8 mx-6">
-                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
-                    <MudIcon Icon="@Icons.Material.Filled.AddAPhoto" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
-                    <MudText Typo="Typo.h4">Your Best Meal Today!</MudText>
-                    <MudText>Take a snapshot of your best meal today and upload it here!</MudText>
-                </div>
-            </MudItem>
-
-                <MudItem xs="12" sm="4" Class="my-8 mx-6">
-                    <div style="background-color: #3bbb61; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
-                    <MudIcon Icon="@Icons.Material.Filled.AutoAwesome" Size="Size.Large" Class="mb-3" Style="@($"color:{Colors.Grey.Lighten5};")" />
-                    <MudText Typo="Typo.h4">Overall Process</MudText>
-                    <MudText>You are at 70% of your total goal!</MudText>
-                </div>
-            </MudItem>
-            </MudPaper>
-            <MudItem xs="12" sm="6" Class="mt-16 mx-16">
+   
+            <MudItem xs="12" sm="6" Class=" mx-16">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Progress</MudText>
                 <MudPaper Class="pa-4 ml-16" Elevation=" 3">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
@@ -51,7 +27,7 @@
                 <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
                
             </MudItem>
-            <MudItem xs="6" sm="3" Class="ml-16 mt-16">
+            <MudItem xs="6" sm="3" Class="ml-16 ">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Details</MudText>
                 <MudPaper Width="100%" Elevation=" 3">
                     <MudTable Items="caloriesDtos" Class="calories-table">
@@ -66,6 +42,28 @@
                     </MudTable>
                 </MudPaper>
             </MudItem>
+            <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="100%">
+               
+                <MudItem xs="12" sm="4" Class="mt-16 mx-6">
+                    <div style="background-color: #78909C; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                        <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Weekly Calorie Intake</MudText>
+                        <MudChart ChartType="ChartType.Pie" InputData="@week" @bind-SelectedIndex="i" InputLabels="@weekday" Width="100%" Height="400px"  />
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="mt-16 mx-6">
+                    <div style="background-color: #78909C; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                        <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Monthly Progress</MudText>
+                        <MudChart ChartType="ChartType.Bar" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="400px"></MudChart>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="4" Class="mt-16 mx-6">
+                    <div style="background-color: #78909C; color: #FAFAFA; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+                        <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Weight Progress</MudText>
+                        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" @bind-SelectedIndex="Index" XAxisLabels="@XAxisLabels" Width="100%" Height="400px"></MudChart>
+                    </div>
+                </MudItem>
+
+            </MudPaper>
         </MudGrid>
     </Authorized>
     <NotAuthorized>
@@ -125,6 +123,11 @@
         }
     }
 
+    int weekSize = 7;
+    double[] week = { 10,10,10,10,10,25,25 };
+    string[] weekday = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+    
     async Task RefreshCaloriesData()
     {
         var authState = await authenticationState;
@@ -147,5 +150,13 @@
         var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
         var result = await dialog.Result;
     }
+
+    private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
+
+    public List<ChartSeries> Series = new List<ChartSeries>()
+    {
+        new ChartSeries() { Name = "Weight", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } }
+    };
+    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
 
 }
