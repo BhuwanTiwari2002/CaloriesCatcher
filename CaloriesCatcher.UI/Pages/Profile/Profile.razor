@@ -52,8 +52,8 @@
         var parameters = new DialogParameters();
         parameters.Add("userDetail", userDetail);
         var dialogResult = await dialogService.Show<UserDetailEditFieldInput>("Edit User", parameters).Result;
-        var results = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(dialogResult));
-        await userDetailService.UpdateUserDetailsAsync(results);
+        snackBar.Add("User Updated", Severity.Normal);
+        await GetUserDetailData();
     }
 
 }
