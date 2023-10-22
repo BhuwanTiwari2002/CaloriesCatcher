@@ -4,6 +4,7 @@ using Calories.API.Data;
 using Calories.API.Models;
 using Calories.API.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
+using static Azure.Core.HttpHeader;
 
 namespace Calories.API.Controllers
 {
@@ -55,12 +56,13 @@ namespace Calories.API.Controllers
         }
         [HttpPut]
         
-        public ResponseDto UpdateUser([FromBody]AspNetUsersDetail aspNetUsersDetail)
+        public ResponseDto Put([FromBody] AspNetUsersDetailDto aspNetUsersDetail)
         {
             try
             {
                 //var user = _db.AspNetUsersDetails.FirstOrDefault(u => u.UserId == aspNetUsersDetail.UserId);
-                _db.Update(aspNetUsersDetail);
+                var obj = _mapper.Map<AspNetUsersDetail>(aspNetUsersDetail);
+                _db.Update(obj);
                 _db.SaveChanges();
                 _response.IsSuccess=true;
                 _response.Message = $"Updated {aspNetUsersDetail.UserId}";

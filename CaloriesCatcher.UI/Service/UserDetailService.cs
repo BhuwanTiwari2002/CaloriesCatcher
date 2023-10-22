@@ -40,8 +40,9 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.PUT,
                 Data = userDetail,
-                Url = $"https://localhost:7005/api/profile/UpdateUser"
+                Url = $"https://localhost:7005/api/profile"
             });
         }
+
     }
 }
