@@ -1,11 +1,12 @@
 ﻿@page "/subscribe"
 @using CaloriesCatcher.UI.Model
 @using CaloriesCatcher.UI.Service;
+@using Microsoft.Extensions.Options
 
 <MudCard Elevation="3" Outlined="true" Class="mt-5 mx-auto" Style="max-width: 500px;">
     <MudCardContent>
         <MudSelect T="Subscription" @bind-Value="SelectedSubscription">
-            <MudSelectItem Value="@TurtleSubscription">Turtle</MudSelectItem>
+            <MudSelectItem Value="@TurtleSubscription">Turtle (Free)</MudSelectItem>
             <MudSelectItem Value="@ElephantSubscription">Elephant ($0.99)</MudSelectItem>
             <MudSelectItem Value="@ParrotSubscription">Parrot ($1.99)</MudSelectItem>
         </MudSelect>
@@ -18,6 +19,7 @@
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     [Inject] IJSRuntime JSRuntime { get; set; }
     [Inject] ISnackbar snackbar { get; set; }
+    [Inject] IOptions<StripeSettings> stripeSettings { get; set; }
     public Subscription TurtleSubscription { get; set; } = new Subscription { Name = "Turtle", MonthlyPrice = 0.00M };
     public Subscription ElephantSubscription { get; set; } = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M, PriceId = "price_1O3kU6CvoZQgmYDTz2m2Q4Sx" };
     public Subscription ParrotSubscription { get; set; } = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M, PriceId = "price_1O3kVYCvoZQgmYDTLLokRW7M" };
@@ -31,15 +33,22 @@
 
     private async Task Subscribe()
     {
-        var priceId = SelectedSubscription.PriceId;  // Assume you have the price ID from the selected subscription
-        var sessionId = await stripeService.CreateCheckoutSessionAsync(priceId);
-        await RedirectToCheckout(sessionId);
+        if (SelectedSubscription == TurtleSubscription)
+        {
+            snackbar.Add("You already have this subscription");
+        }
+        else
+        {
+            var priceId = SelectedSubscription.PriceId;  // Assume you have the price ID from the selected subscription
+            var sessionId = await stripeService.CreateCheckoutSessionAsync(priceId);
+            await RedirectToCheckout(sessionId.ToString());
+        }
     }
 
     private async Task RedirectToCheckout(string sessionId)
     {
         var redirectToCheckoutJs = @"
-        var stripe = Stripe('pk_test_51O3fPDCvoZQgmYDTRoDrsWYa9NgWUX9M9D8869kD1ri4ZcYkp7MQ2IZXceMPNTqStZL69RtyTu788baZrUYJGrOq00WaUNTWY1');
+        var stripe = Stripe('" + stripeSettings.Value.PublishableKey + @"');
         stripe.redirectToCheckout({ sessionId: '" + sessionId + @"' })
             .then(function (result) {
                 if (result.error) {

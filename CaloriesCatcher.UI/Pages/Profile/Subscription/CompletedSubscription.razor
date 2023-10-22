@@ -1,5 +1,31 @@
-﻿<h3>CompletedSubscription</h3>
+﻿@page "/payment-success"
+@using Microsoft.AspNetCore.WebUtilities
+@using CaloriesCatcher.UI.Service
+
+<MudContainer>
+    <MudCard Elevation="3" Outlined="true" Class="mx-auto my-5" Style="max-width: 600px;">
+        <MudCardContent>
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="mb-4">Payment Successful!</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Center" Class="mb-4">
+                Your subscription has been updated successfully. For the changes to take effect,
+                please log out and log back in.
+            </MudText>
+            <MudButton Link="/logout" Color="Color.Primary" Variant="Variant.Filled" Size="Size.Medium" Class="mx-auto d-block">Logout</MudButton>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
 
 @code {
-    
+    [Inject] NavigationManager _navigationManager { get; set; }
+    [Inject] StripePaymentsService stripeService { get; set; }
+    protected override void OnInitialized()
+    {
+        string url = _navigationManager.Uri;
+        var query = new Uri(url).Query;
+        if (QueryHelpers.ParseQuery(query).TryGetValue("sessionId", out var sessionId))
+        {
+           // paymentSuccess = await stripeService.VerifyTransaction(sessionId);
+        }
+
+    }
 }
