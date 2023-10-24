@@ -53,6 +53,7 @@
     [Inject]
     IJsInteropService JsInteropService { get; set; } = default!;
 
+    public string style { get; set; }
     bool _drawerOpen = true;
     bool _isDarkMode = false; // By default, set to light mode
     string user = string.Empty;
