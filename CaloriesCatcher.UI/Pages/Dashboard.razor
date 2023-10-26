@@ -57,19 +57,40 @@
 
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
-
     public string UserId { get; set; }
     List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
 
     protected override async Task OnInitializedAsync()
     {
         await RefreshCaloriesData();
+        getGraphData();
     }
 
     int i = -1;
     int dataSize = 4;
-    double[] data = { 77, 25, 20, 5 };
-    string[] labels = { "Breakfast", "Lunch", "Dinner", "snacks" };
+   // double[] data = { 10, 25, 20, 5 };
+    private double[] data = new double[3] { 0, 0, 0 };
+    string[] labels = { "Breakfast", "Lunch", "Dinner" };
+
+    public void getGraphData()
+    {
+        foreach (CaloriesDto caloriesDto in caloriesDtos)
+        {
+            TimeSpan time = caloriesDto.Date.TimeOfDay;
+            if (time >= TimeSpan.FromHours(5) && time < TimeSpan.FromHours(12))
+            {
+                data[0] += caloriesDto.Calorie; 
+            }
+            else if (time >= TimeSpan.FromHours(12) && time < TimeSpan.FromHours(17))
+            {
+                data[1] += caloriesDto.Calorie; 
+            }
+            else if (time >= TimeSpan.FromHours(17) && time < TimeSpan.FromHours(22))
+            {
+                data[2] += caloriesDto.Calorie; 
+            }
+        }
+    }
     // change to edit
     void EditData()
     {

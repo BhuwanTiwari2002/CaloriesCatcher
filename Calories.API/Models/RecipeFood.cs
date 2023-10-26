@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Calories.API.Models
@@ -8,12 +9,12 @@ namespace Calories.API.Models
         [Key]
         public int RecipeFoodId { get; set; }
         [ForeignKey("FoodId")]
-        public int FoodId { get; set; }
+        public virtual int FoodId { get; set; }
         [ForeignKey("RecipeId")]
-        public int RecipeId { get; set; }
+        public virtual int RecipeId { get; set; }
         [ForeignKey("UserId")]
         [Column(TypeName = "VARCHAR")]
         [StringLength(450)]
-        public string UserId { get; set; } = string.Empty;
+        public virtual string UserId { get; set; } = string.Empty;
     }
 }
