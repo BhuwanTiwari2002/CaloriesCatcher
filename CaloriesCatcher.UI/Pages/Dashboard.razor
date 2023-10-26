@@ -5,8 +5,41 @@
         @using CaloriesCatcher.UI.Model;
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
-       
-            <MudText>User Id: @UserId</MudText>
+        <div class="ms-5 mt-5 mb-lg-5">
+            <MudText Typo="Typo.h5">Welcome: @UserName</MudText>
+            <MudText Class="opacity-75" Typo="Typo.h6">Id: @UserId</MudText>
+            <MudGrid Spacing="1" Justify="Justify.FlexStart">
+                <MudItem>
+                    <MudPaper Height="300px" Width="300px">
+                        <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Progress</MudText>
+                        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels"/>
+                    </MudPaper>
+                </MudItem>
+                <MudItem>
+                    <MudPaper Height="300px" Width="300px">
+                        <MudText Align="Align.Center" Color="Color.Secondary" Typo="Typo.h6" GutterBottom="true">Target Goal</MudText>
+                        <MudChart ChartType="ChartType.Donut" InputData="@daygoal" InputLabels="@daycalorie">
+                            <CustomGraphics>
+                                <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2" color="white">Today</text>
+                                <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="5" color="white">@data.Sum().ToString()</text>
+                            </CustomGraphics>
+                        </MudChart>
+                    </MudPaper>
+                </MudItem>
+                <MudItem Class="mb-lg-5">
+                    <MudPaper Height="300px" Width="300px">
+                        <MudText Align="Align.Center" Color="Color.Success" Typo="Typo.h6" GutterBottom="true">Weekly Calorie Intake</MudText>
+                        <MudChart ChartType="ChartType.Donut" InputData="@week" @bind-SelectedIndex="i" InputLabels="@weekday"></MudChart>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+                    <div style="display: block" class="mt-lg-5">
+                         <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                    </div>
+        </div>
+
+        
+        <MudText Style="margin-top: 500px;">User Id: @UserId</MudText>
             <div class="container" style="display: flex; flex-wrap: wrap; align-content:flex-start; gap: 1%; margin-left: 0 ">
                 <div style="Width:35%; Height:35%">
                 <MudPaper Elevation=" 3">
@@ -32,11 +65,11 @@
                     </div>
                 </MudPaper> *@
             <MudPaper Elevation=" 3">
-                <div style=" flex-direction:column;">
-                    <MudButton Style="width=350px, height=350px" OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                    <MudButton Style="width=350px, height=350px" @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
-                    <MudButton Style="width=350px, height=350px" OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
-                </div>
+                @* <div style=" flex-direction:column;"> *@
+                @*     <MudButton Style="width=350px, height=350px" OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton> *@
+                @*     <MudButton Style="width=350px, height=350px" @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton> *@
+                @*     <MudButton Style="width=350px, height=350px" OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton> *@
+                @* </div> *@
             </MudPaper>
             <MudPaper Elevation=" 3">
 
@@ -45,11 +78,8 @@
             </MudPaper>
                 
             </div>
-
-        
         <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
                 <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
-               
             <MudItem xs="6" sm="3" Class="ml-16 ">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Details</MudText>
                 <MudPaper Width="100%" Elevation=" 3">
@@ -110,6 +140,8 @@
     Task<AuthenticationState> authenticationState { get; set; } = default!;
 
     public string UserId { get; set; }
+    public string UserName { get; set; }
+
     List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
 
     protected override async Task OnInitializedAsync()
@@ -147,19 +179,22 @@
         }
     }
 
+    double totalCalories = 0;
     int weekSize = 7;
     double[] week = { 10,10,10,10,10,25,25 };
     string[] weekday = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-
+    
     
     async Task RefreshCaloriesData()
     {
         var authState = await authenticationState;
         var response = await caloriesService.GetCaloriesByUserAsync(authState.User.FindFirst("Sub")?.Value);
         UserId = authState.User.FindFirst("sub")?.Value;
+        UserName = authState.User.FindFirst("Name")?.Value;
         if (response != null && response.IsSuccess)
         {
             caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
+            totalCalories = caloriesDtos.Sum(c => c.Calorie);
             StateHasChanged();
         }
         else
