@@ -1,0 +1,29 @@
+﻿@using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Service.IService;
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="Answer" T="string" Label="Ingredient Name and Quantity"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="IDK">Add Ingredient</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public EventCallback<string> OnDoneCallback { get; set; }
+
+    private string? Answer;
+
+    private async Task IDK()
+    {
+        await InvokeAsync(() => OnDoneCallback.InvokeAsync(Answer));
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+}

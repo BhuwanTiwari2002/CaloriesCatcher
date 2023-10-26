@@ -14,7 +14,7 @@
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudButton>Add an Item</MudButton>
+                <MudButton OnClick="OpenDialog" OnDoneCallback="OnDialogDone">Add an Item</MudButton>
                 <MudButton>Edit an Item</MudButton>
                 <MudButton>Delete an Item</MudButton>
                 <MudButton>Add an Step</MudButton>
@@ -29,13 +29,10 @@
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
                 <MudPaper Width="100%">
                     <MudList>
-                        <MudListItem Text="Apple" />
-                        <MudListItem Text="Banana" />
-                        <MudListItem Text="Water" />
-                        <MudListItem Text="Chicken" />
-                        <MudListItem Text="Garlic" />
-                        <MudListItem Text="Orange" />
-
+                        @foreach (var RecipeIngredientDto in recipeIngredients)
+                        {
+                            <li>@RecipeIngredientDto.Name</li>
+                        }
                     </MudList>
                 </MudPaper>
 
@@ -74,5 +71,32 @@
 
 @code
 {
+    [Inject]
+    IDialogService dialogService { get; set; } = default!;
+
     string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+    List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
+    private string? newIngredient;
+
+    private void AddIngredient()
+    {
+        if (!string.IsNullOrWhiteSpace(newIngredient))
+        {
+            recipeIngredients.Add(new RecipeIngredientDto { Name = newIngredient });
+            newIngredient = string.Empty;
+        }
+    }
+
+    async void OpenDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
+        var result = await dialog.Result;
+    }
+
+    private void OnDialogDone(string Answer)
+    {
+        newIngredient = Answer;
+    }
 }
