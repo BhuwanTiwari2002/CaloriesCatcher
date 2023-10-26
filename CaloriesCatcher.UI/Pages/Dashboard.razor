@@ -7,26 +7,49 @@
         @using Newtonsoft.Json;
        
             <MudText>User Id: @UserId</MudText>
+            <div class="container" style="display: flex; flex-wrap: wrap; align-content:flex-start; gap: 1%; margin-left: 0 ">
+                <div style="Width:35%; Height:35%">
+                <MudPaper Elevation=" 3">
+                    <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels"  />
+                </MudPaper>
+                </div>
+                <div style="Width:35%; Height:35%">
+                <MudPaper Elevation=" 3">
+                    <MudChart ChartType="ChartType.Donut" InputData="@daygoal" InputLabels="@daycalorie">
+                        <CustomGraphics>
+                            <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="2">Total</text>
+                            <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="5">@data.Sum().ToString()</text>
+                        </CustomGraphics>
+                    </MudChart>
+                </MudPaper>
+                </div>
+            @* 
+                <MudPaper  Elevation=" 3">
+                    <div style="Width:35%; Height:35%; flex-direction:column;">
+                    <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                    <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
+                    <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+                    </div>
+                </MudPaper> *@
+            <MudPaper Elevation=" 3">
+                <div style=" flex-direction:column;">
+                    <MudButton Style="width=350px, height=350px" OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                    <MudButton Style="width=350px, height=350px" @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
+                    <MudButton Style="width=350px, height=350px" OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+                </div>
+            </MudPaper>
+            <MudPaper Elevation=" 3">
+
+
+               
+            </MudPaper>
+                
+            </div>
+
         
-        <MudGrid Class="mt-5 px-5">
-            
-            <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
-                <MudText Typo="Typo.h3" Class="mb-5">Today's Overview</MudText>
-            </MudItem>
-   
-            <MudItem xs="12" sm="6" Class=" mx-16">
-                <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Progress</MudText>
-                <MudPaper Class="pa-4 ml-16" Elevation=" 3">
-                <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
-            </MudPaper>
-                <MudPaper Class="pa-4 mt-2 ml-16 d-flex justify-center" Elevation=" 3">
-                <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
-                <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
-            </MudPaper>
+        <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
                 <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
                
-            </MudItem>
             <MudItem xs="6" sm="3" Class="ml-16 ">
                 <MudText Align="Align.Center" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Details</MudText>
                 <MudPaper Width="100%" Elevation=" 3">
@@ -41,7 +64,8 @@
                         </RowTemplate>
                     </MudTable>
                 </MudPaper>
-            </MudItem>
+        </MudItem>
+        <MudGrid Class="mt-5 px-5">
             <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="100%">
                
                 <MudItem xs="12" sm="4" Class="mt-16 mx-6">
@@ -159,4 +183,9 @@
     };
     public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
 
+
+        public double[] daygoal = { 25, 75};
+        public string[] daycalorie = { "Goal", "Current Intake"};
+
+   
 }
