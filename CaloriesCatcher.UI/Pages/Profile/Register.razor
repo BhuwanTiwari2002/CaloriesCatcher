@@ -50,7 +50,7 @@
                 loginResponseDto.User.PhoneNumber = "920213123";
                 var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;
                 await customAuthenticationStateProvider.UpdateAuthenticationState(loginResponseDto);
-                navigationManager.NavigateTo("/", true);
+                navigationManager.NavigateTo("/profile", true);
                 StateHasChanged();
             } else
             {
