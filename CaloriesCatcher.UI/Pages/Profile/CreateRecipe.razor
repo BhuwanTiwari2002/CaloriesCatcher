@@ -7,27 +7,26 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h2">Create a Recipe</MudText>
+            <MudText Typo="Typo.h3">Create a Recipe</MudText>
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
 
-            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudButton>Add an Item</MudButton>
-                <MudButton>Edit an Item</MudButton>
-                <MudButton>Delete an Item</MudButton>
-                <MudButton>Add an Step</MudButton>
-                <MudButton>Edit an Step</MudButton>
-                <MudButton>Delete an Step</MudButton>
-            </MudButtonGroup>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Add an Item</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Edit an Item</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Delete an Item</MudButton>
+               
+     
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudItem xs="12" md="6">
-                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
-                <MudPaper Width="100%">
+    
+            <MudItem xs="12" >
+        <MudPaper Class="d-flex align-center justify-center mx-auto py-8" Elevation=" 3" Width="50%">
+            <MudText Color="Color.Primary" Typo="Typo.h6" >Ingredients List</MudText>
+        </MudPaper>
+                <MudPaper Class="d-flex align-center justify-center mx-auto py-8" Elevation=" 3" Width="50%">
                     <MudList>
                         <MudListItem Text="Apple" />
                         <MudListItem Text="Banana" />
@@ -38,12 +37,17 @@
 
                     </MudList>
                 </MudPaper>
-
             </MudItem>
-        </MudPaper>
+    
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Add an Step</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Edit an Step</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="m-4">Delete an Step</MudButton>
+         </MudPaper>
     </MudItem>
     <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
             <MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
         </MudPaper>
     </MudItem>

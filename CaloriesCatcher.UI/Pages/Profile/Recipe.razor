@@ -4,12 +4,13 @@
 @inject HttpClient httpClient
 @inject ISnackbar Snackbar
 
-<MudTable Items="@Elements" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit" Filter="new Func<Element,bool>(FilterFunc)"
+<div style="margin-left: 15%; margin-right:15%">
+<MudTable  Items="@Elements" Dense="@dense" Hover="@hover" ReadOnly="@ronly" CanCancelEdit="@canCancelEdit" Filter="new Func<Element,bool>(FilterFunc)"
           @bind-SelectedItem="selectedItem1" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
           OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
           RowEditCommit="ItemHasBeenCommitted" IsEditRowSwitchingBlocked="@blockSwitch" ApplyButtonPosition="@applyButtonPosition" EditButtonPosition="@editButtonPosition" EditTrigger="@editTrigger">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Recipes</MudText>
+        <MudText Typo="Typo.h4">Recipes</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
@@ -28,6 +29,7 @@
             <col style="width:50px;" />
         }
     </ColGroup>
+
     <HeaderContent>
         <MudTh><MudTableSortLabel SortBy="new Func<Element, object>(x=>x.Id)">Id</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortBy="new Func<Element, object>(x=>x.Calories)">Calories</MudTableSortLabel></MudTh>
@@ -70,7 +72,7 @@
 <MudSwitch @bind-Checked="@ronly" Color="Color.Tertiary">Read Only</MudSwitch>
 <MudSwitch @bind-Checked="@canCancelEdit" Color="Color.Info">Can Cancel Edit</MudSwitch>
 <MudSwitch @bind-Checked="@blockSwitch" Color="Color.Success">Block Edit Row Switching</MudSwitch> *@
-<MudGrid>
+@* <MudGrid>
     <MudItem xs="12" md="4">
         <MudSelect Label="Edit Trigger" T="TableEditTrigger" @bind-Value="editTrigger">
             <MudSelectItem Value="TableEditTrigger.RowClick">Row Click</MudSelectItem>
@@ -112,7 +114,8 @@
             </div>
         }
     </MudExpansionPanel>
-</MudExpansionPanels>
+    </MudExpansionPanels> *@
+</div>
 @code {
     private List<string> editEvents = new();
     private bool dense = false;
