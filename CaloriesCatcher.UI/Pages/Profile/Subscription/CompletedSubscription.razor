@@ -1,6 +1,8 @@
 ﻿@page "/payment-success"
 @using Microsoft.AspNetCore.WebUtilities
 @using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Service.IService
+@using KitchenComfort.Web.Models
 
 <MudContainer>
     <MudCard Elevation="3" Outlined="true" Class="mx-auto my-5" Style="max-width: 600px;">
@@ -18,14 +20,41 @@
 @code {
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] StripePaymentsService stripeService { get; set; }
-    protected override void OnInitialized()
+    [Inject] public IAuthService _authService { get; set; }
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    protected async override void OnInitialized()
     {
         string url = _navigationManager.Uri;
         var query = new Uri(url).Query;
-        if (QueryHelpers.ParseQuery(query).TryGetValue("sessionId", out var sessionId))
+        var parsedQuery = QueryHelpers.ParseQuery(query);
+        if (parsedQuery.TryGetValue("sessionId", out var sessionId))
         {
-           // paymentSuccess = await stripeService.VerifyTransaction(sessionId);
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                if (parsedQuery.TryGetValue("price_id", out var priceId))
+                {
+                    var authState = await authenticationState;
+                    if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")
+                    {
+                        _authService.AssignRoleAsync(new RegisterationRequestDto()
+                        {
+                            Email = authState.User.FindFirst("email")?.Value,
+                            RoleName = "Elephant"
+                        });
+                        
+                    }
+                    else
+                    {
+                        _authService.AssignRoleAsync(new RegisterationRequestDto()
+                        {
+                            Email = authState.User.FindFirst("email")?.Value,
+                            RoleName = "Parrot"
+                        }); 
+                    } 
+                }
+            }
         }
+
 
     }
 }

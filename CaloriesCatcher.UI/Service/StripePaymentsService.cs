@@ -39,7 +39,7 @@ namespace CaloriesCatcher.UI.Service
                     }
                 },
                 Mode = "subscription",
-                SuccessUrl = _stripeSettings.SuccessUrl + "?session_id={CHECKOUT_SESSION_ID}",
+                SuccessUrl = _stripeSettings.SuccessUrl + "?session_id={CHECKOUT_SESSION_ID}?price_id=" + priceId,
                 CancelUrl = _stripeSettings.CancelUrl
             };
             var service = new SessionService();
