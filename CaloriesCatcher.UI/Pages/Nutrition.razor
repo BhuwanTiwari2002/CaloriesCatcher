@@ -6,7 +6,7 @@
 <MudForm @ref="_foodNameForm" Style="margin: auto; width: 30%;">
     <MudText Class="mt-2" Typo="Typo.h6">Enter Food Name</MudText>
     <MudTextField @bind-Value="_foodName" Variant="Variant.Outlined"></MudTextField>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Submit</MudButton>
+    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Submit</MudButton>
 </MudForm>
 
 @if (loading)
