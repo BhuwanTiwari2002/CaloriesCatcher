@@ -14,9 +14,10 @@
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudButton OnClick="OpenDialog" OnDoneCallback="OnDialogDone">Add an Item</MudButton>
+                <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
+                <MudButton OnClick="AddIngredient">Add an Item</MudButton>
+                <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
                 <MudButton>Edit an Item</MudButton>
-                <MudButton>Delete an Item</MudButton>
                 <MudButton>Add an Step</MudButton>
                 <MudButton>Edit an Step</MudButton>
                 <MudButton>Delete an Step</MudButton>
@@ -46,7 +47,7 @@
     </MudItem>
     <MudItem xs="6" sm="4">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
+            <MudButton OnClick="AddRecipeToDb" Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
         </MudPaper>
     </MudItem>
     <MudItem xs="6" sm="4">
@@ -88,15 +89,32 @@
         }
     }
 
-    async void OpenDialog()
+    private void DeleteIngredient()
     {
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
-        var result = await dialog.Result;
+        try
+        {
+            recipeIngredients.RemoveAt(recipeIngredients.Count - 1);
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine(ex.Message);
+        }
+
     }
 
-    private void OnDialogDone(string Answer)
+    private void AddRecipeToDb()
     {
-        newIngredient = Answer;
+        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
+        
     }
+
+    //async void OpenDialog()
+    //{
+    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+    //    var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
+        
+    //    var result = await dialog.Result;
+    //}
+
 }

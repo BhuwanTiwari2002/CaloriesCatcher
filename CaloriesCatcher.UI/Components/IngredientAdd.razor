@@ -23,6 +23,7 @@
     {
         await InvokeAsync(() => OnDoneCallback.InvokeAsync(Answer));
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        
         MudDialog.Close(DialogResult.Ok(true));
     }
 
