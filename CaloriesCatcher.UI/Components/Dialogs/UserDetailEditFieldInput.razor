@@ -1,0 +1,31 @@
+﻿﻿@using CaloriesCatcher.UI.Model
+@using CaloriesCatcher.UI.Service.IService;
+@using CaloriesCatcher.UI.Model
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="userDetail.Height" T="int" Label="Your Height"></MudTextField>
+        <MudTextField @bind-Value="userDetail.Weight" T="int" Label="Your Weight"></MudTextField>
+        <MudTextField @bind-Value="userDetail.DailyCalories" T="Decimal" Label="Your Daily Calories"></MudTextField>
+        <MudTextField @bind-Value="userDetail.Gender" T="string" Label="Your Gender"></MudTextField>
+        <MudTextField @bind-Value="userDetail.BirthDate" T="DateTime" Label="Your Birthday"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="EditUserDetail">Submit Details</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private IUserDetailService userDetailService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    [Parameter] public UserDetail userDetail { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    private async Task EditUserDetail()
+    {        
+        await userDetailService.UpdateUserDetailsAsync(userDetail);
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        MudDialog.Close(DialogResult.Ok(true));
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}

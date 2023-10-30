@@ -1,3 +1,4 @@
+using CaloriesCatcher.UI.Model;
 using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
 using KitchenComfort.Web.Models.Utility;
@@ -11,13 +12,35 @@ public class UserDetailService : IUserDetailService
     {
         _baseService = baseService;
     }
+
+    public async Task<ResponseDto> CreateUserDetailsAsync(UserDetail userDetail)
+    {
+        return await _baseService.SendAsync(new RequestDto()
+        {
+            ApiType = StaticType.ApiType.POST,
+            Data = userDetail,
+            Url = $"https://localhost:7005/api/profile/"
+        });
+    }
+
     public async Task<ResponseDto> GetByUser(string userId)
     {
         return await _baseService.SendAsync(new RequestDto()
         {
             ApiType = StaticType.ApiType.GET,
             Url = $"https://localhost:7005/api/profile/{userId}"
-        }) ;
+        });
 
     }
+
+    public async Task<ResponseDto> UpdateUserDetailsAsync(UserDetail userDetail)
+    {
+        return await _baseService.SendAsync(new RequestDto()
+        {
+            ApiType = StaticType.ApiType.PUT,
+            Data = userDetail,
+            Url = $"https://localhost:7005/api/profile"
+        });
+    }
+
 }

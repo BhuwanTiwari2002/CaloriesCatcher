@@ -90,7 +90,8 @@ namespace CaloriesCatcher.UI.Service
                     jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name)?.Value));
                 identity.AddClaim(new Claim(ClaimTypes.Name,
                     jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email)?.Value));
-                identity.AddClaim(new Claim(ClaimTypes.Role, "BASIC"));
+                identity.AddClaim(new Claim(ClaimTypes.Role,
+                    jwt.Claims.FirstOrDefault(u => u.Type == "role")?.Value));
   
                 var claimsPrincipal = new ClaimsPrincipal(identity);
 

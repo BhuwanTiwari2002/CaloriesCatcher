@@ -2,6 +2,7 @@
 @using CaloriesCatcher.UI.Model
 @using CaloriesCatcher.UI.Service;
 @using Microsoft.Extensions.Options
+@using System.Security.Claims
 
 <MudCard Elevation="3" Outlined="true" Class="mt-5 mx-auto" Style="max-width: 500px;">
     <MudCardContent>
@@ -20,20 +21,42 @@
     [Inject] IJSRuntime JSRuntime { get; set; }
     [Inject] ISnackbar snackbar { get; set; }
     [Inject] IOptions<StripeSettings> stripeSettings { get; set; }
-    public Subscription TurtleSubscription { get; set; } = new Subscription { Name = "Turtle", MonthlyPrice = 0.00M };
-    public Subscription ElephantSubscription { get; set; } = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M, PriceId = "price_1O3kU6CvoZQgmYDTz2m2Q4Sx" };
-    public Subscription ParrotSubscription { get; set; } = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M, PriceId = "price_1O3kVYCvoZQgmYDTLLokRW7M" };
+    public Subscription TurtleSubscription { get; set; }
+    public Subscription ElephantSubscription { get; set; } 
+    public Subscription ParrotSubscription { get; set; } 
+    public string role { get; set; } = string.Empty;
+    Subscription SelectedSubscription;
 
-    Subscription SelectedSubscription = null;  
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        SelectedSubscription = TurtleSubscription;  
+        var authState = await authenticationState;
+        role = authState.User.FindFirst(ClaimTypes.Role)?.Value;
+        if (string.IsNullOrEmpty(role))
+        {
+            role = "Turtle";
+        }
+        SelectedSubscription = new Subscription();
+        TurtleSubscription = new  Subscription { Name = "Turtle", MonthlyPrice = 0.00M };
+        ElephantSubscription = new Subscription { Name = "Elephant", MonthlyPrice = 0.99M, PriceId = "price_1O3kU6CvoZQgmYDTz2m2Q4Sx" };
+        ParrotSubscription = new Subscription { Name = "Parrot", MonthlyPrice = 1.99M, PriceId = "price_1O3kVYCvoZQgmYDTLLokRW7M" };
+        if (role.ToLower() == TurtleSubscription.Name.ToLower())
+        {
+            SelectedSubscription = TurtleSubscription;  
+        } else if (role.ToLower() == ElephantSubscription.Name.ToLower())
+        {
+            SelectedSubscription = ElephantSubscription;
+        }
+        else
+        {
+            SelectedSubscription = ParrotSubscription;
+        }
+        
+        
     }
 
     private async Task Subscribe()
     {
-        if (SelectedSubscription == TurtleSubscription)
+        if (SelectedSubscription.Name.ToLower() == role.ToLower())
         {
             snackbar.Add("You already have this subscription");
         }

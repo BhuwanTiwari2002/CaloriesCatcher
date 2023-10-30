@@ -16,7 +16,6 @@
         </MudCardContent>
     </MudCard>
 </MudContainer>
-
 @code {
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] StripePaymentsService stripeService { get; set; }
@@ -29,32 +28,34 @@
         var parsedQuery = QueryHelpers.ParseQuery(query);
         if (parsedQuery.TryGetValue("sessionId", out var sessionId))
         {
-            if (string.IsNullOrEmpty(sessionId))
-            {
-                if (parsedQuery.TryGetValue("price_id", out var priceId))
-                {
-                    var authState = await authenticationState;
-                    if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")
-                    {
-                        _authService.AssignRoleAsync(new RegisterationRequestDto()
-                        {
-                            Email = authState.User.FindFirst("email")?.Value,
-                            RoleName = "Elephant"
-                        });
-                        
-                    }
-                    else
-                    {
-                        _authService.AssignRoleAsync(new RegisterationRequestDto()
-                        {
-                            Email = authState.User.FindFirst("email")?.Value,
-                            RoleName = "Parrot"
-                        }); 
-                    } 
-                }
-            }
+            
+            
         }
-
-
+        if (!string.IsNullOrEmpty(url))
+        {
+            int charAt = sessionId.ToString().IndexOf("$");
+            string priceId = sessionId.ToString().Substring(charAt, sessionId.Count);
+            var authState = await authenticationState;
+            if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")
+            {
+                _authService.AssignRoleAsync(new RegisterationRequestDto()
+                {
+                    Email = authState.User.FindFirst("Email")?.Value,
+                    RoleName = "Elephant"
+                });
+                        
+            }
+            else
+            {
+                _authService.AssignRoleAsync(new RegisterationRequestDto()
+                {
+                    Email = authState.User.FindFirst("Email")?.Value,
+                    RoleName = "Parrot",
+                    Password = "",
+                    PhoneNumber = "",
+                    UserName = ""
+                }); 
+            }  
+        }   
     }
 }
