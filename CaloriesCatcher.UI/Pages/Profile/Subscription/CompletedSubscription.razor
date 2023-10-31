@@ -33,7 +33,7 @@
         }
         if (!string.IsNullOrEmpty(url))
         {
-            int charAt = sessionId.ToString().IndexOf("$");
+            int charAt = url.IndexOf("$");
             string priceId = sessionId.ToString().Substring(charAt, sessionId.Count);
             var authState = await authenticationState;
             if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")

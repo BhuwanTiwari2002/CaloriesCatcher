@@ -70,6 +70,42 @@ namespace Calories.API.Controllers
             }
             return _response;
         }
+
+        [HttpPut]
+        public ResponseDto Put([FromBody] CaloriesDto caloriesDto)
+        {
+            try
+            {
+                var obj = _mapper.Map<Calories.API.Models.Calories>(caloriesDto);
+                _db.Calories.Update(obj);
+                _db.SaveChanges();
+                _response.Result = _mapper.Map<CaloriesDto>(obj);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [HttpDelete]
+        public ResponseDto Delete(int userId)
+        {
+            try
+            {
+                var obj = _db.Calories.Where(c => c.Id == userId).FirstOrDefault();
+                _db.Calories.Remove(obj);
+                _db.SaveChanges();
+                _response.Result = $"The {userId} has been deleted";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
     
     }
 }

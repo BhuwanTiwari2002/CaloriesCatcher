@@ -33,6 +33,25 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
+        public async Task<ResponseDto> DeleteCaloriesAsync(int userId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.DELETE,
+                Url = $"https://localhost:7005/api/calories/{userId}"
+            });
+        }
+
+        public async Task<ResponseDto> UpdateCaloriesAsync(CaloriesDto caloriesDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.PUT,
+                Data = caloriesDto,
+                Url = "https://localhost:7005/api/calories"
+            });
+        }
+
         public async Task<ResponseDto> GetAllCaloriesAsync()
         {
             return await _baseService.SendAsync(new RequestDto()
