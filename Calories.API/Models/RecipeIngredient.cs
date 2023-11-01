@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Calories.API.Models
 {
-    public class RecipeFood
+    public class RecipeIngredient
     {
         [Key]
-        public int RecipeFoodId { get; set; }
-        [ForeignKey("FoodId")]
-        public virtual int FoodId { get; set; }
+        public int RecipeIngredientId { get; set; }
         [ForeignKey("RecipeId")]
         public virtual int RecipeId { get; set; }
-        [ForeignKey("UserId")]
         [Column(TypeName = "VARCHAR")]
-        [StringLength(450)]
-        public virtual string UserId { get; set; } = string.Empty;
+        [StringLength(150)]
+        public string IngredientName { get; set; }
+        [Column(TypeName = "DECIMAL")]
+        public double Quantity { get; set; }
+        
     }
 }

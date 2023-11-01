@@ -12,5 +12,13 @@ namespace Calories.API.Models
         [Column(TypeName = "VARCHAR")]
         [StringLength(150)]
         public string RecipeName { get; set; } = string.Empty;
+        [ForeignKey("UserId")]
+        public virtual string UserId { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string Calories { get; set; }
+        [Column(TypeName = "VARCHAR")]
+        [StringLength(100)]
+        public string ImagePath { get; set; }
     }
 }

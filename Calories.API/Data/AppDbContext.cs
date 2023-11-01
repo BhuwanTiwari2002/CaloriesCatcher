@@ -8,7 +8,7 @@ namespace Calories.API.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Calories.API.Models.Calories> Calories { get; set; }
         public DbSet<AspNetUsersDetail> AspNetUsersDetails { get; set; }
-        public DbSet<RecipeFood> RecipeFoods { get; set; }
+        public DbSet<RecipeIngredient>  ReceipeIngredients { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -99,38 +99,52 @@ namespace Calories.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeId"));
 
+                    b.Property<string>("Calories")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("VARCHAR");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("VARCHAR");
+
                     b.Property<string>("RecipeName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("VARCHAR");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecipeId");
 
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("Calories.API.Models.RecipeFood", b =>
+            modelBuilder.Entity("Calories.API.Models.RecipeIngredient", b =>
                 {
-                    b.Property<int>("RecipeFoodId")
+                    b.Property<int>("RecipeIngredientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeFoodId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecipeIngredientId"));
 
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
+                    b.Property<string>("IngredientName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("VARCHAR");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("DECIMAL");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("VARCHAR");
+                    b.HasKey("RecipeIngredientId");
 
-                    b.HasKey("RecipeFoodId");
-
-                    b.ToTable("RecipeFoods");
+                    b.ToTable("ReceipeIngredients");
                 });
 #pragma warning restore 612, 618
         }
