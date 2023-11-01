@@ -4,6 +4,7 @@
         @using CaloriesCatcher.UI.Components;
         @using CaloriesCatcher.UI.Model;
         @using CaloriesCatcher.UI.Service.IService;
+@using Microsoft.AspNetCore.Authentication.OAuth.Claims
         @using Newtonsoft.Json;
         <div style="float:left; width:40%; margin: 20px;">
             <MudText>User Id: @UserId</MudText>
@@ -28,11 +29,13 @@
                     <MudTable Items="caloriesDtos" Class="calories-table">
                         <HeaderContent>
                             <MudTh>Calorie Name</MudTh>
-                            <MudTh>Calorie Value</MudTh>
+                            <MudTh>Calorie Value</MudTh>                            
+                            <MudTh></MudTh>
                         </HeaderContent>
                         <RowTemplate Context="items">
                             <MudTd>@items.CalorieName</MudTd>
                             <MudTd>@items.Calorie</MudTd>
+                            <MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton>
                         </RowTemplate>
                     </MudTable>
                 </MudPaper>
@@ -65,7 +68,8 @@
         await RefreshCaloriesData();
         getGraphData();
     }
-
+    
+    
      int i = -1;
     int dataSize = 4;
    // double[] data = { 10, 25, 20, 5 };
@@ -140,4 +144,24 @@
         var result = await dialog.Result;
     }
 
+    private async void DeleteCalories(int caloriesId)
+    {
+        try
+        {
+           var response = await caloriesService.DeleteCaloriesAsync(caloriesId);
+            if (response.IsSuccess)
+            {
+                StateHasChanged();
+                snackBar.Add($"Error: Something went wrong", Severity.Success);
+            }
+            else
+            {
+                snackBar.Add($"Error: Something went wrong", Severity.Error);
+            }
+        } catch (Exception ex)
+        {
+            snackBar.Add($"Error: {ex.Message}", Severity.Error);
+        }
+
+    }
 }
