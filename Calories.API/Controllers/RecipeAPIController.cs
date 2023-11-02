@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Recipe.API.Data;
-using Recipe.API.Models.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using static Azure.Core.HttpHeader;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Calories.API.Models.Dto;
+using Calories.API.Data;
 
 namespace Recipe.API.Controllers
 {
@@ -26,7 +26,7 @@ namespace Recipe.API.Controllers
         {
             try
             {
-                IEnumerable<Recipe.API.Models.Recipe> objList = _db.Recipe.ToList();
+                IEnumerable<Calories.API.Models.Recipe> objList = _db.Recipes.ToList();
                 _response.Result = _mapper.Map<IEnumerable<RecipeDto>>(objList);
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Recipe.API.Controllers
         {
             try
             {
-                List<Recipe.API.Models.Recipe> obj = _db.Recipe.Where(x => x.UserId == userId).ToList();
+                List<Calories.API.Models.Recipe> obj = _db.Recipes.Where(x => x.UserId == userId).ToList();
                 _response.Result = _mapper.Map<List<RecipeDto>>(obj);
             }
             catch (Exception ex)
@@ -58,8 +58,8 @@ namespace Recipe.API.Controllers
         {
             try
             {
-                var obj = _mapper.Map< Recipe.API.Models.Recipe> (caloriesDto);
-                _db.Recipe.Add(obj);
+                var obj = _mapper.Map<Calories.API.Models.Recipe> (caloriesDto);
+                _db.Recipes.Add(obj);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<RecipeDto>(obj);
             }
@@ -76,8 +76,8 @@ namespace Recipe.API.Controllers
         {
             try
             {
-                var obj = _mapper.Map<Recipe.API.Models.Recipe>(caloriesDto);
-                _db.Recipe.Update(obj);
+                var obj = _mapper.Map<Calories.API.Models.Recipe>(caloriesDto);
+                _db.Recipes.Update(obj);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<RecipeDto>(obj);
             }
@@ -94,8 +94,8 @@ namespace Recipe.API.Controllers
         {
             try
             {
-                var obj = _db.Recipe.Where(c => c.Id == userId).FirstOrDefault();
-                _db.Recipe.Remove(obj);
+                var obj = _db.Recipes.Where(c => c.RecipeId == userId).FirstOrDefault();
+                _db.Recipes.Remove(obj);
                 _db.SaveChanges();
                 _response.Result = $"The {userId} has been deleted";
             }
