@@ -3,6 +3,9 @@
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
+@using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Model;
+@using RecipeCatcher.UI.Service;
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 <MudGrid>
     <MudItem xs="12">
@@ -17,7 +20,7 @@
                 <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
                 <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
-                <MudButton>Edit an Item</MudButton>
+                <MudButton OnClick="AddRecipeToDb">Edit an Item</MudButton>
                 <MudButton>Add an Step</MudButton>
                 <MudButton>Edit an Step</MudButton>
                 <MudButton>Delete an Step</MudButton>
@@ -72,16 +75,30 @@
 
 @code
 {
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private IRecipe recipeService { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
     string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
     List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
+
     private string? newIngredient;
     //temp data until ui is finished
     private string RecipeName = "Test";
-    private double Quantity = 99.9;
+    private int RecipeId = 123;
+    private double Calories = 99.9;
+    private string ImagePath = "Test";
+
+    CaloriesCatcher.UI.Model.RecipeDto recipeDto = new RecipeDto();
+
+
+
+
+
+
 
 
     private void AddIngredient()
@@ -107,10 +124,16 @@
 
     }
 
-    private void AddRecipeToDb()
+    private async void AddRecipeToDb()
     {
+        recipeDto.RecipeId = RecipeId;
+        recipeDto.RecipeName = RecipeName;
+        recipeDto.Calories = Calories;
+        recipeDto.ImagePath = ImagePath;
         //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-        
+        var authState = await authenticationState;
+        recipeDto.UserId = authState.User.FindFirst("sub")?.Value;
+        recipeService.CreateRecipeAsync(recipeDto);
     }
 
     //async void OpenDialog()

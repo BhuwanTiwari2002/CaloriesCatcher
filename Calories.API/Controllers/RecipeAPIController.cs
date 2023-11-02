@@ -54,11 +54,11 @@ namespace Recipe.API.Controllers
             return _response;
         }
         [HttpPost]
-        public ResponseDto Post([FromBody] RecipeDto caloriesDto)
+        public ResponseDto Post([FromBody] RecipeDto recipeDto)
         {
             try
             {
-                var obj = _mapper.Map<Calories.API.Models.Recipe> (caloriesDto);
+                var obj = _mapper.Map<Calories.API.Models.Recipe> (recipeDto);
                 _db.Recipes.Add(obj);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<RecipeDto>(obj);
