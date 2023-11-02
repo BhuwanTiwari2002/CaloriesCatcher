@@ -110,7 +110,7 @@ namespace Auth.API.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            var response = _authService.DeleteUser(id);
+            var response = await _authService.DeleteUser(id);
             if (response == null)
             {
                 _responseDto.IsSuccess = false;

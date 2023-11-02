@@ -23,10 +23,10 @@
             </div>
         </div>
         <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
-            <MudItem xs="12" md="6">
+            <MudItem xs="12" md="10">
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
                 <MudPaper Width="100%">
-                    <MudTable Items="caloriesDtos" Class="calories-table">
+                    <MudTable Items="ListOfCalories" Class="calories-table">
                         <HeaderContent>
                             <MudTh>Calorie Name</MudTh>
                             <MudTh>Calorie Value</MudTh>                            
@@ -35,7 +35,7 @@
                         <RowTemplate Context="items">
                             <MudTd>@items.CalorieName</MudTd>
                             <MudTd>@items.Calorie</MudTd>
-                            <MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton>
+                            <MudTd><MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton></MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudPaper>
@@ -61,7 +61,7 @@
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
     public string UserId { get; set; }
-    List<CaloriesDto> caloriesDtos = new List<CaloriesDto>();
+    List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,7 +78,7 @@
 
     public void getGraphData()
     {
-        foreach (CaloriesDto caloriesDto in caloriesDtos)
+        foreach (CaloriesDto caloriesDto in ListOfCalories)
         {
             TimeSpan time = caloriesDto.Date.TimeOfDay;
             if (time >= TimeSpan.FromHours(5) && time < TimeSpan.FromHours(12))
@@ -128,7 +128,7 @@
         UserId = authState.User.FindFirst("sub")?.Value;
         if (response != null && response.IsSuccess)
         {
-            caloriesDtos = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
+            ListOfCalories = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
             StateHasChanged();
         }
         else
@@ -151,8 +151,9 @@
            var response = await caloriesService.DeleteCaloriesAsync(caloriesId);
             if (response.IsSuccess)
             {
+                ListOfCalories.Remove(ListOfCalories.FirstOrDefault(c => c.Id == caloriesId));
+                snackBar.Add($"Success: {response.Message} was deleted", Severity.Success);
                 StateHasChanged();
-                snackBar.Add($"Error: Something went wrong", Severity.Success);
             }
             else
             {

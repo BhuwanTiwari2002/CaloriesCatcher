@@ -89,22 +89,22 @@ namespace Calories.API.Controllers
             return _response;
         }
 
-        [HttpDelete]
-        public ResponseDto Delete(int userId)
+        [HttpDelete("Delete/{userId:int}")]
+        public async Task<ActionResult> DeleteCalorieByUser(int userId)
         {
             try
             {
                 var obj = _db.Calories.Where(c => c.Id == userId).FirstOrDefault();
                 _db.Calories.Remove(obj);
                 _db.SaveChanges();
-                _response.Result = $"The {userId} has been deleted";
+                _response.Message = $"The {obj.CalorieName} has been deleted";
             }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
-            return _response;
+            return Ok(_response);
         }
     
     }

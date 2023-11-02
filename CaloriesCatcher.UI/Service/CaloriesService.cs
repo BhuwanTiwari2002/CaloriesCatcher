@@ -38,7 +38,7 @@ namespace CaloriesCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.DELETE,
-                Url = $"https://localhost:7005/api/calories/{userId}"
+                Url = $"https://localhost:7005/api/calories/Delete/{userId}"
             });
         }
 
