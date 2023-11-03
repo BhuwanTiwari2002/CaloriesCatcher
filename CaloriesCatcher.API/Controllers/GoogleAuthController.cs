@@ -57,5 +57,4 @@ public class GoogleAuthController : ControllerBase
 
         return BadRequest("Google authentication failed.");
     }
-
 }

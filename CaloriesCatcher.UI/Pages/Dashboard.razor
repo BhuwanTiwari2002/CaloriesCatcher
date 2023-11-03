@@ -2,10 +2,10 @@
     <Authorized>
         @page "/"
         @using CaloriesCatcher.UI.Components;
-@using CaloriesCatcher.UI.Components.Dialogs
+        @using CaloriesCatcher.UI.Components.Dialogs
         @using CaloriesCatcher.UI.Model;
         @using CaloriesCatcher.UI.Service.IService;
-@using Microsoft.AspNetCore.Authentication.OAuth.Claims
+        @using Microsoft.AspNetCore.Authentication.OAuth.Claims
         @using Newtonsoft.Json;
         <div style="float:left; width:40%; margin: 20px; border-radius: 7px;">
             <MudText>User Id: @UserId</MudText>
@@ -42,7 +42,7 @@
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Goal Progress</MudText>
                 <MudPaper Style="border-radius: 7px !important;">
                     <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="35%" Height="35%"
-                              InputData="@data" InputLabels="@labels">
+                              InputData="@trackingData" InputLabels="@trackingLabel">
                     </MudChart>
                 </MudPaper>
                 <div style="float:right; width:100%;margin-top:5%; margin-bottom:5%;">
@@ -73,16 +73,15 @@
 </AuthorizeView>
 
 @code {
-
     [Inject]
     private ICalories caloriesService { get; set; } = default!;
-
     [Inject]
     private ISnackbar snackBar { get; set; } = default!;
-
     [Inject]
     IDialogService dialogService { get; set; } = default!;
 
+    [Inject]
+    private IUserDetailService _userDetailService { get; set; } = default!;
     [CascadingParameter]
     Task<AuthenticationState> authenticationState { get; set; } = default!;
     public string UserId { get; set; }
@@ -92,15 +91,39 @@
     {
         await RefreshCaloriesData();
         getGraphData();
+        getTrackingGraphData();
     }
     
     
-     int i = -1;
+    int i = -1;
     int dataSize = 4;
-   // double[] data = { 10, 25, 20, 5 };
     private double[] data = new double[3] { 0, 0, 0 };
     string[] labels = { "Breakfast", "Lunch", "Dinner" };
+    string[] trackingLabel = { "Daily Target", "Current" };
+    private Double[] trackingData = new Double[2] { 0.0, 0.0 };
 
+    public async void getTrackingGraphData()
+    {
+        foreach (CaloriesDto caloriesDto in ListOfCalories)
+        {
+            if (caloriesDto.Date.Date == DateTime.Today)
+            {
+                trackingData[1] += caloriesDto.Calorie;
+            }
+        }
+
+        var result = await _userDetailService.GetByUser(UserId);
+        if (result.IsSuccess == true & result.Result != null)
+        {
+            var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
+            trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);  
+        }
+        else
+        {
+            trackingData[0] = 0;
+        }
+    }
+    
     public void getGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
@@ -123,28 +146,10 @@
     // change to edit
     void EditData()
     {
-    /* var new_data = new double[dataSize];
-        for (int i = 0; i < new_data.Length; i++)
-        new_data[i] = random.NextDouble() * 100;
-        data = new_data;
-        StateHasChanged(); */
+
     }
 
-    void AddDataSize()
-    {
-        if (dataSize < 20)
-        {
-            dataSize = dataSize + 1;
-        }
-    }
-
-    void RemoveDataSize()
-    {
-        if (dataSize > 0)
-        {
-            dataSize = dataSize - 1;
-        }
-    }
+    
 
     async Task RefreshCaloriesData()
     {
