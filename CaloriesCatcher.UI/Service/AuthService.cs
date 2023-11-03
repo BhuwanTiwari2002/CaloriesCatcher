@@ -19,7 +19,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = registerationRequestDto,
-                Url = "https://localhost:7002/api/auth/AssignRole"
+                Url = StaticType.AuthAPIBase + "api/auth/AssignRole"
             });
         }
 
@@ -29,13 +29,13 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = loginRequestDto,
-                Url = "https://localhost:7002/api/auth/login"
+                Url = StaticType.AuthAPIBase + "api/auth/login"
             });
         }
         public void StartGoogleLogin()
         {
             // Redirect to the API's Google Login endpoint to start the Google authentication process
-            var googleLoginUrl = "https://localhost:7002/api/signin-google/StartGoogleLogin";
+            var googleLoginUrl = StaticType.AuthAPIBase + "api/signin-google/StartGoogleLogin";
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
                 FileName = googleLoginUrl,
@@ -48,7 +48,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = registerationRequestDto,
-                Url = "https://localhost:7002/api/auth/register"
+                Url = StaticType.AuthAPIBase + "api/auth/register"
             });
         }
         public async Task<ResponseDto?> ForgotPasswordAsync(string email)
@@ -57,7 +57,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = new { Email = email },  // An anonymous type for the request body
-                Url = "https://localhost:7002/api/auth/forgot-password"
+                Url =  StaticType.AuthAPIBase + "api/auth/forgot-password"
             };
 
             return await _baseService.SendAsync(requestDto);
@@ -68,7 +68,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = request,
-                Url = "https://localhost:7002/api/auth/reset-password"
+                Url = StaticType.AuthAPIBase + "api/auth/reset-password"
             };
 
             return await _baseService.SendAsync(requestDto);
@@ -78,7 +78,7 @@ namespace CaloriesCatcher.UI.Service
             var requestDto = new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = "https://localhost:7002/api/auth/GetAll"
+                Url = StaticType.AuthAPIBase + "api/auth/GetAll"
             };
 
             return await _baseService.SendAsync(requestDto);
@@ -89,7 +89,7 @@ namespace CaloriesCatcher.UI.Service
             var requestDto = new RequestDto()
             {
                 ApiType = StaticType.ApiType.DELETE,
-                Url = $"https://localhost:7002/api/auth/Delete/{Id}"
+                Url = StaticType.AuthAPIBase + $"auth/Delete/{Id}"
             };
             return await _baseService.SendAsync(requestDto);
         }

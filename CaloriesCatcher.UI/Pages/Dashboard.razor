@@ -31,11 +31,13 @@
                             <MudTh>Calorie Name</MudTh>
                             <MudTh>Calorie Value</MudTh>                            
                             <MudTh></MudTh>
+                            <MudTh></MudTh>
                         </HeaderContent>
                         <RowTemplate Context="items">
                             <MudTd>@items.CalorieName</MudTd>
                             <MudTd>@items.Calorie</MudTd>
                             <MudTd><MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton></MudTd>
+                            <MudTd><MudIconButton Icon="@Icons.Material.Filled.Edit" aria-label="Edit"></MudIconButton></MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudPaper>
