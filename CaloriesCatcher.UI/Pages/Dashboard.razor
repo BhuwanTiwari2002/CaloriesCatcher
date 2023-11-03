@@ -2,42 +2,39 @@
     <Authorized>
         @page "/"
         @using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Components.Dialogs
         @using CaloriesCatcher.UI.Model;
         @using CaloriesCatcher.UI.Service.IService;
 @using Microsoft.AspNetCore.Authentication.OAuth.Claims
         @using Newtonsoft.Json;
-        <div style="float:left; width:40%; margin: 20px;">
+        <div style="float:left; width:40%; margin: 20px; border-radius: 7px;">
             <MudText>User Id: @UserId</MudText>
             <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
-            <MudPaper Class="pa-4">
+            <MudPaper Class="pa-4" Style="border-radius: 7px">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
             </MudPaper>
-            <MudPaper Class="pa-4 mt-2 d-flex justify-center">
+            <MudPaper Class="pa-4 mt-2 d-flex justify-center" Style="border-radius: 7px">
                 <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4">Edit Food</MudButton>
-                <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Secondary">Delete Food</MudButton>
+                <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Log Receipe</MudButton>
+                <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
             </MudPaper>
-            <div style="text-align:center; margin-top:2%;">
-                <MudButton Color="Color.Primary" Variant="Variant.Text">Track a food</MudButton>
-                <MudButton Color="Color.Primary" Variant="Variant.Text">Track a recipe</MudButton>
-            </div>
         </div>
         <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
             <MudItem xs="12" md="10">
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
-                <MudPaper Width="100%">
+                <MudPaper Width="100%" Style="border-radius: 7px;">
                     <MudTable Items="ListOfCalories" Class="calories-table">
                         <HeaderContent>
-                            <MudTh>Calorie Name</MudTh>
-                            <MudTh>Calorie Value</MudTh>                            
-                            <MudTh></MudTh>
-                            <MudTh></MudTh>
+                            <MudTh>Name</MudTh>
+                            <MudTh>Value</MudTh>                            
+                            <MudTh>Delete</MudTh>
+                            <MudTh>Update</MudTh>
                         </HeaderContent>
                         <RowTemplate Context="items">
                             <MudTd>@items.CalorieName</MudTd>
                             <MudTd>@items.Calorie</MudTd>
                             <MudTd><MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton></MudTd>
-                            <MudTd><MudIconButton Icon="@Icons.Material.Filled.Edit" aria-label="Edit"></MudIconButton></MudTd>
+                            <MudTd><MudIconButton @onclick="() => UpdateCalories(items)" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton></MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudPaper>
@@ -166,5 +163,14 @@
             snackBar.Add($"Error: {ex.Message}", Severity.Error);
         }
 
+    }
+
+    private async void UpdateCalories(CaloriesDto caloriesDto)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("caloriesDto", caloriesDto);
+        var dialogResult = await dialogService.Show<CaloriesEditDialog>("Calories: ", parameters).Result;
+        snackBar.Add("Calorie Updated", Severity.Success);
+        await RefreshCaloriesData();
     }
 }
