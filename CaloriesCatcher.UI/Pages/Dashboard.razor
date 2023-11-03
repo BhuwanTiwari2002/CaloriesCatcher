@@ -37,15 +37,16 @@
             </MudPaper>
         </div>
 
-        <div style="float:right; width:50%;margin-top:6%; margin-right:3%; margin-bottom:5%;">
+        <div style="float:right; width:50%;margin-top:3.5%; margin-right:3%; margin-bottom:5%;">
             <MudItem xs="12" md="10">
+                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Goal Progress</MudText>
                 <MudPaper Style="border-radius: 7px !important;">
                     <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="35%" Height="35%"
                               InputData="@data" InputLabels="@labels">
                     </MudChart>
                 </MudPaper>
-                <div style="float:right; width:100%;margin-top:3%; margin-bottom:5%;">
-                    <MudItem xs="12" md="6" Class="mb-4">
+                <div style="float:right; width:100%;margin-top:5%; margin-bottom:5%;">
+                    <MudItem xs="12" md="8" Class="mb-4">
                         <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
                                 <MudImage Src="images/FireIcon.png" Width="50"></MudImage>
@@ -53,10 +54,10 @@
                             </div>
                         </MudPaper>
                     </MudItem>
-                    <MudItem xs="12" md="6" Class="mb-4">
+                    <MudItem xs="12" md="8" Class="mb-4">
                         <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(127, 0, 255,0.5); color: white; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
-                                <MudImage Src="images/CaloriesIcon.png" Width="55"></MudImage>
+                                <MudImage Src="images/CaloriesIcon.png" Width="60"></MudImage>
                                 <MudText Typo="Typo.h5" Class="ms-lg-5">Total Calories: @ListOfCalories.Sum(c => c.Calorie)</MudText>
                             </div>
                         </MudPaper>
