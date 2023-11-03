@@ -1,5 +1,4 @@
 ﻿using CaloriesCatcher.UI.Model;
-using CaloriesCatcher.UI.Model;
 using KitchenComfort.Web.Models;
 
 namespace CaloriesCatcher.UI.Service.IService

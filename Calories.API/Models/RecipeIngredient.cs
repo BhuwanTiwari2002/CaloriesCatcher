@@ -15,6 +15,8 @@ namespace Calories.API.Models
         public string IngredientName { get; set; }
         [Column(TypeName = "DECIMAL")]
         public double Quantity { get; set; }
-        
+        [ForeignKey("UserId")]
+        public virtual string UserId { get; set; }// Added UserId
+
     }
 }

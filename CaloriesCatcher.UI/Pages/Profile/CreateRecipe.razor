@@ -35,7 +35,7 @@
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
-                            <li>@RecipeIngredientDto.Name</li>
+                            <li>@RecipeIngredientDto.IngredientName</li>
                         }
                     </MudList>
                 </MudPaper>
@@ -66,13 +66,6 @@
 
 </MudGrid>
 
-
-
-
-
-
-
-
 @code
 {
     [Inject] IDialogService dialogService { get; set; } = default!;
@@ -94,18 +87,11 @@
 
     CaloriesCatcher.UI.Model.RecipeDto recipeDto = new RecipeDto();
 
-
-
-
-
-
-
-
     private void AddIngredient()
     {
         if (!string.IsNullOrWhiteSpace(newIngredient))
         {
-            recipeIngredients.Add(new RecipeIngredientDto { Name = newIngredient });
+            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
             newIngredient = string.Empty;
         }
     }

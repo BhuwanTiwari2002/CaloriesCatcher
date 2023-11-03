@@ -14,6 +14,10 @@
 	<PackageReference Include="Stripe.net" Version="43.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Calories.API\Calories.API.csproj" />
+  </ItemGroup>
+
   
 
 </Project>
