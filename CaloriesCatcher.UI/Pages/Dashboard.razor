@@ -13,32 +13,57 @@
             <MudPaper Class="pa-4" Style="border-radius: 7px">
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
             </MudPaper>
+            <MudText Color="Color.Primary" Class="mt-lg-5" Typo="Typo.h6" GutterBottom="true">Today's Calories</MudText>
+            <MudPaper Width="100%" Style="border-radius: 7px;">
+                <MudTable Items="ListOfCalories" Class="calories-table">
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Value</MudTh>                            
+                        <MudTh>Delete</MudTh>
+                        <MudTh>Update</MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="items">
+                        <MudTd>@items.CalorieName</MudTd>
+                        <MudTd>@items.Calorie</MudTd>
+                        <MudTd><MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton></MudTd>
+                        <MudTd><MudIconButton @onclick="() => UpdateCalories(items)" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton></MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudPaper>
             <MudPaper Class="pa-4 mt-2 d-flex justify-center" Style="border-radius: 7px">
-                <MudButton OnClick="OpenDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                <MudButton @onclick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Log Receipe</MudButton>
-                <MudButton OnClick="RemoveDataSize" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
+                <MudButton OnClick="OpenCaloriesDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                <MudButton OnClick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Create Receipe</MudButton>
+                <MudButton Href="/profile" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
             </MudPaper>
         </div>
-        <div style="float:right; width:40%;margin-top:3%; margin-right:3%; margin-bottom:5%;">
+
+        <div style="float:right; width:50%;margin-top:6%; margin-right:3%; margin-bottom:5%;">
             <MudItem xs="12" md="10">
-                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Progress</MudText>
-                <MudPaper Width="100%" Style="border-radius: 7px;">
-                    <MudTable Items="ListOfCalories" Class="calories-table">
-                        <HeaderContent>
-                            <MudTh>Name</MudTh>
-                            <MudTh>Value</MudTh>                            
-                            <MudTh>Delete</MudTh>
-                            <MudTh>Update</MudTh>
-                        </HeaderContent>
-                        <RowTemplate Context="items">
-                            <MudTd>@items.CalorieName</MudTd>
-                            <MudTd>@items.Calorie</MudTd>
-                            <MudTd><MudButton @onclick="() => DeleteCalories(items.Id)" Color="Color.Error">Delete</MudButton></MudTd>
-                            <MudTd><MudIconButton @onclick="() => UpdateCalories(items)" Icon="@Icons.Material.Filled.Edit" Color="Color.Primary" aria-label="Edit"></MudIconButton></MudTd>
-                        </RowTemplate>
-                    </MudTable>
+                <MudPaper Style="border-radius: 7px !important;">
+                    <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="35%" Height="35%"
+                              InputData="@data" InputLabels="@labels">
+                    </MudChart>
                 </MudPaper>
+                <div style="float:right; width:100%;margin-top:3%; margin-bottom:5%;">
+                    <MudItem xs="12" md="6" Class="mb-4">
+                        <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
+                            <div style="display: flex; align-items: center; margin-top: 10px;">
+                                <MudImage Src="images/FireIcon.png" Width="50"></MudImage>
+                                <MudText Typo="Typo.h5" Class="ms-lg-5">Streaks: 20 days</MudText>
+                            </div>
+                        </MudPaper>
+                    </MudItem>
+                    <MudItem xs="12" md="6" Class="mb-4">
+                        <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(127, 0, 255,0.5); color: white; border-radius: 7px;">
+                            <div style="display: flex; align-items: center; margin-top: 10px;">
+                                <MudImage Src="images/CaloriesIcon.png" Width="55"></MudImage>
+                                <MudText Typo="Typo.h5" Class="ms-lg-5">Total Calories: @ListOfCalories.Sum(c => c.Calorie)</MudText>
+                            </div>
+                        </MudPaper>
+                    </MudItem>
+                </div>
             </MudItem>
+            
         </div>
     </Authorized>
     <NotAuthorized>
@@ -136,7 +161,7 @@
         }
     }
 
-    async void OpenDialog()
+    async void OpenCaloriesDialog()
     {
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
