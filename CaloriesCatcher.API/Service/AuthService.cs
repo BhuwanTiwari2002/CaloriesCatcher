@@ -6,6 +6,7 @@ using KitchenComfort.Services.AuthAPI.Models.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
+using Auth.API.Models;
 
 namespace AuthApi.API.Service
 {
@@ -137,7 +138,7 @@ namespace AuthApi.API.Service
         }
         public async Task SendForgotPasswordEmail(ApplicationUser applicationUser, string resetCode)
         {
-            var resetLink = $"https://localhost:7024/reset-password?token={applicationUser.IdentityResetToken}";
+            var resetLink = StaticTypes.APIAuthUrl + $"reset-password?token={applicationUser.IdentityResetToken}";
             var message = $@"
                 <html>
                 <head>
