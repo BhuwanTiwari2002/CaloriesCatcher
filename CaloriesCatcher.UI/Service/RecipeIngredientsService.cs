@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CaloriesCatcher.UI.Service
 {
-    public class RecipeIngredientsService : Controller
+    public class RecipeIngredientsService : IRecipeIngredients
     {
         private readonly IBaseService _baseService;
         public RecipeIngredientsService(IBaseService baseService)
@@ -23,7 +23,7 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
-        public async Task<ResponseDto> GetAllRecipeIngredientsAsync(string userId)
+        public async Task<ResponseDto> GetRecipeIngredientsByUserAsync(string userId)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -51,7 +51,7 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
-        public async Task<ResponseDto> GetAllRecipesAsync()
+        public async Task<ResponseDto> GetAllRecipeIngredientsAsync()
         {
             return await _baseService.SendAsync(new RequestDto()
             {

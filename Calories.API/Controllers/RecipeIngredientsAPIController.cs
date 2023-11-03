@@ -4,7 +4,6 @@ using Calories.API.Models;
 using Calories.API.Models.Dto;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
-using static Azure.Core.HttpHeader;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
 namespace RecipeIngredients.API.Controllers
@@ -45,7 +44,7 @@ namespace RecipeIngredients.API.Controllers
             try
             {
                 List<Calories.API.Models.RecipeIngredient> obj = _db.ReceipeIngredients.Where(x => x.UserId == userId).ToList();
-                _response.Result = _mapper.Map<List<CaloriesDto>>(obj);
+                _response.Result = _mapper.Map<List<RecipeIngredientDto>>(obj);
             }
             catch (Exception ex)
             {
@@ -59,10 +58,10 @@ namespace RecipeIngredients.API.Controllers
         {
             try
             {
-                var obj = _mapper.Map<Calories.API.Models.Calories>(recipeIngredientDto);
-                _db.Calories.Add(obj);
+                var obj = _mapper.Map<Calories.API.Models.RecipeIngredient>(recipeIngredientDto);
+                _db.ReceipeIngredients.Add(obj);
                 _db.SaveChanges();
-                _response.Result = _mapper.Map<CaloriesDto>(obj);
+                _response.Result = _mapper.Map<RecipeIngredientDto>(obj);
             }
             catch (Exception ex)
             {

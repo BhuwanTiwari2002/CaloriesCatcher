@@ -25,6 +25,7 @@ builder.Services.AddHttpContextAccessor(); /* We need this for cookies */
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<ICalories, CaloriesService>();
 builder.Services.AddHttpClient<IRecipe, RecipeService>();
+builder.Services.AddHttpClient<IRecipeIngredients, RecipeIngredientsService>();
 builder.Services.AddHttpClient<IEdamamAPI, EdamamAPI>();
 builder.Services.AddHttpClient<IUserDetailService, UserDetailService>();
 
@@ -32,6 +33,7 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICalories, CaloriesService>();
 builder.Services.AddScoped<IRecipe, RecipeService>();
+builder.Services.AddScoped<IRecipeIngredients, RecipeIngredientsService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IUserDetailService, UserDetailService>();
 builder.Services.AddScoped<IEdamamAPI, EdamamAPI>();
