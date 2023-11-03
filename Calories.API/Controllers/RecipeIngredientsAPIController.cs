@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Calories.API.Data;
-using Calories.API.Models;
 using Calories.API.Models.Dto;
+using static Azure.Core.HttpHeader;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
+using Calories.API.Models;
 
 namespace RecipeIngredients.API.Controllers
 {
@@ -37,22 +38,7 @@ namespace RecipeIngredients.API.Controllers
             return _response;
         }
 
-        [HttpGet]
-        [Route("{userId}")]
-        public ResponseDto GetByUser(string userId)
-        {
-            try
-            {
-                List<Calories.API.Models.RecipeIngredient> obj = _db.ReceipeIngredients.Where(x => x.UserId == userId).ToList();
-                _response.Result = _mapper.Map<List<RecipeIngredientDto>>(obj);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
-        }
+        
         [HttpPost]
         public ResponseDto Post([FromBody] RecipeIngredientDto recipeIngredientDto)
         {

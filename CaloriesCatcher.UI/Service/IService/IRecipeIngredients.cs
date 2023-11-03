@@ -7,7 +7,6 @@ namespace CaloriesCatcher.UI.Service.IService
     {
         Task<ResponseDto> GetAllRecipeIngredientsAsync();
         Task<ResponseDto> CreateRecipeIngredientAsync(RecipeIngredientDto recipeIngredientsDto);
-        Task<ResponseDto> GetRecipeIngredientsByUserAsync(string UserId);
         Task<ResponseDto> DeleteRecipeIngredientAsync(int id);
         Task<ResponseDto> UpdateRecipeIngredientAsync(RecipeIngredientDto recipeIngredientsDto);
     }

@@ -1,11 +1,8 @@
-﻿@page "/createrecipe"
+﻿﻿@page "/createrecipe"
 @using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
-@using CaloriesCatcher.UI.Service
-@using CaloriesCatcher.UI.Model;
-@using RecipeCatcher.UI.Service;
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
 <MudGrid>
     <MudItem xs="12">
@@ -18,9 +15,9 @@
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
                 <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
-                <MudButton ></MudButton>
-                <MudButton >Delete an Item</MudButton>
-                <MudButton OnClick="AddRecipeToDb">Edit an Item</MudButton>
+                <MudButton OnClick="AddIngredient">Add an Item</MudButton>
+                <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
+                <MudButton>Edit an Item</MudButton>
                 <MudButton>Add an Step</MudButton>
                 <MudButton>Edit an Step</MudButton>
                 <MudButton>Delete an Step</MudButton>
@@ -33,7 +30,10 @@
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
                 <MudPaper Width="100%">
                     <MudList>
-                        
+                        @foreach (var RecipeIngredientDto in recipeIngredients)
+                        {
+                            <li>@RecipeIngredientDto.IngredientName</li>
+                        }
                     </MudList>
                 </MudPaper>
 
@@ -63,72 +63,50 @@
 
 </MudGrid>
 
+
+
+
+
+
+
+
 @code
 {
-    [Inject] IDialogService dialogService { get; set; } = default!;
-    [Inject] private IRecipe recipeService { get; set; } = default!;
-    [Inject] private IRecipeIngredients recipeIngredientsService { get; set; } = default!;
-    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
-
-    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [Inject]
+    IDialogService dialogService { get; set; } = default!;
 
     string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-    //List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
-
+    List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
     private string? newIngredient;
-    //temp data until ui is finished
-    private string RecipeName = "Test";
-    private int RecipeId = 123;
-    private double Calories = 99.9;
-    private string ImagePath = "Test";
-    private int RecipeIngredientId = 123;
-    private int Quantity = 70;
-    private string IngredientName = "Test";
-    new RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
-    CaloriesCatcher.UI.Model.RecipeDto recipeDto = new RecipeDto();
-
-    //private void AddIngredient()
-    //{
-    //    if (!string.IsNullOrWhiteSpace(newIngredient))
-    //    {
-    //        recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
-    //        newIngredient = string.Empty;
-    //    }
-    //}
-
-    //private void DeleteIngredient()
-    //{
-    //    try
-    //    {
-    //        recipeIngredients.RemoveAt(recipeIngredients.Count - 1);
-    //    }
-    //    catch (Exception ex)
-    //    {
-
-    //        Console.WriteLine(ex.Message);
-    //    }
-
-    //}
-
-    private async void AddRecipeToDb()
+    private void AddIngredient()
     {
-        recipeDto.RecipeId = RecipeId;
-        recipeDto.RecipeName = RecipeName;
-        recipeDto.Calories = Calories;
-        recipeDto.ImagePath = ImagePath;
-        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-        var authState = await authenticationState;
-        recipeDto.UserId = authState.User.FindFirst("sub")?.Value;
-        recipeService.CreateRecipeAsync(recipeDto);
+        if (!string.IsNullOrWhiteSpace(newIngredient))
+        {
+            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
+            newIngredient = string.Empty;
+        }
+    }
 
-        recipeIngredientDto.IngredientName = IngredientName;
-        recipeIngredientDto.RecipeIngredientsId = RecipeIngredientId;
-        recipeIngredientDto.Quantity = Quantity;
-        recipeIngredientDto.RecipeId = RecipeId;
-        recipeIngredientDto.UserId = authState.User.FindFirst("sub")?.Value;
-        recipeIngredientsService.CreateRecipeIngredientAsync(recipeIngredientDto);
+    private void DeleteIngredient()
+    {
+        try
+        {
+            recipeIngredients.RemoveAt(recipeIngredients.Count - 1);
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+
+    private void AddRecipeToDb()
+    {
+        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
+        
     }
 
     //async void OpenDialog()

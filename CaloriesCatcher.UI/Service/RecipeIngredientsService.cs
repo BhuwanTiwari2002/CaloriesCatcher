@@ -23,15 +23,6 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
-        public async Task<ResponseDto> GetRecipeIngredientsByUserAsync(string userId)
-        {
-            return await _baseService.SendAsync(new RequestDto()
-            {
-                ApiType = StaticType.ApiType.GET,
-                Url = $"https://localhost:7005/api/recipeingredients/{userId}"
-            });
-        }
-
         public async Task<ResponseDto> DeleteRecipeIngredientAsync(int userId)
         {
             return await _baseService.SendAsync(new RequestDto()
