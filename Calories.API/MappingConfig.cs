@@ -16,10 +16,10 @@ namespace Calories.API
                 config.CreateMap<Calories.API.Models.Calories, CaloriesDto>();
                 config.CreateMap<AspNetUsersDetailDto, AspNetUsersDetail>();
                 config.CreateMap<AspNetUsersDetail, AspNetUsersDetailDto>();
-                config.CreateMap<RecipeFoodDto, RecipeIngredient>();
-                config.CreateMap<RecipeIngredient, RecipeFoodDto>();
-                config.CreateMap<RecipeDto, Recipe>();
-                config.CreateMap<Recipe, RecipeFoodDto>();
+                config.CreateMap<RecipeIngredientDto, RecipeIngredient>();
+                config.CreateMap<RecipeIngredient, RecipeIngredientDto>();
+                config.CreateMap<RecipeDto, Calories.API.Models.Recipe>();
+                config.CreateMap<Calories.API.Models.Recipe, RecipeDto>();
             });
             return mappingConfig;
         }

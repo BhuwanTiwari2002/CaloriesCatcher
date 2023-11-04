@@ -30,7 +30,7 @@
     [Inject] IUserDetailService userDetailService { get; set; } = default!;
     [Inject] IDialogService dialogService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
-    public UserDetail userDetail { get; set; } = new UserDetail();     
+    public UserDetail userDetail = new UserDetail();     
 
     protected override async Task OnInitializedAsync()
     {

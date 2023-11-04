@@ -1,4 +1,4 @@
-﻿namespace Calories.API.Models.Dto
+﻿namespace CaloriesCatcher.UI.Model
 {
     public class RecipeDto
     {

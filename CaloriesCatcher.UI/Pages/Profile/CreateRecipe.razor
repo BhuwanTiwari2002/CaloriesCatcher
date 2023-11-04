@@ -32,7 +32,7 @@
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
-                            <li>@RecipeIngredientDto.Name</li>
+                            <li>@RecipeIngredientDto.IngredientName</li>
                         }
                     </MudList>
                 </MudPaper>
@@ -84,7 +84,7 @@
     {
         if (!string.IsNullOrWhiteSpace(newIngredient))
         {
-            recipeIngredients.Add(new RecipeIngredientDto { Name = newIngredient });
+            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
             newIngredient = string.Empty;
         }
     }
