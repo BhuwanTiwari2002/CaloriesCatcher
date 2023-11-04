@@ -7,18 +7,22 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Microsoft.AspNetCore.Authentication.OAuth.Claims
         @using Newtonsoft.Json;
+@using RecipeDto = Calories.API.Models.Dto.RecipeDto
         <div style="float:left; width:40%; margin: 20px; border-radius: 7px;">
-            <MudText>User Id: @UserId</MudText>
-            <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
-            <MudPaper Class="pa-4" Style="border-radius: 7px">
-                <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="35%"/>
-            </MudPaper>
-            <MudText Color="Color.Primary" Class="mt-lg-5" Typo="Typo.h6" GutterBottom="true">Today's Calories</MudText>
+            <MudText Style="margin-left: 5%">User Id: @UserId</MudText>
             <MudPaper Width="100%" Style="border-radius: 7px;">
+                <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
+                <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="40%"/>
+                <div style="text-align: center">
+                    <MudButton OnClick="OpenCaloriesDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
+                    <MudButton OnClick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Create Receipe</MudButton>
+                    <MudButton Href="/profile" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
+                </div>
+                <MudText Style="margin-left: 5%" Color="Color.Primary" Class="mt-lg-5" Typo="Typo.h6" GutterBottom="true">Today's Calories</MudText>
                 <MudTable Items="ListOfCalories" Class="calories-table">
                     <HeaderContent>
                         <MudTh>Name</MudTh>
-                        <MudTh>Value</MudTh>                            
+                        <MudTh>Value</MudTh>
                         <MudTh>Delete</MudTh>
                         <MudTh>Update</MudTh>
                     </HeaderContent>
@@ -30,23 +34,15 @@
                     </RowTemplate>
                 </MudTable>
             </MudPaper>
-            <MudPaper Class="pa-4 mt-2 d-flex justify-center" Style="border-radius: 7px">
-                <MudButton OnClick="OpenCaloriesDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                <MudButton OnClick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Create Receipe</MudButton>
-                <MudButton Href="/profile" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
-            </MudPaper>
         </div>
-        <div style="float:right; width:50%;margin-top:3.5%; margin-right:3%; margin-bottom:5%;">
-            <MudItem xs="12" md="10">
-                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Goal Progress</MudText>
-                <MudPaper Style="border-radius: 7px !important;">
-                    <MudChart ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="35%" Height="35%"
-                              InputData="@trackingData" InputLabels="@trackingLabel">
-                    </MudChart>
-                </MudPaper>
-                <div style="float:right; width:100%;margin-top:5%; margin-bottom:5%;">
-                    <MudItem xs="12" md="8" Class="mb-4">
-                        <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
+        <div style="float:right; width:50%;margin-top:3.0%; margin-right:3%; margin-bottom:5%; border-radius: 7px !important;">
+            <MudPaper Style="border-radius: 7px !important; margin: auto;">
+                <MudItem xs="12" md="12">
+                    <br/>
+                    <MudText Style="margin-left: 5%;;" Color="Color.Primary" Typo="Typo.h6">Recently Added Recipes</MudText>
+                    <RecipeCard Recipes="listOfRecipes"></RecipeCard>
+                    <MudItem Style="margin-left: 4%" xs="12" md="8" Class="mb-4">
+                        <div class="p-3" style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
                                 <MudImage Src="images/FireIcon.png" Width="50"></MudImage>
                                 <div style="display: flex; flex-direction: column;">
@@ -54,18 +50,22 @@
                                     <MudText Typo="Typo.h5" Class="ms-lg-5">Longest Streaks: @longestStreak</MudText>
                                 </div>
                             </div>
-                        </MudPaper>
+                        </div>
                     </MudItem>
-                    <MudItem xs="12" md="8" Class="mb-4">
-                        <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(127, 0, 255,0.5); color: white; border-radius: 7px;">
+                    <MudItem Style="margin-left: 4%" xs="12" md="8" Class="mb-4">
+                        <div class="p-3" style="background-color: rgba(127, 0, 255,0.5); color: white; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
                                 <MudImage Src="images/CaloriesIcon.png" Width="60"></MudImage>
                                 <MudText Typo="Typo.h5" Class="ms-lg-5">Total Calories: @ListOfCalories.Sum(c => c.Calorie)</MudText>
                             </div>
-                        </MudPaper>
+                        </div>
                     </MudItem>
+                </MudItem>
+                <div style="height: 50px">
+                    
                 </div>
-            </MudItem>
+            </MudPaper>
+            
         </div>
     </Authorized>
     <NotAuthorized>
@@ -76,8 +76,10 @@
     [Inject] private ICalories caloriesService { get; set; } = default!;
     [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    List<RecipeDto> listOfRecipes = new List<RecipeDto>();
     public string UserId { get; set; }
     List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
     int i = -1;
@@ -95,6 +97,17 @@
         getGraphData();
         //getTrackingGraphData();
         GetStreaks();
+        await getRecipes();
+    }
+
+    async Task getRecipes()
+    {
+        var result = await _recipeService.GetRecipesByUserAsync(UserId);
+        if (result.IsSuccess == true)
+        {
+            listOfRecipes = JsonConvert.DeserializeObject<List<RecipeDto>>(Convert.ToString(result.Result));
+        }
+        
     }
     public async void getTrackingGraphData()
     {

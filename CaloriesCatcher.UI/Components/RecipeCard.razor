@@ -1,0 +1,66 @@
+@using Calories.API.Models.Dto
+
+<div class="recipe-container">
+    @foreach (RecipeDto recipe in Recipes.Take(3))
+    {
+        <MudCard class="recipe-card">
+            <div class="recipe-media">
+                <MudImage Src="@recipe.ImagePath" Alt="@recipe.RecipeName" />
+            </div>
+            <div class="recipe-content">
+                <MudText Typo="Typo.h5" Class="recipe-label">@recipe.RecipeName</MudText>
+                <MudText Typo="Typo.body2" Class="recipe-label">Calories: @recipe.Calories</MudText>
+            </div>
+        </MudCard>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<RecipeDto> Recipes { get; set; } = new List<RecipeDto>();
+    private void CardClicked(RecipeDto receipe)
+    {
+        // if (OnCardClick.HasDelegate)
+        // {
+        //     await OnCardClick.InvokeAsync(artist);
+        // }
+    }
+}
+<style>
+    .recipe-card {
+        max-width: 200px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        margin: 1rem;
+        display: inline-block;
+        overflow: hidden; 
+    }
+    
+    .recipe-media {
+        height: 150px; 
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .recipe-media img {
+        height: 100%; 
+        width: 100%; 
+        object-fit: cover; 
+    }
+    
+    .recipe-content {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        height: calc(100% - 150px); 
+    }
+    
+    .recipe-label {
+        background-color: var(--mud-palette-background-paper); /* Replace with the actual variable name */
+        padding: 8px;
+        font-weight: bold;
+    }
+</style>
