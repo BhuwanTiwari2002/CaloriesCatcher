@@ -53,6 +53,34 @@ namespace Calories.API.Controllers
             }
             return _response;
         }
+        
+        [HttpGet]
+        [Route("{userId}/{dateFilter:int}")]
+        public ResponseDto GetByUser(string userId, int dateFilter)
+        {
+            try
+            {
+                // check if dateFilter is 0, 0 means get it for today 
+                // Check if the date is today then return it
+                List<Models.Calories> obj = new List<Models.Calories>();
+                if (dateFilter == 0)
+                {
+                    var test = DateTime.Today;
+                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date == DateTime.Today & c.UserId == userId);
+                    obj = results.ToList();
+                }
+                
+                
+                _response.Result = _mapper.Map<List<CaloriesDto>>(obj);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+        
         [HttpPost]
         public ResponseDto Post([FromBody] CaloriesDto caloriesDto)
         {
