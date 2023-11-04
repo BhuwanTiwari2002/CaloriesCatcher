@@ -50,7 +50,10 @@
                         <MudPaper Elevation="3" Class="p-3" Style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
                                 <MudImage Src="images/FireIcon.png" Width="50"></MudImage>
-                                <MudText Typo="Typo.h5" Class="ms-lg-5">Streaks: 20 days</MudText>
+                                <div style="display: flex; flex-direction: column;">
+                                    <MudText Typo="Typo.h5" Class="ms-lg-5">Streaks: @currentStreak</MudText>
+                                    <MudText Typo="Typo.h5" Class="ms-lg-5">Longest Streaks: @longestStreak</MudText>
+                                </div>
                             </div>
                         </MudPaper>
                     </MudItem>
@@ -92,6 +95,7 @@
         await RefreshCaloriesData();
         getGraphData();
         getTrackingGraphData();
+        GetStreaks();
     }
     
     
@@ -101,7 +105,8 @@
     string[] labels = { "Breakfast", "Lunch", "Dinner" };
     string[] trackingLabel = { "Daily Target", "Current" };
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
-
+    int currentStreak = 0;
+    int longestStreak = 0;
     public async void getTrackingGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
@@ -124,7 +129,7 @@
         }
     }
     
-    public void getGraphData()
+    private void getGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
         {
@@ -149,6 +154,36 @@
 
     }
 
+    private void GetStreaks()
+    {
+    // Ensure the list is sorted by date
+        var sortedEntries = ListOfCalories.OrderBy(dto => dto.Date.Date).ToList();
+        DateTime? lastDate = null;
+
+        foreach (var entry in sortedEntries)
+        {
+            if (!lastDate.HasValue)
+            {
+                currentStreak = 1;
+            }
+            else
+            {
+                if (entry.Date.Date == lastDate.Value.Date.AddDays(1))
+                {
+                    currentStreak++;
+                }
+                else if (entry.Date.Date > lastDate.Value.Date.AddDays(1))
+                {
+                    currentStreak = 1;
+                }
+            }
+            if (currentStreak > longestStreak)
+            {
+                longestStreak = currentStreak;
+            }
+            lastDate = entry.Date;
+        } 
+    }
     
 
     async Task RefreshCaloriesData()
