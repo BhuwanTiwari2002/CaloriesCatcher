@@ -93,10 +93,9 @@
     {
         await RefreshCaloriesData();
         getGraphData();
-        getTrackingGraphData();
+        //getTrackingGraphData();
         GetStreaks();
     }
-    
     public async void getTrackingGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
@@ -118,7 +117,6 @@
             trackingData[0] = 0;
         }
     }
-    
     private void getGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
@@ -138,12 +136,10 @@
             }
         }
     }
-    // change to edit
     void EditData()
     {
 
     }
-
     private void GetStreaks()
     {
         var sortedEntries = ListOfCalories.OrderBy(dto => dto.Date.Date).ToList();
@@ -173,7 +169,6 @@
             lastDate = entry.Date;
         } 
     }
-
     async Task RefreshCaloriesData()
     {
         var authState = await authenticationState;
@@ -189,14 +184,12 @@
             snackBar.Add("Something went wrong", Severity.Error);
         }
     }
-
     async void OpenCaloriesDialog()
     {
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
         var result = await dialog.Result;
     }
-
     private async void DeleteCalories(int caloriesId)
     {
         try
@@ -218,7 +211,6 @@
         }
 
     }
-
     private async void UpdateCalories(CaloriesDto caloriesDto)
     {
         var parameters = new DialogParameters();
