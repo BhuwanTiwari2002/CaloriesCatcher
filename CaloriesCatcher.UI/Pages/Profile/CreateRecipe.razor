@@ -1,5 +1,6 @@
 ﻿@page "/createrecipe"
 @using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Components.Dialogs;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
@@ -106,15 +107,21 @@
     private void AddRecipeToDb()
     {
         //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-        
+
     }
 
-    //async void OpenDialog()
-    //{
-    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-    //    var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
+    async void OpenDialog()
+    {
+        RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
+
+        //var parameter = new DialogParameters
+        //{
+        //    //["indgredient"] = 
+        //};
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
         
-    //    var result = await dialog.Result;
-    //}
+        var result = await dialog.Result;
+    }
 
 }
