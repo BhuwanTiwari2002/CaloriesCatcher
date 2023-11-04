@@ -36,7 +36,6 @@
                 <MudButton Href="/profile" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
             </MudPaper>
         </div>
-
         <div style="float:right; width:50%;margin-top:3.5%; margin-right:3%; margin-bottom:5%;">
             <MudItem xs="12" md="10">
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Goal Progress</MudText>
@@ -67,38 +66,20 @@
                     </MudItem>
                 </div>
             </MudItem>
-            
         </div>
     </Authorized>
     <NotAuthorized>
         <NotAuthorzied/>
     </NotAuthorized>
 </AuthorizeView>
-
 @code {
-    [Inject]
-    private ICalories caloriesService { get; set; } = default!;
-    [Inject]
-    private ISnackbar snackBar { get; set; } = default!;
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
-
-    [Inject]
-    private IUserDetailService _userDetailService { get; set; } = default!;
-    [CascadingParameter]
-    Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [Inject] private ICalories caloriesService { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     public string UserId { get; set; }
     List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        await RefreshCaloriesData();
-        getGraphData();
-        getTrackingGraphData();
-        GetStreaks();
-    }
-    
-    
     int i = -1;
     int dataSize = 4;
     private double[] data = new double[3] { 0, 0, 0 };
@@ -107,6 +88,15 @@
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
     int currentStreak = 0;
     int longestStreak = 0;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshCaloriesData();
+        getGraphData();
+        getTrackingGraphData();
+        GetStreaks();
+    }
+    
     public async void getTrackingGraphData()
     {
         foreach (CaloriesDto caloriesDto in ListOfCalories)
@@ -156,7 +146,6 @@
 
     private void GetStreaks()
     {
-    // Ensure the list is sorted by date
         var sortedEntries = ListOfCalories.OrderBy(dto => dto.Date.Date).ToList();
         DateTime? lastDate = null;
 
@@ -184,7 +173,6 @@
             lastDate = entry.Date;
         } 
     }
-    
 
     async Task RefreshCaloriesData()
     {
