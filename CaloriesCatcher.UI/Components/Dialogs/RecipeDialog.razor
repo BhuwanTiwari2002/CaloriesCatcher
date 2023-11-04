@@ -8,25 +8,28 @@
         <MudTextField @bind-Value="recipeDto.ImagePath" T="string" Label="Image Path"></MudTextField>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="EditCalories">Update Calories</MudButton>
+        <MudButton OnClick="CreateRecipe">Create Recipe</MudButton>
     </DialogActions>
 </MudDialog>
 
 
 @code {
-
-    [Parameter] public RecipeDto recipeDto { get; set; } = default!;
     [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] private IRecipe recipeService { get; set; } = default!;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    
-    private async void EditCalories()
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    [Inject] private NavigationManager navigationManager { get; set; } = default!;
+    RecipeDto recipeDto = new RecipeDto();
+
+    private async void CreateRecipe()
     {
-        // var response = await caloriesService.UpdateCaloriesAsync(recipeDto);
-        // DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        // MudDialog.Close(DialogResult.Ok(true));
+        var authState = await authenticationState;
+        recipeDto.UserId = authState.User.FindFirst("sub")?.Value;
+
+        var response = await recipeService.CreateRecipeAsync(recipeDto);
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        MudDialog.Close(DialogResult.Ok(true));
+        navigationManager.NavigateTo("/createrecipe", true);
+        StateHasChanged();
     }
-    
-
-
-
 }

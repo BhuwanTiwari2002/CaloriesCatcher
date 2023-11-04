@@ -23,8 +23,7 @@
 @code {
     [Inject]private IAuthService authService { get; set; } = default!;
     [Inject]private ISnackbar snackBar { get; set; } = default!;
-    [Inject]
-    private NavigationManager navigationManager { get; set; } = default!;
+    [Inject]private NavigationManager navigationManager { get; set; } = default!;
     [Inject]
     AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
     RegisterationRequestDto registerationRequestDto = new RegisterationRequestDto();
