@@ -20,7 +20,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = caloriesDto,
-                Url = "https://localhost:7005/api/calories"
+                Url =  StaticType.CaloriesAPIBase + "api/calories"
             });
         }
 
@@ -29,7 +29,7 @@ namespace CaloriesCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = $"https://localhost:7005/api/calories/{userId}"
+                Url = StaticType.CaloriesAPIBase + $"api/calories/{userId}"
             });
         }
 
@@ -38,7 +38,7 @@ namespace CaloriesCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.DELETE,
-                Url = $"https://localhost:7005/api/calories/Delete/{userId}"
+                Url = StaticType.CaloriesAPIBase + $"api/calories/Delete/{userId}"
             });
         }
 
@@ -48,7 +48,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.PUT,
                 Data = caloriesDto,
-                Url = "https://localhost:7005/api/calories"
+                Url = StaticType.CaloriesAPIBase + "api/calories"
             });
         }
 
@@ -57,7 +57,7 @@ namespace CaloriesCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = "https://localhost:7005/api/calories"
+                Url = StaticType.CaloriesAPIBase + "api/calories"
             });
         }
     }
