@@ -1,0 +1,32 @@
+﻿@page "/recipedashboard" 
+@using CaloriesCatcher.UI.Components.Dialogs;
+@using CaloriesCatcher.UI.Service.IService;
+
+<MudGrid>
+    <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
+
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
+            <MudButton OnClick="DisplayRecipe">Create Recipe</MudButton>
+        </MudButtonGroup>
+    </MudPaper>    
+</MudGrid>
+
+<!-- Footer -->
+<CalorieFooter/>
+
+@code
+{
+    [Inject] IDialogService dialogService { get; set; } = default!; 
+    [Inject] private IRecipe recipeService { get; set; } = default!;
+
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+    async private void DisplayRecipe()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog = dialogService.Show<RecipeDialog>("Create Recipe", closeOnEscapeKey);
+        var result = await dialog.Result;
+    }
+}

@@ -1,0 +1,32 @@
+@using CaloriesCatcher.UI.Model
+@using CaloriesCatcher.UI.Service
+@using CaloriesCatcher.UI.Service.IService
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="recipeDto.RecipeName" T="string" Label="Recipe Name"></MudTextField>
+        <MudTextField @bind-Value="recipeDto.Calories" T="double" Label="Calories"></MudTextField>
+        <MudTextField @bind-Value="recipeDto.ImagePath" T="string" Label="Image Path"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="EditCalories">Update Calories</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+
+    [Parameter] public RecipeDto recipeDto { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    
+    private async void EditCalories()
+    {
+        // var response = await caloriesService.UpdateCaloriesAsync(recipeDto);
+        // DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        // MudDialog.Close(DialogResult.Ok(true));
+    }
+    
+
+
+
+}
