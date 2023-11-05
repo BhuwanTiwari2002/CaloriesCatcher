@@ -13,5 +13,7 @@ namespace CaloriesCatcher.UI.Service.IService
         Task<ResponseDto?> ResetPasswordAsync(PasswordResetRequest request);
         Task<ResponseDto?> GetAllUsers();
         Task<ResponseDto?> DeleteUser(string Id);
+
+        Task<ResponseDto?> GetUserById(string Id);
     }
 }

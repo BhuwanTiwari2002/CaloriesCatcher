@@ -13,5 +13,6 @@ namespace AuthApi.API.Service.IService
         Task<string> ResetPassword(PasswordResetRequest request);
         List<UserDto> getAllUsers();
         Task<string> DeleteUser(string id);
+        UserDto getUserById(string id);
     }
 }

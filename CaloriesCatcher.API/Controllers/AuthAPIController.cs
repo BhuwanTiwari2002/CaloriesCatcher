@@ -120,6 +120,20 @@ namespace Auth.API.Controllers
             _responseDto.Result = response;
             return Ok(_responseDto);
         }
+
+        [HttpGet("GetUserById/{id}")]
+        public IActionResult GetUserById(string id)
+        {
+            var response = _authService.getUserById(id);
+            if (response == null)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = "Something went wrong";
+                return BadRequest(_responseDto); 
+            }
+            _responseDto.Result = response;
+            return Ok(_responseDto); 
+        }
         
      
     }

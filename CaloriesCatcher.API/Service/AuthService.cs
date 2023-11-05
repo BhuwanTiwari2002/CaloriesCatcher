@@ -237,5 +237,10 @@ namespace AuthApi.API.Service
                 return ex.ToString();
             }
         }
+
+        public UserDto getUserById(string id)
+        {
+            return  (UserDto) _db.ApplicationUsers.Where(u => u.Id == id);
+        }
     }
 }

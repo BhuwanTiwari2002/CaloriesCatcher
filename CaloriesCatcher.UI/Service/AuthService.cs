@@ -89,9 +89,20 @@ namespace CaloriesCatcher.UI.Service
             var requestDto = new RequestDto()
             {
                 ApiType = StaticType.ApiType.DELETE,
-                Url = StaticType.AuthAPIBase + $"auth/Delete/{Id}"
+                Url = StaticType.AuthAPIBase + $"api/auth/Delete/{Id}"
             };
             return await _baseService.SendAsync(requestDto);
+        }
+
+        public async Task<ResponseDto?> GetUserById(string Id)
+        {
+            var requestDto = new RequestDto()
+            {
+                ApiType = StaticType.ApiType.GET,
+                Url = StaticType.AuthAPIBase + $"api/auth/GetUserById/{Id}"
+            };
+            return await _baseService.SendAsync(requestDto);
+            
         }
     }
 }

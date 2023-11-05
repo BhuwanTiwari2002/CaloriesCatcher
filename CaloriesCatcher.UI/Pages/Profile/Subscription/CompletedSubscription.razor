@@ -3,6 +3,7 @@
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models
+@using Newtonsoft.Json
 
 <MudContainer>
     <MudCard Elevation="3" Outlined="true" Class="mx-auto my-5" Style="max-width: 600px;">
@@ -34,26 +35,32 @@
         if (!string.IsNullOrEmpty(url))
         {
             int charAt = url.IndexOf("$");
-            string priceId = sessionId.ToString().Substring(charAt, sessionId.Count);
+            string priceId = url.ToString().Substring(charAt + 1);
             var authState = await authenticationState;
+            var response = await _authService.GetUserById(authState.User.FindFirst("sub")?.Value);
+            UserDto dto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(response.Result)); 
             if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")
             {
                 _authService.AssignRoleAsync(new RegisterationRequestDto()
                 {
-                    Email = authState.User.FindFirst("Email")?.Value,
-                    RoleName = "Elephant"
+                    Email = dto.Email,
+                    RoleName = "Elephant",
+                    Password = "",
+                    PhoneNumber = dto.PhoneNumber,
+                    UserName = dto.UserName
                 });
                         
             }
             else
             {
+                
                 _authService.AssignRoleAsync(new RegisterationRequestDto()
                 {
-                    Email = authState.User.FindFirst("Email")?.Value,
+                    Email = dto.Email,
                     RoleName = "Parrot",
                     Password = "",
-                    PhoneNumber = "",
-                    UserName = ""
+                    PhoneNumber = dto.PhoneNumber,
+                    UserName = dto.UserName
                 }); 
             }  
         }   
