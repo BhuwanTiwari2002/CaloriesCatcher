@@ -19,7 +19,7 @@
                 <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
                 <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
-                <MudButton OnClick="GetRecentRecipesId">Get Recipe Id</MudButton>
+                @*<MudButton OnClick="GetRecentRecipesId">Get Recipe Id</MudButton>*@
                 <MudButton>Delete an Step</MudButton>
             </MudButtonGroup>
         </MudPaper>
@@ -115,7 +115,7 @@
         }
         else
         {
-            snackBar.Add("Something went wrong", Severity.Error);
+            //snackBar.Add("Something went wrong", Severity.Error);
         }
     }
 
