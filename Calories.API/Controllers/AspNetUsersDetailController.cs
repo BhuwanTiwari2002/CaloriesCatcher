@@ -53,5 +53,24 @@ namespace Calories.API.Controllers
             }
             return _response;
         }
+        [HttpPut]
+        
+        public ResponseDto Put([FromBody] AspNetUsersDetailDto aspNetUsersDetail)
+        {
+            try
+            {
+                var obj = _mapper.Map<AspNetUsersDetail>(aspNetUsersDetail);
+                _db.Update(obj);
+                _db.SaveChanges();
+                _response.IsSuccess=true;
+                _response.Message = $"Updated {aspNetUsersDetail.UserId}";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
     }
 }
