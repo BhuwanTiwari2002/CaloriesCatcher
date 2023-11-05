@@ -1,4 +1,5 @@
 ﻿using CaloriesCatcher.UI.Model;
+using CaloriesCatcher.UI.Model.Edamam;
 using CaloriesCatcher.UI.Service.IService;
 using KitchenComfort.Web.Models;
 using static KitchenComfort.Web.Models.Utility.StaticType;
@@ -20,6 +21,17 @@ namespace CaloriesCatcher.UI.Service
                 Data = edamamRequestDto,
                 Url = $"{edamamRequestDto.Url}?app_id={edamamRequestDto.app_id}&app_key={edamamRequestDto.app_key}&nutrition-type=cooking&ingr={edamamRequestDto.ingredient}"
             });
+        }
+
+        public async Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto)
+        {
+            return await _baseService.SendAsyncRecipeEdamam(new RequestDto()
+            {
+                ApiType = ApiType.GET,
+                Data = recipeEdamaRequestDto,
+                Url = $"{recipeEdamaRequestDto.Url}&q={recipeEdamaRequestDto.ReceipeName}&app_id={recipeEdamaRequestDto.ApplicationId}&app_key={recipeEdamaRequestDto.ApplicationKey}"
+                
+            });        
         }
     }
 }

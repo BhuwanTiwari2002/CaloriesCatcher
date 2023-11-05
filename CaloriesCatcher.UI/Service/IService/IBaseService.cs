@@ -1,4 +1,5 @@
 ﻿using CaloriesCatcher.UI.Model;
+using CaloriesCatcher.UI.Model.Edamam;
 using KitchenComfort.Web.Models;
 
 namespace CaloriesCatcher.UI.Service.IService
@@ -7,5 +8,6 @@ namespace CaloriesCatcher.UI.Service.IService
     {
         Task<ResponseDto?> SendAsync(RequestDto requestDto);
         Task<Nutrition?> SendAsyncEdamam(RequestDto requestDto);
+        Task<RecipeModelEdamam> SendAsyncRecipeEdamam(RequestDto requestDto);
     }
 }

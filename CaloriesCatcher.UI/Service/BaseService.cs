@@ -4,6 +4,7 @@ using KitchenComfort.Web.Models;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
+using CaloriesCatcher.UI.Model.Edamam;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using static KitchenComfort.Web.Models.Utility.StaticType;
@@ -162,6 +163,58 @@ namespace CaloriesCatcher.UI.Service
                     IsSuccess = false
                 };
             }
+        }
+
+        public async Task<RecipeModelEdamam> SendAsyncRecipeEdamam(RequestDto requestDto)
+        {
+           try
+            {
+                using HttpClient client = _httpClientFactory.CreateClient("CalorieCatcherAPI");
+                // Create HttpRequestMessage
+                var message = new HttpRequestMessage
+                {
+                    Headers = { { "Accept", "application/json" } },
+                    RequestUri = new Uri(requestDto.Url),
+                    Method = requestDto.ApiType switch
+                    {
+                        ApiType.POST => HttpMethod.Post,
+                        ApiType.PUT => HttpMethod.Put,
+                        ApiType.DELETE => HttpMethod.Delete,
+                        _ => HttpMethod.Get
+                    }
+                };
+
+                if (requestDto.Data != null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+                }
+                
+                var apiResponse = await client.SendAsync(message);
+
+
+
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    var apiContent = await apiResponse.Content.ReadAsStringAsync();
+                    RecipeModelEdamam recipeModelEdamam  = JsonConvert.DeserializeObject<RecipeModelEdamam>(apiContent);
+                    recipeModelEdamam.IsSuccess = true;
+                    return recipeModelEdamam;
+                }
+
+                
+                return new RecipeModelEdamam
+                {
+                    IsSuccess = false
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RecipeModelEdamam
+                {
+                    Message = ex.Message,
+                    IsSuccess = false
+                };
+            } 
         }
     }
 }

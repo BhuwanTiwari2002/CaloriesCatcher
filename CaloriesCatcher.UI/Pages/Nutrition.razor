@@ -1,12 +1,15 @@
 ﻿@page "/nutrition"
 @using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Model.Edamam
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
 
 <MudForm @ref="_foodNameForm" Style="margin: auto; width: 30%;">
     <MudText Class="mt-2" Typo="Typo.h6">Enter Food Name</MudText>
     <MudTextField @bind-Value="_foodName" Variant="Variant.Outlined"></MudTextField>
+    <MudTextField @bind-Value="_receipeName" Variant="Variant.Outlined"></MudTextField>
     <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Submit</MudButton>
+    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByRecipe">Test</MudButton>
 </MudForm>
 
 @if (loading)
@@ -38,10 +41,19 @@ else if (_nutrition != null)
     [Inject]
     private IEdamamAPI edamamService { get; set; } = default!;
     public string _foodName { get; set; }
+    public string _receipeName { get; set; }
     private MudForm _foodNameForm;
     private CaloriesCatcher.UI.Model.Nutrition _nutrition;
+    private RecipeModelEdamam _recipeModelEdamam;
     private bool loading = false;
 
+    public async void searchByRecipe()
+    {
+        loading = true;
+        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(_receipeName));
+        var test = _recipeModelEdamam;
+    }
+    
     public async void searchByFoodName()
     {
         loading = true;
