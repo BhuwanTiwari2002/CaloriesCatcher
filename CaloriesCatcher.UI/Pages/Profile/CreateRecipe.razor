@@ -19,9 +19,7 @@
                 <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
                 <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
-                <MudButton OnClick="Test">Edit an Item</MudButton>
-                <MudButton OnClick="getRecipes">Add an Step</MudButton>
-                <MudButton>Edit an Step</MudButton>
+                <MudButton OnClick="GetRecentRecipesId">Get Recipe Id</MudButton>
                 <MudButton>Delete an Step</MudButton>
             </MudButtonGroup>
         </MudPaper>
@@ -44,7 +42,7 @@
     </MudItem>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudTextField T="int" Variant="Variant.Outlined" Text="@Answer.RecipeId.ToString()" />
+            <MudTextField T="int" Variant="Variant.Outlined" Text="@RecentRecipeId.RecipeId.ToString()" />
         </MudPaper>
     </MudItem>
     <MudItem xs="6" sm="4">
@@ -74,38 +72,51 @@
 
 @code
 {
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
+    //injections
+    [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
-    string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-    Calories.API.Models.Dto.RecipeDto Answer = new Calories.API.Models.Dto.RecipeDto();
+    //data lists
     List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
-    private string? newIngredient;
-    int Idk;
-
     List<Calories.API.Models.Dto.RecipeDto> listOfRecipes = new List<Calories.API.Models.Dto.RecipeDto>();
+
+    //single variables
+    Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    private string? newIngredient;
     public string UserId { get; set; }
 
-    async Task getRecipes()
+    protected override async Task OnInitializedAsync()
     {
-        var result = await _recipeService.GetRecipesByUserAsync(UserId);
-        if (result.IsSuccess == true)
-        {
-            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(result.Result));
-
-
-            Answer = listOfRecipes.LastOrDefault();
-        }
-
+        GetUserIdAndRecipes();
+        
     }
 
-    async private void Test()
+    //async Task GetRecentRecipesId()
+    //{
+    //    var result = await _recipeService.GetRecipesByUserAsync(UserId);
+    //    if (result.IsSuccess == true)
+    //    {
+            
+    //    }
+
+    //}
+
+    async private void GetUserIdAndRecipes()
     {
         var authState = await authenticationState;
         var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);
         UserId = authState.User.FindFirst("sub")?.Value;
+        if (response != null && response.IsSuccess)
+        {
+            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
+            RecentRecipeId = listOfRecipes.LastOrDefault();
+            StateHasChanged();
+        }
+        else
+        {
+            snackBar.Add("Something went wrong", Severity.Error);
+        }
     }
 
     private void AddIngredient()
