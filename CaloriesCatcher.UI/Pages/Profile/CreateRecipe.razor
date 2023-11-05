@@ -16,7 +16,8 @@
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
+                <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="newIngredientName" />
+                <MudTextField T="double" Variant="Variant.Outlined" @bind-Value="newIngredientQuantity" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
                 <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
                 @*<MudButton OnClick="GetRecentRecipesId">Get Recipe Id</MudButton>*@
@@ -32,7 +33,7 @@
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
-                            <li>@RecipeIngredientDto.IngredientName</li>
+                            <li>@RecipeIngredientDto.Quantity units of @RecipeIngredientDto.IngredientName</li>
                         }
                     </MudList>
                 </MudPaper>
@@ -75,6 +76,7 @@
     //injections
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
+    [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
     //data lists
@@ -83,13 +85,14 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
-    private string? newIngredient;
+    private string newIngredientName;
+    private double newIngredientQuantity;
     public string UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         GetUserIdAndRecipes();
-        
+
     }
 
     //async Task GetRecentRecipesId()
@@ -97,7 +100,7 @@
     //    var result = await _recipeService.GetRecipesByUserAsync(UserId);
     //    if (result.IsSuccess == true)
     //    {
-            
+
     //    }
 
     //}
@@ -121,10 +124,12 @@
 
     private void AddIngredient()
     {
-        if (!string.IsNullOrWhiteSpace(newIngredient))
+        if (!string.IsNullOrWhiteSpace(newIngredientName))
         {
-            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
-            newIngredient = string.Empty;
+            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredientName, Quantity = newIngredientQuantity });
+            newIngredientName = string.Empty;
+            newIngredientQuantity = 0;
+
         }
     }
 
@@ -145,21 +150,25 @@
     private void AddRecipeToDb()
     {
         //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+            recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
+            _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
+        }
     }
 
-    async void OpenDialog()
-    {
-        RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
+    //async void OpenDialog()
+    //{
+    //    RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
-        //var parameter = new DialogParameters
-        //{
-        //    //["indgredient"] =
-        //};
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
+    //    //var parameter = new DialogParameters
+    //    //{
+    //    //    //["indgredient"] =
+    //    //};
+    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+    //    var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
 
-        var result = await dialog.Result;
-    }
+    //    var result = await dialog.Result;
+    //}
 
 }
