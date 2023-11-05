@@ -86,38 +86,11 @@
     private string? newIngredient;
     public string UserId { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        GetUserIdAndRecipes();
-        
-    }
+    
 
-    //async Task GetRecentRecipesId()
-    //{
-    //    var result = await _recipeService.GetRecipesByUserAsync(UserId);
-    //    if (result.IsSuccess == true)
-    //    {
-            
-    //    }
+   
 
-    //}
-
-    async private void GetUserIdAndRecipes()
-    {
-        var authState = await authenticationState;
-        var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);
-        UserId = authState.User.FindFirst("sub")?.Value;
-        if (response != null && response.IsSuccess)
-        {
-            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
-            RecentRecipeId = listOfRecipes.LastOrDefault();
-            StateHasChanged();
-        }
-        else
-        {
-            //snackBar.Add("Something went wrong", Severity.Error);
-        }
-    }
+    
 
     private void AddIngredient()
     {
