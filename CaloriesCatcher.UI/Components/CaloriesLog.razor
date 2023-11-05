@@ -24,7 +24,7 @@
         caloriesDto.UserId = authState.User.FindFirst("sub")?.Value;
         caloriesService.CreateCaloriesAsync(caloriesDto);
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-        MudDialog.Close(DialogResult.Ok(true));
+        MudDialog.Close(DialogResult.Ok(caloriesDto));
     }
 
 }

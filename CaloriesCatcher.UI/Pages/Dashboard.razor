@@ -202,6 +202,11 @@
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
         var result = await dialog.Result;
+        CaloriesDto calorie = (CaloriesDto) result.Data;
+        ListOfCalories.Add(calorie);
+        snackBar.Add($"Added {calorie.CalorieName} Successfully", Severity.Success);
+        getGraphData();
+        StateHasChanged();
     }
     private async void DeleteCalories(int caloriesId)
     {
@@ -212,6 +217,7 @@
             {
                 ListOfCalories.Remove(ListOfCalories.FirstOrDefault(c => c.Id == caloriesId));
                 snackBar.Add($"Success: {response.Message} was deleted", Severity.Success);
+                getGraphData();
                 StateHasChanged();
             }
             else
@@ -231,5 +237,6 @@
         var dialogResult = await dialogService.Show<CaloriesEditDialog>("Calories: ", parameters).Result;
         snackBar.Add("Calorie Updated", Severity.Success);
         await RefreshCaloriesData();
+        getGraphData();
     }
 }
