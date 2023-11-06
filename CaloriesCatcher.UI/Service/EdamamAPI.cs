@@ -23,13 +23,13 @@ namespace CaloriesCatcher.UI.Service
             });
         }
 
-        public async Task<List<RecipeModelEdamam>> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto)
+        public async Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto)
         {
             return await _baseService.SendAsyncRecipeEdamam(new RequestDto()
             {
                 ApiType = ApiType.GET,
                 Data = recipeEdamaRequestDto,
-                Url = $"{recipeEdamaRequestDto.Url}&q={recipeEdamaRequestDto.ReceipeName}&app_id={recipeEdamaRequestDto.ApplicationId}&app_key={recipeEdamaRequestDto.ApplicationKey}&field=image&field=calories"
+                Url = $"{recipeEdamaRequestDto.Url}&q={recipeEdamaRequestDto.ReceipeName}&app_id={recipeEdamaRequestDto.ApplicationId}&app_key={recipeEdamaRequestDto.ApplicationKey}&field=image&field=ingredients&field=calories"
                 
             });        
         }

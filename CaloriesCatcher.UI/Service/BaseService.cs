@@ -146,8 +146,7 @@ namespace CaloriesCatcher.UI.Service
                 };
             }
         }
-
-        public async Task<List<RecipeModelEdamam>> SendAsyncRecipeEdamam(RequestDto requestDto)
+        public async Task<RecipeModelEdamam> SendAsyncRecipeEdamam(RequestDto requestDto)
         {
            try
             {
@@ -176,30 +175,20 @@ namespace CaloriesCatcher.UI.Service
                 {
                     var apiContent = await apiResponse.Content.ReadAsStringAsync();
                     RecipeModelEdamam recipe = JsonConvert.DeserializeObject<RecipeModelEdamam>(apiContent);
-                    List<RecipeModelEdamam> recipeModelEdamam = new List<RecipeModelEdamam>();
-                    recipeModelEdamam.Add(recipe);
-               //     recipeModelEdamam.Where(c => c.IsSuccess = true);
-                    return recipeModelEdamam;
+                    recipe.isSuccess = true;
+                    return recipe;
                 }
-
                 
-                return new List<RecipeModelEdamam>()
+                return new RecipeModelEdamam()
                 {
-                    new RecipeModelEdamam()
-                    {
-                       // IsSuccess = false
-                    }
+                    
                 };
             }
             catch (Exception ex)
             {
-                return new List<RecipeModelEdamam>()
+                return new RecipeModelEdamam()
                 {
-                    new RecipeModelEdamam()
-                    {
-                     //   Message = ex.Message,
-                     //   IsSuccess = false 
-                    }
+                   isSuccess = false
                 };
             } 
         }
