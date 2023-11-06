@@ -97,9 +97,6 @@ namespace CaloriesCatcher.UI.Service
             try
             {
                 using HttpClient client = _httpClientFactory.CreateClient("CalorieCatcherAPI");
-
-
-
                 // Create HttpRequestMessage
                 var message = new HttpRequestMessage
                 {
@@ -113,20 +110,11 @@ namespace CaloriesCatcher.UI.Service
                         _ => HttpMethod.Get
                     }
                 };
-
-
-
                 if (requestDto.Data != null)
                 {
                     message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
                 }
-
-
-
                 var apiResponse = await client.SendAsync(message);
-
-
-
                 if (apiResponse.IsSuccessStatusCode)
                 {
                     var apiContent = await apiResponse.Content.ReadAsStringAsync();
@@ -134,9 +122,6 @@ namespace CaloriesCatcher.UI.Service
                     nutrition.IsSuccess = true;
                     return nutrition;
                 }
-
-
-
                 // Handle error response
                 var errorResponse = new Nutrition
                 {
@@ -150,9 +135,6 @@ namespace CaloriesCatcher.UI.Service
                         _ => "Unknown Error"
                     }
                 };
-
-
-
                 return errorResponse;
             }
             catch (Exception ex)
@@ -165,7 +147,7 @@ namespace CaloriesCatcher.UI.Service
             }
         }
 
-        public async Task<RecipeModelEdamam> SendAsyncRecipeEdamam(RequestDto requestDto)
+        public async Task<List<RecipeModelEdamam>> SendAsyncRecipeEdamam(RequestDto requestDto)
         {
            try
             {
@@ -190,29 +172,34 @@ namespace CaloriesCatcher.UI.Service
                 }
                 
                 var apiResponse = await client.SendAsync(message);
-
-
-
                 if (apiResponse.IsSuccessStatusCode)
                 {
                     var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                    RecipeModelEdamam recipeModelEdamam  = JsonConvert.DeserializeObject<RecipeModelEdamam>(apiContent);
-                    recipeModelEdamam.IsSuccess = true;
+                    RecipeModelEdamam recipe = JsonConvert.DeserializeObject<RecipeModelEdamam>(apiContent);
+                    List<RecipeModelEdamam> recipeModelEdamam = new List<RecipeModelEdamam>();
+                    recipeModelEdamam.Add(recipe);
+               //     recipeModelEdamam.Where(c => c.IsSuccess = true);
                     return recipeModelEdamam;
                 }
 
                 
-                return new RecipeModelEdamam
+                return new List<RecipeModelEdamam>()
                 {
-                    IsSuccess = false
+                    new RecipeModelEdamam()
+                    {
+                       // IsSuccess = false
+                    }
                 };
             }
             catch (Exception ex)
             {
-                return new RecipeModelEdamam
+                return new List<RecipeModelEdamam>()
                 {
-                    Message = ex.Message,
-                    IsSuccess = false
+                    new RecipeModelEdamam()
+                    {
+                     //   Message = ex.Message,
+                     //   IsSuccess = false 
+                    }
                 };
             } 
         }
