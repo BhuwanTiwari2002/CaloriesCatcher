@@ -32,6 +32,14 @@ namespace CaloriesCatcher.UI.Service
                 Url = StaticType.CaloriesAPIBase + $"api/calories/{userId}"
             });
         }
+        public async Task<ResponseDto> GetCaloriesByUserAsync(string userId, int filterOption)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticType.ApiType.GET,
+                Url = StaticType.CaloriesAPIBase + $"api/calories/{userId}/{filterOption}"
+            });
+        }
 
         public async Task<ResponseDto> DeleteCaloriesAsync(int userId)
         {
@@ -60,5 +68,6 @@ namespace CaloriesCatcher.UI.Service
                 Url = StaticType.CaloriesAPIBase + "api/calories"
             });
         }
+        
     }
 }
