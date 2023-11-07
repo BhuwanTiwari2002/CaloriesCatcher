@@ -1,5 +1,85 @@
-<MudText Typo="Typo.h3">Receipe Discover</MudText>
+@page "/discover/recipes"
+@using CaloriesCatcher.UI.Model.Edamam
+@using CaloriesCatcher.UI.Service.IService
+<MudText Style="text-align: center" Class="mt-5" Typo="Typo.h5">Receipe Discover</MudText>
+<div style="display: flex; width: 50%; align-items: center; align-content: center; align-self: center; margin: auto">
+    <MudTextField Style="font-size: 20px"  @bind-Value="SearchValue" Label="Search" Variant="Variant.Outlined" />
+    <MudFab Class="ms-5" OnClick="searchByRecipe" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" />
+</div>
+<div>
+    @if (_recipeModelEdamam != null)
+    {
+        <div class="recipe-container">
+            @foreach (Hit hit in _recipeModelEdamam.Hits)
+            {
+                <MudCard class="recipe-card">
+                    <div class="recipe-media">
+                        <MudImage Src="@hit.Recipe.Image" Alt="@hit.Recipe.Label" />
+                    </div>
+                    <div class="recipe-content">
+                        <MudText Typo="Typo.h5" Class="recipe-label">@hit.Recipe.Label</MudText>
+                        <MudText Typo="Typo.body2" Class="recipe-label">Calories: @hit.Recipe.Calories</MudText>
+                    </div>
+                </MudCard>
+            }
+        </div>
+
+    }
+</div>
 
 @code {
+    [Inject] private IEdamamAPI edamamService { get; set; } = default!;
+    private RecipeModelEdamam _recipeModelEdamam;
+    public string SearchValue { get; set;}
+    public async void searchByRecipe()
+    {
+        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(SearchValue));
+        StateHasChanged();
+    }
     
 }
+
+<style>
+      .center-progress {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;  
+        }
+            .recipe-card {
+                max-width: 200px;
+                border-radius: 15px;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                margin: 1rem;
+                display: inline-block;
+                overflow: hidden; 
+            }
+            
+            .recipe-media {
+                height: 150px; 
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .recipe-media img {
+                height: 100%; 
+                width: 100%; 
+                object-fit: cover; 
+            }
+            
+            .recipe-content {
+                padding: 0.5rem;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between; 
+                height: calc(100% - 150px); 
+            }
+            
+            .recipe-label {
+                background-color: var(--mud-palette-background-paper); 
+                padding: 8px;
+                font-weight: bold;
+            }
+</style>

@@ -36,28 +36,7 @@ else if (_nutrition != null)
         </MudExpansionPanels>
     </div>
 }
-<div>
-    @if (_recipeModelEdamam != null)
-    {
-        
-        <div class="recipe-container">
-            @foreach (Hit hit in _recipeModelEdamam.Hits)
-            {
-        
-                <MudCard class="recipe-card">
-                    <div class="recipe-media">
-                        <MudImage Src="@hit.Recipe.Image" Alt="@hit.Recipe.Label" />
-                    </div>
-                    <div class="recipe-content">
-                        <MudText Typo="Typo.h5" Class="recipe-label">@hit.Recipe.Label</MudText>
-                        <MudText Typo="Typo.body2" Class="recipe-label">Calories: @hit.Recipe.Calories</MudText>
-                    </div>
-                </MudCard>
-            }
-        </div>
 
-    }
-</div>
 
 @code {
     [Inject]
@@ -130,46 +109,5 @@ else if (_nutrition != null)
         color: var(--mud-palette-text-secondary);
     }
 
-    .center-progress {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;  
-    }
-        .recipe-card {
-            max-width: 200px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-            margin: 1rem;
-            display: inline-block;
-            overflow: hidden; 
-        }
-        
-        .recipe-media {
-            height: 150px; 
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .recipe-media img {
-            height: 100%; 
-            width: 100%; 
-            object-fit: cover; 
-        }
-        
-        .recipe-content {
-            padding: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; 
-            height: calc(100% - 150px); 
-        }
-        
-        .recipe-label {
-            background-color: var(--mud-palette-background-paper); 
-            padding: 8px;
-            font-weight: bold;
-        }
+  
 </style>
