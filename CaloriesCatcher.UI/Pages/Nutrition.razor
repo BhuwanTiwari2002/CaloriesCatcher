@@ -7,12 +7,12 @@
 <MudForm @ref="_foodNameForm" Style="margin: auto; width: 30%;">
     <MudText Class="mt-2" Typo="Typo.h6">Enter Food Name</MudText>
     <MudTextField @bind-Value="_foodName" Variant="Variant.Outlined"></MudTextField>
-    <MudText>Receipes</MudText>
+    <MudText>Receipes Below</MudText>
     <MudTextField @bind-Value="_receipeName" Variant="Variant.Outlined"></MudTextField>
-    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Submit</MudButton>
-    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByRecipe">Test</MudButton>
+    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Search Calories</MudButton>
+    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByRecipe">Search Recipes</MudButton>
 </MudForm>
-
+i
 @if (loading)
 {
     <div class="center-progress">
@@ -36,7 +36,28 @@ else if (_nutrition != null)
         </MudExpansionPanels>
     </div>
 }
+<div>
+    @if (_recipeModelEdamam != null)
+    {
+        
+        <div class="recipe-container">
+            @foreach (Hit hit in _recipeModelEdamam.Hits)
+            {
+        
+                <MudCard class="recipe-card">
+                    <div class="recipe-media">
+                        <MudImage Src="@hit.Recipe.Image" Alt="@hit.Recipe.Label" />
+                    </div>
+                    <div class="recipe-content">
+                        <MudText Typo="Typo.h5" Class="recipe-label">@hit.Recipe.Label</MudText>
+                        <MudText Typo="Typo.body2" Class="recipe-label">Calories: @hit.Recipe.Calories</MudText>
+                    </div>
+                </MudCard>
+            }
+        </div>
 
+    }
+</div>
 
 @code {
     [Inject]
@@ -53,6 +74,7 @@ else if (_nutrition != null)
         loading = true;
         _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(_receipeName));
         var test = _recipeModelEdamam;
+        StateHasChanged();
     }
     
     public async void searchByFoodName()
@@ -114,4 +136,40 @@ else if (_nutrition != null)
         align-items: center;
         height: 100vh;  
     }
+        .recipe-card {
+            max-width: 200px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            margin: 1rem;
+            display: inline-block;
+            overflow: hidden; 
+        }
+        
+        .recipe-media {
+            height: 150px; 
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .recipe-media img {
+            height: 100%; 
+            width: 100%; 
+            object-fit: cover; 
+        }
+        
+        .recipe-content {
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            height: calc(100% - 150px); 
+        }
+        
+        .recipe-label {
+            background-color: var(--mud-palette-background-paper); 
+            padding: 8px;
+            font-weight: bold;
+        }
 </style>
