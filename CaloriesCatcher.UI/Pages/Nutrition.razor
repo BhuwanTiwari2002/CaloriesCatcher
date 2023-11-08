@@ -10,7 +10,6 @@
     <MudText>Receipes Below</MudText>
     <MudTextField @bind-Value="_receipeName" Variant="Variant.Outlined"></MudTextField>
     <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByFoodName">Search Calories</MudButton>
-    <MudButton Variant="Variant.Filled" Style="@($"color:{Colors.Grey.Lighten5}; background:{Colors.BlueGrey.Lighten1};")" Class="mt-3" DisableElevation="true" OnClick="searchByRecipe">Search Recipes</MudButton>
 </MudForm>
 i
 @if (loading)
@@ -47,15 +46,7 @@ else if (_nutrition != null)
     private CaloriesCatcher.UI.Model.Nutrition _nutrition;
     private RecipeModelEdamam _recipeModelEdamam;
     private bool loading = false;
-
-    public async void searchByRecipe()
-    {
-        loading = true;
-        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(_receipeName));
-        var test = _recipeModelEdamam;
-        StateHasChanged();
-    }
-    
+   
     public async void searchByFoodName()
     {
         loading = true;

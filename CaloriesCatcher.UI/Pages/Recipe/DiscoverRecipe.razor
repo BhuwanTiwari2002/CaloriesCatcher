@@ -3,10 +3,23 @@
 @using CaloriesCatcher.UI.Service.IService
 @using CaloriesCatcher.UI.Model
 <MudText Style="text-align: center" Class="mt-5" Typo="Typo.h5">Receipe Discover</MudText>
-<div style="display: flex; width: 50%; align-items: center; align-content: center; align-self: center; margin: auto">
-    <MudTextField Style="font-size: 20px"  @bind-Value="SearchValue" Label="Search" Variant="Variant.Outlined" />
-    <MudFab Class="ms-5" OnClick="searchByRecipe" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" />
-</div>
+<MudGrid>
+        <MudItem xs="5" Class="mt-5" Style="margin: auto">
+                <MudTextField Style="font-size: 20px" @bind-Value="SearchValue" Label="Search" Variant="Variant.Outlined"/>
+            </MudItem>
+        <MudItem xs="3">
+            <MudSelect @bind-Value="selectedDiet" Label="Select a Diet" OpenIcon="@Icons.Material.Filled.FoodBank" AdornmentColor="Color.Secondary">
+                @foreach (string item in edamamDiet)
+                {
+                    <MudSelectItem Value="@item">@item</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="2">
+            <MudFab Class="ms-5" OnClick="searchByRecipe" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search"/>
+        </MudItem>
+    
+</MudGrid>
 <div>
     @if (_recipeModelEdamam != null)
     {
@@ -33,16 +46,27 @@
 </div>
 
 @code {
+    /* Services */
     [Inject] private IEdamamAPI edamamService { get; set; } = default!;
     [Inject] private ICalories _calories { get; set; } = default;
     [Inject] private ISnackbar _snackbar { get; set; } = default!;
     [Inject] private IRecipe _recipe { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    
+    /* Models */
     private RecipeModelEdamam _recipeModelEdamam;
     public string SearchValue { get; set;}
+    private string[] edamamDiet = { string.Empty , "balanced", "high-fiber", "high-protein", "low-carb", "low-fat", "low-sodium"};
+    public string selectedDiet { get; set; } = String.Empty;
+    /* This gets the recipes from the Edamama API */
     public async void searchByRecipe()
     {
-        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(SearchValue));
+        string dietString = string.Empty;
+        if (selectedDiet != string.Empty)
+        {
+            dietString = "&diet=" + selectedDiet;
+        }
+        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(SearchValue, dietString));
         StateHasChanged();
     }
 
