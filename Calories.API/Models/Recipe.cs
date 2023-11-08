@@ -17,8 +17,8 @@ namespace Calories.API.Models
         [Column(TypeName = "VARCHAR")]
         [StringLength(100)]
         public string Calories { get; set; }
-        [Column(TypeName = "VARCHAR")]
-        [StringLength(100)]
+        [Column(TypeName = "NVARCHAR")]
+        [MaxLength]
         public string ImagePath { get; set; }
     }
 }

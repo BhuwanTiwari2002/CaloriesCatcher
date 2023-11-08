@@ -23,7 +23,7 @@
                     </div>
                     <div style="text-align: center">
                         <MudIconButton @onclick="() => logRecipeToCalories(hit.Recipe.Calories, hit.Recipe.Label)" Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large" Color="Color.Primary" ></MudIconButton>
-                        <MudIconButton Icon="@Icons.Material.Filled.Favorite"  Size="Size.Large" Color="Color.Primary" Title="Add to Receipe">Favorite</MudIconButton>
+                        <MudIconButton @onclick="() => addRecipe(hit.Recipe.Label, hit.Recipe.Calories, hit.Recipe.Image)" Icon="@Icons.Material.Filled.Favorite"  Size="Size.Large" Color="Color.Primary" Title="Add to Receipe">Favorite</MudIconButton>
                     </div>
                 </MudCard>
             }
@@ -36,6 +36,7 @@
     [Inject] private IEdamamAPI edamamService { get; set; } = default!;
     [Inject] private ICalories _calories { get; set; } = default;
     [Inject] private ISnackbar _snackbar { get; set; } = default!;
+    [Inject] private IRecipe _recipe { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
     private RecipeModelEdamam _recipeModelEdamam;
     public string SearchValue { get; set;}
@@ -64,7 +65,26 @@
             _snackbar.Add($"Unable to add {label}", Severity.Error);
         }
     }
-    
+
+    private async Task addRecipe(string recipe, double calories, string imagePath)
+    {
+        var authState = await authenticationState;
+        var response = await _recipe.CreateRecipeAsync(new RecipeDto()
+        {
+            UserId = authState.User.FindFirst("sub")?.Value,
+            RecipeName = recipe,
+            Calories = calories,
+            ImagePath = imagePath
+        });
+        if (response.IsSuccess == true)
+        {
+            _snackbar.Add($"{recipe} was added", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add($"Unable to add {recipe}", Severity.Error);
+        }
+    }
 }
 
 <style>
