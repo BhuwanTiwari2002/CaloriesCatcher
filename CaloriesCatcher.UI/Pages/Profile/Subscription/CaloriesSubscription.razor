@@ -14,7 +14,43 @@
         <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Subscribe" Class="mt-3">Subscribe Now</MudButton>
     </MudCardContent>
 </MudCard>
+<MudGrid Class="mt-5 px-5"> 
+    <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
+        <MudText Typo="Typo.h3" Class="mb-5">Subscription Details</MudText>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            
+            <MudText Typo="Typo.h4">Turtle Plan</MudText>
+            <MudText>Come try it out for a week on us! <br/> No Purchase Necessary</MudText>
+        </div>
+    </MudItem>
 
+    <MudItem xs="12" sm="4">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            
+            <MudText Typo="Typo.h4">Elephant Plan</MudText>
+            <MudText>Join for 1 month at a time. <br/> $0.99 per month</MudText>
+        </div>
+    </MudItem>
+
+    <MudItem xs="12" sm="4">
+        <div style="background-color: skyblue; color: black; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            
+            <MudText Typo="Typo.h4">Parrot Plan</MudText>
+            <MudText>Love it so much, join us for 1 year.<br/> $1.99 per year</MudText>
+        </div>
+    </MudItem>
+</MudGrid>
+<MudGrid>
+<MudItem xs="12" sm="12">
+        <div style="  border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
+            
+            
+            <MudText>All payments are done using Stripe Payment. If you use Stripe Payment, you accept and agree to the terms applicable to that payment method.  </MudText>
+        </div>
+    </MudItem>
+</MudGrid>
 @code {
     [Inject] StripePaymentsService stripeService { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
