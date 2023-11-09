@@ -86,7 +86,7 @@
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
-    
+
     /* Variables */
     List<RecipeDto> listOfRecipes = new List<RecipeDto>();
     List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
@@ -100,15 +100,15 @@
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
     int currentStreak = 0;
     int longestStreak = 0;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await RefreshCaloriesData(0);
         getGraphData();
         GetStreaks();
         await getRecipes();
+        //await GetDataForUserProgressBar();
     }
-    
     /* Loads the list of Recipes */
     async Task getRecipes()
     {
@@ -118,7 +118,7 @@
             listOfRecipes = JsonConvert.DeserializeObject<List<RecipeDto>>(Convert.ToString(result.Result));
         }
     }
-   
+
     /* Will get the Profile Daily Calories Goal & The daily calories */
     public async void getTrackingGraphData()
     {
@@ -140,7 +140,7 @@
             trackingData[0] = 0;
         }
     }
-    
+
     /* This will update the graph data */
     private void getGraphData()
     {
@@ -164,12 +164,12 @@
             }
         }
     }
-    
+
     void EditData()
     {
 
     }
-    
+
     /* This includes the logic to get the Streaks */
     private void GetStreaks()
     {
@@ -200,7 +200,7 @@
             lastDate = entry.Date;
         } 
     }
-    
+
     /* This will get the List of Calories based on the user filter option */
     async Task RefreshCaloriesData(int filterOption)
     {
@@ -253,8 +253,8 @@
             }  
         }
         StateHasChanged();
-       }
-   
+    }
+
     /* Opens the Dialog to let the user create a new calorie */
     async void OpenCaloriesDialog()
     {
@@ -267,13 +267,13 @@
         getGraphData();
         StateHasChanged();
     }
-    
+
     /* Deletes the Calorie based on the id */
     private async Task DeleteCalories(int caloriesId)
     {
         try
         {
-           var response = await caloriesService.DeleteCaloriesAsync(caloriesId);
+            var response = await caloriesService.DeleteCaloriesAsync(caloriesId);
             if (response.IsSuccess)
             {
                 ListOfCalories.Remove(ListOfCalories.FirstOrDefault(c => c.Id == caloriesId));
@@ -291,7 +291,7 @@
         }
 
     }
-    
+
     /* This dialog gets triggered when the user wants to update a Calories */
     private async Task UpdateCalories(CaloriesDto caloriesDto)
     {
@@ -302,5 +302,18 @@
         await RefreshCaloriesData(0);
         getGraphData();
     }
-    
+
+    /* Get Data for Progress Bar  */
+    private async Task GetDataForUserProgressBar()
+    {
+        var response = await _userDetailService.GetByUser(UserId);
+        if (response.IsSuccess == true && response != null)
+        {
+            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+        } else
+        {
+            snackBar.Add("Something went wrong, could not load user details");
+        }
+
+    }
 }

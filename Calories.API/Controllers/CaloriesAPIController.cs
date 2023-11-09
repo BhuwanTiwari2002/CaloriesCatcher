@@ -65,17 +65,17 @@ namespace Calories.API.Controllers
                 List<Models.Calories> obj = new List<Models.Calories>();
                 if (dateFilter == 0)
                 {
-                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today & c.UserId == userId);
+                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date.AddDays(-1) <= DateTime.Today.Date & c.UserId == userId);
                     obj = results.ToList();
                 } else if (dateFilter == 1)
                 {
                     // Weekly
-                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.AddDays(-7) & c.UserId == userId);
+                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.Date.AddDays(-7) & c.UserId == userId);
                     obj = results.ToList();
                 } else if(dateFilter == 2)
                 {
                     // Monthly
-                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.AddDays(-30) & c.UserId == userId);
+                    IQueryable<Calories.API.Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.Date.AddDays(-30) & c.UserId == userId);
                     obj = results.ToList(); 
                 }
                 _response.Result = _mapper.Map<List<CaloriesDto>>(obj);

@@ -2,46 +2,87 @@
 @using CaloriesCatcher.UI.Model.Edamam
 @using CaloriesCatcher.UI.Service.IService
 @using CaloriesCatcher.UI.Model
-<MudText Style="text-align: center" Class="mt-5" Typo="Typo.h5">Receipe Discover</MudText>
-<MudGrid>
-        <MudItem xs="5" Class="mt-5" Style="margin: auto">
-                <MudTextField Style="font-size: 20px" @bind-Value="SearchValue" Label="Search" Variant="Variant.Outlined"/>
-            </MudItem>
-        <MudItem xs="3">
-            <MudSelect @bind-Value="selectedDiet" Label="Select a Diet" OpenIcon="@Icons.Material.Filled.FoodBank" AdornmentColor="Color.Secondary">
-                @foreach (string item in edamamDiet)
-                {
-                    <MudSelectItem Value="@item">@item</MudSelectItem>
-                }
-            </MudSelect>
-        </MudItem>
-        <MudItem xs="2">
-            <MudFab Class="ms-5" OnClick="searchByRecipe" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search"/>
-        </MudItem>
-    
+<MudGrid Style="max-width: 1200px; margin: auto;">
+    <MudItem xs="12" Class="mb-2 text-center">
+        <MudText Color="Color.Primary" Typo="Typo.h4">Recipe Discovery</MudText>
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudTextField FullWidth="true" Label="Search for recipes" Variant="Variant.Outlined" @bind-Value="SearchValue" AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudSelect FullWidth="true" @bind-Value="selectedMudDropDown[0]" Label="Select a Diet" OpenIcon="@Icons.Material.Filled.FoodBank" AdornmentColor="Color.Secondary">
+            @foreach (string item in edamamDiet)
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudSelect FullWidth="true" @bind-Value="selectedMudDropDown[1]" Label="Select a Health Diet" OpenIcon="@Icons.Material.Filled.EmojiFoodBeverage" AdornmentColor="Color.Secondary">
+            @foreach (string item in healthDiet)
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudSelect FullWidth="true" @bind-Value="selectedMudDropDown[2]" Label="Select a Cuisine Type" OpenIcon="@Icons.Material.Filled.FoodBank" AdornmentColor="Color.Secondary">
+            @foreach (string item in cuisineType)
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudSelect FullWidth="true" @bind-Value="selectedMudDropDown[3]" Label="Select a Meal Type" OpenIcon="@Icons.Material.Filled.Timer" AdornmentColor="Color.Secondary">
+            @foreach (string item in mealType)
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" sm="4" Class="mb-4">
+        <MudSelect FullWidth="true" @bind-Value="selectedMudDropDown[4]" Label="Select a Meal Type" OpenIcon="@Icons.Material.Filled.FoodBank" AdornmentColor="Color.Secondary">
+            @foreach (string item in dishType)
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    <MudItem xs="12" Class="mt-2 text-center">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="searchByRecipe">Search</MudButton>
+    </MudItem>
 </MudGrid>
+
 <div>
     @if (_recipeModelEdamam != null)
     {
         <div class="recipe-container">
-            @foreach (Hit hit in _recipeModelEdamam.Hits)
+            @if (_recipeModelEdamam.Hits != null)
             {
-                <MudCard class="recipe-card">
-                    <div class="recipe-media">
-                        <MudImage Src="@hit.Recipe.Image" Alt="@hit.Recipe.Label" />
-                    </div>
-                    <div class="recipe-content ms-5">
-                        <MudText Typo="Typo.body1" Color="Color.Primary" Class="recipe-label">@hit.Recipe.Label</MudText>
-                        <MudText Typo="Typo.body2"  Color="Color.Secondary" Class="recipe-label">Calories: @Math.Round(hit.Recipe.Calories, 3)</MudText>
-                    </div>
-                    <div style="text-align: center">
-                        <MudIconButton @onclick="() => logRecipeToCalories(hit.Recipe.Calories, hit.Recipe.Label)" Icon="@Icons.Material.Filled.AddCircle" Size="Size.Large" Color="Color.Primary" ></MudIconButton>
-                        <MudIconButton @onclick="() => addRecipe(hit.Recipe.Label, hit.Recipe.Calories, hit.Recipe.Image)" Icon="@Icons.Material.Filled.Favorite"  Size="Size.Large" Color="Color.Primary" Title="Add to Receipe">Favorite</MudIconButton>
-                    </div>
-                </MudCard>
+                @foreach (Hit hit in _recipeModelEdamam.Hits)
+                {
+                    <MudCard class="recipe-card">
+                        <div class="recipe-media">
+                            <MudImage Src="@hit.Recipe.Image" Alt="@hit.Recipe.Label" />
+                        </div>
+                        <div class="recipe-content">
+                            <MudText Typo="Typo.h6" Color="Color.Primary" Class="recipe-title">@hit.Recipe.Label</MudText>
+                            <MudText Typo="Typo.subtitle1" Color="Color.Secondary">Calories: @Math.Round(hit.Recipe.Calories)</MudText>
+                            <!-- You can add more recipe details here -->
+                        </div>
+                        <div class="recipe-actions">
+                            <MudIconButton @onclick="() => logRecipeToCalories(hit.Recipe.Calories, hit.Recipe.Label)" Icon="@Icons.Material.Filled.AddCircleOutline" Size="Size.Large" Color="Color.Primary" Title="Log Calories"></MudIconButton>
+                            <MudIconButton @onclick="() => addRecipe(hit.Recipe.Label, hit.Recipe.Calories, hit.Recipe.Image)" Icon="@Icons.Material.Filled.FavoriteBorder" Size="Size.Large" Color="Color.Secondary" Title="Add to Favorites"></MudIconButton>
+                        </div>
+                    </MudCard>
+                }
+            }
+            else
+            {
+                <MudText Typo="Typo.h3" Color="Color.Error">Sorry, no recipes found.</MudText>
             }
         </div>
-
     }
 </div>
 
@@ -52,21 +93,47 @@
     [Inject] private ISnackbar _snackbar { get; set; } = default!;
     [Inject] private IRecipe _recipe { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
-    
+
     /* Models */
     private RecipeModelEdamam _recipeModelEdamam;
     public string SearchValue { get; set;}
     private string[] edamamDiet = { string.Empty , "balanced", "high-fiber", "high-protein", "low-carb", "low-fat", "low-sodium"};
-    public string selectedDiet { get; set; } = String.Empty;
+    private string[] healthDiet = { string.Empty , "alcohol-cocktail", "alcohol-free", "celery-free", "crustacean-free", "dairy-fat"
+                                                 , "DASH", "egg-free", "fish-free", "fodmap-free", "gluten-free", "immuno-supportive"
+                                                 , "keto-friendly", "kidney-friendly", "kosher", "low-fat-abs", "low-potassium", "low-sugar"
+                                                 , "lupine-free", "Mediterranean", "moullusk-free", "mustard-free", "no-oil-added", "paleo"
+                                                 , "peanut-free", "pescatarian", "pork-free", "red-meat-free", "sesame-free"
+                                                 , "shellyfish-free", "soy-free", "sugar-conscious", "sulfite-free"
+                                                 , "tree-nut-free", "vegan", "vegetarian", "wheat-free" };
+    private string[] cuisineType = {string.Empty , "American", "Asian", "British", "Cabribbean", "Central Europe", "Chinese", "Eastern Europe"
+                                                 , "French", "Indian", "Italian", "Japanese", "Kosher", "Mediterranean", "Mexican", "Middle Eastern"
+                                                 , "Nordic", "South American", "South East Asian" };
+    private string[] mealType = { string.Empty   , "Breakfast", "Dinner", "Lunch", "Snack", "Teatime" };
+    private string[] dishType = { string.Empty   , "Biscuits and cookies", "Bread", "Cereals", "Condiments and sauces", "Desserts", "Drinks"
+                                                 , "Main course", "Pancake", "Preps", "Preserve", "Salad", "Sandwiches", "Side dish", "Soup"
+                                                 , "Starter", "Sweets" };
+
+    private string[] selectedMudDropDown = { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
+    /* 0 => Diet, 1 => Health, 2 => CuisineType, 3 => MealType, 4 => DishType */
     /* This gets the recipes from the Edamama API */
     public async void searchByRecipe()
     {
-        string dietString = string.Empty;
-        if (selectedDiet != string.Empty)
+        string queryFilter = string.Empty;
+        for(int i = 0; i < selectedMudDropDown.Length; i++)
         {
-            dietString = "&diet=" + selectedDiet;
+            if (!string.IsNullOrEmpty(selectedMudDropDown[i]))
+            {
+                switch(i)
+                {
+                    case 0: queryFilter += "&diet=" + selectedMudDropDown[0]; break;
+                    case 1: queryFilter += "&health=" + selectedMudDropDown[1]; break;
+                    case 2: queryFilter += "&cuisineType=" + selectedMudDropDown[2]; break;
+                    case 3: queryFilter += "&mealType=" + selectedMudDropDown[3]; break;
+                    case 4: queryFilter += "&dishType=" + selectedMudDropDown[4]; break;
+                }
+            }
         }
-        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(SearchValue, dietString));
+        _recipeModelEdamam = await edamamService.GetRecipe(new RecipeEdamaRequestDto(SearchValue, queryFilter));
         StateHasChanged();
     }
 
@@ -113,40 +180,51 @@
 
 <style>
 
-            .recipe-card {
-                max-width: 300px;
-                border-radius: 15px;
-                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-                margin: 1rem;
-                display: inline-block;
-                overflow: hidden; 
-            }
-            
-            .recipe-media {
-                height: 200px; 
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            .recipe-media img {
-                height: 100%; 
-                width: 100%; 
-                object-fit: cover; 
-            }
-            
-            .recipe-content {
-                padding: 0.5rem;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between; 
-                height: calc(100% - 150px); 
-            }
-            
-            .recipe-label {
-                background-color: var(--mud-palette-background-paper); 
-                padding: 8px;
-                font-weight: bold;
-            }
+    .recipe-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 1rem;
+    }
+
+    .recipe-card {
+        max-width: 300px;
+        margin: 1rem;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+        .recipe-card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+        }
+
+    .recipe-media {
+        height: 200px;
+    }
+
+        .recipe-media img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+    .recipe-content {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .recipe-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .recipe-actions {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+        gap: 1rem;
+    }
 </style>
