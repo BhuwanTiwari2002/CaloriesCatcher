@@ -15,7 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Calories.API\Calories.API.csproj" />
+	  <Content Update="appsettings.json" CopyToPublishDirectory="Never" />
+	  <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+        <ProjectReference Include="..\Calories.API\Calories.API.csproj" />
   </ItemGroup>
 
 

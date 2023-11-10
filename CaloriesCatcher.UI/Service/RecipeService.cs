@@ -19,7 +19,7 @@ namespace RecipeCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.POST,
                 Data = recipeDto,
-                Url = "https://localhost:7005/api/recipes"
+                Url = StaticType.CaloriesAPIBase + "api/recipes"
             });
         }
 
@@ -28,7 +28,7 @@ namespace RecipeCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = $"https://localhost:7005/api/recipes/{userId}"
+                Url = StaticType.CaloriesAPIBase + $"api/recipes/{userId}"
             });
         }
 
@@ -37,7 +37,7 @@ namespace RecipeCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.DELETE,
-                Url = $"https://localhost:7005/api/recipes/{userId}"
+                Url = StaticType.CaloriesAPIBase + $"api/recipes/{userId}"
             });
         }
 
@@ -47,7 +47,7 @@ namespace RecipeCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.PUT,
                 Data = recipeDto,
-                Url = "https://localhost:7005/api/recipes"
+                Url = StaticType.CaloriesAPIBase + "api/recipes"
             });
         }
 
@@ -56,7 +56,7 @@ namespace RecipeCatcher.UI.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticType.ApiType.GET,
-                Url = "https://localhost:7005/api/recipes"
+                Url = StaticType.CaloriesAPIBase + "api/recipes"
             });
         }
     }

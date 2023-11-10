@@ -19,7 +19,7 @@ public class UserDetailService : IUserDetailService
         {
             ApiType = StaticType.ApiType.POST,
             Data = userDetail,
-            Url = $"https://localhost:7005/api/profile/"
+            Url = StaticType.CaloriesAPIBase + $"api/profile/"
         });
     }
 
@@ -28,7 +28,7 @@ public class UserDetailService : IUserDetailService
         return await _baseService.SendAsync(new RequestDto()
         {
             ApiType = StaticType.ApiType.GET,
-            Url = $"https://localhost:7005/api/profile/{userId}"
+            Url = StaticType.CaloriesAPIBase + $"api/profile/{userId}"
         });
 
     }
@@ -39,7 +39,7 @@ public class UserDetailService : IUserDetailService
         {
             ApiType = StaticType.ApiType.PUT,
             Data = userDetail,
-            Url = $"https://localhost:7005/api/profile/"
+            Url = StaticType.CaloriesAPIBase + $"api/profile/"
         });
     }
 
