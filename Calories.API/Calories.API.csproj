@@ -17,6 +17,13 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
+	  <PackageReference Include="Serilog" Version="3.1.1" />
+	  <PackageReference Include="Serilog.AspNetCore" Version="7.0.1-dev-00320" />
+	  <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0-dev-10359" />
+	  <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.2-dev-00546" />
+	  <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
+	  <PackageReference Include="Serilog.UI" Version="2.5.1" />
+	  <PackageReference Include="Serilog.UI.MsSqlServerProvider" Version="2.2.2" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"></PackageReference>
 
   </ItemGroup>
