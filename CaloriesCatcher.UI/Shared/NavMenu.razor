@@ -1,5 +1,6 @@
 ﻿@using CaloriesCatcher.UI.Service.IService;
 @using CaloriesCatcher.UI.Service
+@using KitchenComfort.Web.Models.Utility
 <AuthorizeView>
     <Authorized>
         <MudNavMenu>
@@ -20,7 +21,7 @@
             <AuthorizeView Roles="ADMIN">
                <Authorized Context="adminContext">
                    <MudNavGroup Title="Admin" Expanded="true" Icon="@Icons.Material.Filled.AdminPanelSettings">
-                       <MudNavLink Href="/setting" Icon="@Icons.Material.Filled.Settings" Match="NavLinkMatch.All">Settings</MudNavLink>
+                       <MudNavLink Href="@logUri" Icon="@Icons.Material.Filled.Settings" Match="NavLinkMatch.All">Logs</MudNavLink>
                        <MudNavLink Href="/AdminDashboard" Icon="@Icons.Material.Filled.People" Match="NavLinkMatch.All">Users</MudNavLink>
                    </MudNavGroup>
                </Authorized>
@@ -32,6 +33,7 @@
 @code {
     [Inject]private NavigationManager navigationManager { get; set; } = default!;
     [Inject]AuthenticationStateProvider authenticationStateProvider { get; set; } = default!;
+    string logUri = StaticType.CaloriesAPIBase + "logs";
     private async Task Logout()
     {
         var customAuthenticationStateProvider = (CustomAuthenticationStateProvider)authenticationStateProvider;

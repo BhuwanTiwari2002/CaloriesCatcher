@@ -3,10 +3,11 @@
 @using CaloriesCatcher.UI.Service.IService
 @using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Components.Dialogs
+@using KitchenComfort.Web.Models.Utility
 @using Newtonsoft.Json
 <AuthorizeView Roles="ADMIN">
     <Authorized>
-         <MudText Typo="Typo.h4" Class="mt-5 ms-5">Admin Dashboard</MudText>
+        <MudText Typo="Typo.h4" Class="mt-5 ms-5">Admin Dashboard</MudText>
             <MudDataGrid Class="ms-5" T="UserDto" Items="@listOfUsers" Filterable="true" QuickFilter="@_quickFilter"
                          Hideable="true">
                 <ToolBarContent>
@@ -42,6 +43,7 @@
     [Inject] IAuthService _authService { get; set; }
     [Inject] IDialogService _dialogService { get; set; }
     [Inject] ISnackbar _snackbar { get; set; }
+
     protected async override Task OnInitializedAsync()
     {
         try
