@@ -29,16 +29,15 @@
         var parsedQuery = QueryHelpers.ParseQuery(query);
         if (parsedQuery.TryGetValue("sessionId", out var sessionId))
         {
-            
-            
+
+
         }
         if (!string.IsNullOrEmpty(url))
         {
             int charAt = url.IndexOf("$");
             string priceId = url.ToString().Substring(charAt + 1);
-            var authState = await authenticationState;
-            var response = await _authService.GetUserById(authState.User.FindFirst("sub")?.Value);
-            UserDto dto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(response.Result)); 
+            var authState = await _authService.GetAllUsers();
+            UserDto dto = new UserDto();
             if (priceId == "price_1O3kU6CvoZQgmYDTz2m2Q4Sx")
             {
                 _authService.AssignRoleAsync(new RegisterationRequestDto()

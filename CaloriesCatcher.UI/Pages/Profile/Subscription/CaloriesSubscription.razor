@@ -61,12 +61,14 @@
     public Subscription ElephantSubscription { get; set; } 
     public Subscription ParrotSubscription { get; set; } 
     public string role { get; set; } = string.Empty;
+    public string username { get; set; } = string.Empty;
     Subscription SelectedSubscription;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await authenticationState;
         role = authState.User.FindFirst(ClaimTypes.Role)?.Value;
+        username = authState.User.FindFirst("sub")?.Value;
         if (string.IsNullOrEmpty(role))
         {
             role = "Turtle";
