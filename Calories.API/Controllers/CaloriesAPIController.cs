@@ -2,11 +2,6 @@
 using Calories.API.Data;
 using Calories.API.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Calories.API.Controllers
 {
@@ -75,17 +70,17 @@ namespace Calories.API.Controllers
 
                 if (dateFilter == 0)
                 {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date.Date.AddDays(-1) <= DateTime.Today.Date && c.UserId == userId);
+                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date.Date.AddDays(-1) >= DateTime.Today.Date && c.UserId == userId);
                     obj = results.ToList();
                 }
                 else if (dateFilter == 1)
                 {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.Date.AddDays(-7) && c.UserId == userId);
+                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date >= DateTime.Today.Date.AddDays(-7) && c.UserId == userId);
                     obj = results.ToList();
                 }
                 else if (dateFilter == 2)
                 {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date.Date >= DateTime.Today.Date.AddDays(-30) && c.UserId == userId);
+                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date >= DateTime.Today.Date.AddDays(-30) && c.UserId == userId);
                     obj = results.ToList();
                 }
 
