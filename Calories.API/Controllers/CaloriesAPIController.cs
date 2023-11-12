@@ -153,13 +153,15 @@ namespace Calories.API.Controllers
                 _db.Calories.Remove(obj);
                 _db.SaveChanges();
                 _logger.LogInformation("Calorie record for user with ID: {UserId} deleted successfully", userId);
+                _response.IsSuccess = true;
             }
             catch (Exception ex)
             {
+                _response.IsSuccess = false;
                 _logger.LogError(ex, "Error occurred while deleting calorie record for user with ID: {UserId}", userId);
                 return StatusCode(500, "Internal Server Error");
             }
-            return Ok();
+            return Ok(_response);
         }
     }
 }
