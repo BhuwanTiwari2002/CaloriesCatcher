@@ -1,5 +1,6 @@
 ﻿@page "/createrecipe"
 @using CaloriesCatcher.UI.Components;
+@using CaloriesCatcher.UI.Components.Dialogs;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
@@ -14,13 +15,10 @@
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudTextField T="string" Variant="Variant.Outlined" Text="" @bind-Value="newIngredient" />
+                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@RecentRecipeId.RecipeName</MudText>
+                <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="newIngredientName" />
+                <MudTextField T="double" Variant="Variant.Outlined" @bind-Value="newIngredientQuantity" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
-                <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
-                <MudButton>Edit an Item</MudButton>
-                <MudButton>Add an Step</MudButton>
-                <MudButton>Edit an Step</MudButton>
-                <MudButton>Delete an Step</MudButton>
             </MudButtonGroup>
         </MudPaper>
     </MudItem>
@@ -32,17 +30,12 @@
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
-                            <li>@RecipeIngredientDto.IngredientName</li>
+                            <li>@RecipeIngredientDto.Quantity cup(s) @RecipeIngredientDto.IngredientName<MudButton @onclick="() => DeleteIngredient(RecipeIngredientDto.RecipeIngredientsId)" Color="Color.Error">Delete</MudButton></li>
                         }
                     </MudList>
                 </MudPaper>
 
             </MudItem>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudTextField T="string" Label="Steps:" Variant="Variant.Outlined" Text="@sampleText" Lines="3" />
         </MudPaper>
     </MudItem>
     <MudItem xs="6" sm="4">
@@ -72,28 +65,62 @@
 
 @code
 {
-    [Inject]
-    IDialogService dialogService { get; set; } = default!;
+    //injections
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] IRecipe _recipeService { get; set; } = default!;
+    [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
+    [Inject] private NavigationManager navigationManager { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
-    string sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-
+    //data lists
     List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
-    private string? newIngredient;
+    List<Calories.API.Models.Dto.RecipeDto> listOfRecipes = new List<Calories.API.Models.Dto.RecipeDto>();
 
-    private void AddIngredient()
+    //single variables
+    Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    private string newIngredientName;
+    private double newIngredientQuantity;
+    public string UserId { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        if (!string.IsNullOrWhiteSpace(newIngredient))
+        GetUserIdAndRecipes();
+
+    }
+
+    async private void GetUserIdAndRecipes()
+    {
+        var authState = await authenticationState;
+        var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);
+        UserId = authState.User.FindFirst("sub")?.Value;
+        if (response != null && response.IsSuccess)
         {
-            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredient });
-            newIngredient = string.Empty;
+            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
+            RecentRecipeId = listOfRecipes.LastOrDefault();
+            StateHasChanged();
+        }
+        else
+        {
+            //snackBar.Add("Something went wrong", Severity.Error);
         }
     }
 
-    private void DeleteIngredient()
+    private void AddIngredient()
+    {
+        if (!string.IsNullOrWhiteSpace(newIngredientName))
+        {
+            recipeIngredients.Add(new RecipeIngredientDto { IngredientName = newIngredientName, Quantity = newIngredientQuantity });
+            newIngredientName = string.Empty;
+            newIngredientQuantity = 0;
+
+        }
+    }
+
+    private void DeleteIngredient(int id)
     {
         try
         {
-            recipeIngredients.RemoveAt(recipeIngredients.Count - 1);
+            recipeIngredients.RemoveAt(id);
         }
         catch (Exception ex)
         {
@@ -106,15 +133,12 @@
     private void AddRecipeToDb()
     {
         //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-        
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+            recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
+            _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
+        }
+        navigationManager.NavigateTo("/discover/recipes", true);
     }
-
-    //async void OpenDialog()
-    //{
-    //    DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
-    //    var dialog = dialogService.Show<IngredientAdd>("Add Ingredient", closeOnEscapeKey);
-        
-    //    var result = await dialog.Result;
-    //}
 
 }
