@@ -4,7 +4,6 @@
 <MudDialog>
     <DialogContent>
         <MudTextField @bind-Value="recipeDto.RecipeName" T="string" Label="Recipe Name"></MudTextField>
-        <MudTextField @bind-Value="recipeDto.Calories" T="double" Label="Calories"></MudTextField>
         <MudTextField @bind-Value="recipeDto.ImagePath" T="string" Label="Image Path"></MudTextField>
     </DialogContent>
     <DialogActions>
@@ -23,6 +22,8 @@
 
     private async void CreateRecipe()
     {
+        //temp value, will be overwritten in creatrecipe
+        recipeDto.Calories = 0;
         var authState = await authenticationState;
         recipeDto.UserId = authState.User.FindFirst("sub")?.Value;
 

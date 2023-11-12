@@ -9,19 +9,16 @@
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
             <MudText Typo="Typo.h2">Create a Recipe</MudText>
-            <MudText Style="margin-left: 5%">User Id: @UserId</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
             <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
+                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@RecentRecipeId.RecipeName</MudText>
                 <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="newIngredientName" />
                 <MudTextField T="double" Variant="Variant.Outlined" @bind-Value="newIngredientQuantity" />
                 <MudButton OnClick="AddIngredient">Add an Item</MudButton>
-                <MudButton OnClick="DeleteIngredient">Delete an Item</MudButton>
-                @*<MudButton OnClick="GetRecentRecipesId">Get Recipe Id</MudButton>*@
-                <MudButton>Delete an Step</MudButton>
             </MudButtonGroup>
         </MudPaper>
     </MudItem>
@@ -33,17 +30,12 @@
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
-                            <li>@RecipeIngredientDto.Quantity units of @RecipeIngredientDto.IngredientName</li>
+                            <li>@RecipeIngredientDto.Quantity cup(s) @RecipeIngredientDto.IngredientName<MudButton @onclick="() => DeleteIngredient(RecipeIngredientDto.RecipeIngredientsId)" Color="Color.Error">Delete</MudButton></li>
                         }
                     </MudList>
                 </MudPaper>
 
             </MudItem>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudTextField T="int" Variant="Variant.Outlined" Text="@RecentRecipeId.RecipeId.ToString()" />
         </MudPaper>
     </MudItem>
     <MudItem xs="6" sm="4">
@@ -77,6 +69,7 @@
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
+    [Inject] private NavigationManager navigationManager { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
     //data lists
@@ -123,11 +116,11 @@
         }
     }
 
-    private void DeleteIngredient()
+    private void DeleteIngredient(int id)
     {
         try
         {
-            recipeIngredients.RemoveAt(recipeIngredients.Count - 1);
+            recipeIngredients.RemoveAt(id);
         }
         catch (Exception ex)
         {
@@ -145,6 +138,7 @@
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
             _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
         }
+        navigationManager.NavigateTo("/discover/recipes", true);
     }
 
 }

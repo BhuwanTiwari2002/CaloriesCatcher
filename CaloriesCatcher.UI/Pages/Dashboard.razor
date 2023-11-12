@@ -14,7 +14,7 @@
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="40%"/>
                 <div style="text-align: center">
                     <MudButton OnClick="OpenCaloriesDialog" Variant="Variant.Filled" Color="Color.Primary">Log Calories</MudButton>
-                    <MudButton OnClick="EditData" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Create Receipe</MudButton>
+                    <MudButton OnClick="DisplayRecipe" Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Create Receipe</MudButton>
                     <MudButton Href="/profile" Variant="Variant.Filled" Color="Color.Tertiary">Profile</MudButton>
                 </div>
                 <MudText Style="margin-left: 5%" Color="Color.Primary" Class="mt-lg-5" Typo="Typo.h6" GutterBottom="true">Today's Calories</MudText>
@@ -165,9 +165,11 @@
         }
     }
 
-    void EditData()
+    async private void DisplayRecipe()
     {
-
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        var dialog = dialogService.Show<RecipeCreateDialog>("Create Recipe", closeOnEscapeKey);
+        var result = await dialog.Result;
     }
 
     /* This includes the logic to get the Streaks */
