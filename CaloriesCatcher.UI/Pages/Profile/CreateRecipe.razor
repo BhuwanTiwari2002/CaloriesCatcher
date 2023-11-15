@@ -78,9 +78,11 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    Calories.API.Models.Dto.RecipeDto UpdatedRecipeCalories = new Calories.API.Models.Dto.RecipeDto();
     private string newIngredientName;
     private double newIngredientQuantity;
     public string UserId { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -132,7 +134,18 @@
 
     private void AddRecipeToDb()
     {
-        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
+        //Upload flat list of Ingredients + Quantity
+
+        var TempAPIInformation = new System.Text.StringBuilder();
+
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+            TempAPIInformation.AppendLine(recipeIngredientDto.Quantity.ToString() + " " + recipeIngredientDto.IngredientName);
+            //send TempAPIInformation to the API
+        }
+        //after foreach hit an
+        //_recipeService.UpdateRecipeAsync()
+        
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
