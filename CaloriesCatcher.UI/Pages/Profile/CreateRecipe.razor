@@ -144,8 +144,9 @@
             //send TempAPIInformation to the API
         }
         //after foreach hit an
-        //_recipeService.UpdateRecipeAsync()
-        
+        //UpdatedRecipeCalories.Calories = API Response
+        //_recipeService.UpdateRecipeAsync(UpdatedRecipeCalories);
+
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
