@@ -4,9 +4,18 @@
 <MudDialog>
     <DialogContent>
         <MudTextField @bind-Value="recipeDto.RecipeName" T="string" Label="Recipe Name"></MudTextField>
-        <MudTextField @bind-Value="recipeDto.ImagePath" T="string" Label="Image Path"></MudTextField>
+        <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles">
+            <ButtonTemplate>
+                <MudFab HtmlTag="label"
+                        Color="Color.Secondary"
+                        Icon="@Icons.Material.Filled.Image"
+                        Label="Load picture"
+                        for="@context" />
+            </ButtonTemplate>
+        </MudFileUpload>
     </DialogContent>
     <DialogActions>
+        
         <MudButton OnClick="CreateRecipe">Create Recipe</MudButton>
     </DialogActions>
 </MudDialog>
@@ -20,6 +29,13 @@
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
     RecipeDto recipeDto = new RecipeDto();
 
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private void UploadFiles(IBrowserFile file)
+    {
+        //not sure if this is what we need but Im not super familiar with storing images in a website
+        recipeDto.ImagePath = file.Name;
+    }
+    
     private async void CreateRecipe()
     {
         //temp value, will be overwritten in creatrecipe
