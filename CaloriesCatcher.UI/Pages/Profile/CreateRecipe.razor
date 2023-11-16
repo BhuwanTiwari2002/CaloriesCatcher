@@ -8,25 +8,24 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h2">Create a Recipe</MudText>
+            <MudText Color="Color.Primary" Typo="Typo.h4">@RecentRecipeId.RecipeName</MudText>
         </MudPaper>
     </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
 
-            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined" VerticalAlign="true">
-                <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@RecentRecipeId.RecipeName</MudText>
-                <MudTextField T="string" Variant="Variant.Outlined" @bind-Value="newIngredientName" />
-                <MudTextField T="double" Variant="Variant.Outlined" @bind-Value="newIngredientQuantity" />
-                <MudButton OnClick="AddIngredient">Add an Item</MudButton>
-            </MudButtonGroup>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
+
+            <MudTextField Class="m-4" T="string" Variant="Variant.Outlined" Label="Name" @bind-Value="newIngredientName" />
+            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity"@bind-Value="newIngredientQuantity" />
+            <MudButton Class="m-4" OnClick="AddIngredient">Add Ingredient</MudButton>
+           
         </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6">
-        <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudItem xs="12" md="6">
+       </MudItem>
+    <MudItem xs="12">
+        <MudPaper Class="d-flex align-center justify-center mx-auto py-8" Elevation=" 3" Width="50%">
                 <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Ingredients List</MudText>
-                <MudPaper Width="100%">
+        </MudPaper>
+            <MudPaper Class="d-flex align-center justify-center mx-auto py-8" Elevation=" 3" Width="50%">
                     <MudList>
                         @foreach (var RecipeIngredientDto in recipeIngredients)
                         {
@@ -35,8 +34,7 @@
                     </MudList>
                 </MudPaper>
 
-            </MudItem>
-        </MudPaper>
+      
     </MudItem>
     <MudItem xs="6" sm="4">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
