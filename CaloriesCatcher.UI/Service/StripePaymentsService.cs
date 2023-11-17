@@ -43,7 +43,7 @@ namespace CaloriesCatcher.UI.Service
                 CancelUrl = _stripeSettings.CancelUrl
             };
             var service = new SessionService();
-            var session = await service.CreateAsync(options);
+            var session = await service.CreateAsync(options).ConfigureAwait(false);
             return session.Id;
         }
 

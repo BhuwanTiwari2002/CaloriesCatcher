@@ -20,7 +20,7 @@ namespace RecipeCatcher.UI.Service
                 ApiType = StaticType.ApiType.POST,
                 Data = recipeDto,
                 Url = StaticType.CaloriesAPIBase + "api/recipes"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> GetRecipesByUserAsync(string userId)
@@ -29,7 +29,7 @@ namespace RecipeCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.GET,
                 Url = StaticType.CaloriesAPIBase + $"api/recipes/{userId}"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> DeleteRecipeAsync(int userId)
@@ -38,7 +38,7 @@ namespace RecipeCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.DELETE,
                 Url = StaticType.CaloriesAPIBase + $"api/recipes/{userId}"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> UpdateRecipeAsync(CaloriesCatcher.UI.Model.RecipeDto recipeDto)
@@ -48,7 +48,7 @@ namespace RecipeCatcher.UI.Service
                 ApiType = StaticType.ApiType.PUT,
                 Data = recipeDto,
                 Url = StaticType.CaloriesAPIBase + "api/recipes"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> GetAllRecipesAsync()
@@ -57,7 +57,7 @@ namespace RecipeCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.GET,
                 Url = StaticType.CaloriesAPIBase + "api/recipes"
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

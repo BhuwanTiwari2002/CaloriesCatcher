@@ -20,7 +20,7 @@ namespace CaloriesCatcher.UI.Service
                 ApiType = ApiType.GET,
                 Data = edamamRequestDto,
                 Url = $"{edamamRequestDto.Url}?app_id={edamamRequestDto.app_id}&app_key={edamamRequestDto.app_key}&nutrition-type=cooking&ingr={edamamRequestDto.ingredient}"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto)
@@ -29,9 +29,8 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = ApiType.GET,
                 Data = recipeEdamaRequestDto,
-                Url = $"{recipeEdamaRequestDto.Url}&q={recipeEdamaRequestDto.ReceipeName}&app_id={recipeEdamaRequestDto.ApplicationId}&app_key={recipeEdamaRequestDto.ApplicationKey}&field=label&field=image&field=ingredients&field=calories{recipeEdamaRequestDto.QueryFilters}" 
-                
-            });        
+                Url = $"{recipeEdamaRequestDto.Url}&q={recipeEdamaRequestDto.ReceipeName}&app_id={recipeEdamaRequestDto.ApplicationId}&app_key={recipeEdamaRequestDto.ApplicationKey}&field=label&field=image&field=ingredients&field=calories{recipeEdamaRequestDto.QueryFilters}"
+            }).ConfigureAwait(false);        
         }
     }
 }

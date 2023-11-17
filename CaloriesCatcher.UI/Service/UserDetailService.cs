@@ -20,7 +20,7 @@ public class UserDetailService : IUserDetailService
             ApiType = StaticType.ApiType.POST,
             Data = userDetail,
             Url = StaticType.CaloriesAPIBase + $"api/profile/"
-        });
+        }).ConfigureAwait(false);
     }
 
     public async Task<ResponseDto> GetByUser(string userId)
@@ -29,7 +29,7 @@ public class UserDetailService : IUserDetailService
         {
             ApiType = StaticType.ApiType.GET,
             Url = StaticType.CaloriesAPIBase + $"api/profile/{userId}"
-        });
+        }).ConfigureAwait(false);
 
     }
 
@@ -40,7 +40,7 @@ public class UserDetailService : IUserDetailService
             ApiType = StaticType.ApiType.PUT,
             Data = userDetail,
             Url = StaticType.CaloriesAPIBase + $"api/profile/"
-        });
+        }).ConfigureAwait(false);
     }
 
 }

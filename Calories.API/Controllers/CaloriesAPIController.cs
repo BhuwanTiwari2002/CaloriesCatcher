@@ -66,26 +66,34 @@ namespace Calories.API.Controllers
             try
             {
                 _logger.LogInformation("Fetching calories data for user: {UserId} with date filter: {DateFilter}", userId, dateFilter);
-                List<Models.Calories> obj = new List<Models.Calories>();
 
-                if (dateFilter == 0)
+                // Set the end date to the end of today to include any entries made today.
+                DateTime endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+                DateTime startDate = DateTime.Today;
+
+                switch (dateFilter)
                 {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date.Date == DateTime.Today.Date && c.UserId == userId);
-                    obj = results.ToList();
-                }
-                else if (dateFilter == 1)
-                {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date >= DateTime.Today.Date.AddDays(-7) && c.UserId == userId);
-                    obj = results.ToList();
-                }
-                else if (dateFilter == 2)
-                {
-                    IQueryable<Models.Calories> results = _db.Calories.Where(c => c.Date >= DateTime.Today.Date.AddDays(-30) && c.UserId == userId);
-                    obj = results.ToList();
+                    case 0: // Daily
+                        break;
+                    case 1: // Weekly
+                        startDate = startDate.AddDays(-7);
+                        break;
+                    case 2: // Monthly
+                        startDate = startDate.AddDays(-30);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid date filter");
                 }
 
-                _response.Result = _mapper.Map<List<CaloriesDto>>(obj);
-                _logger.LogInformation("Successfully fetched calories data for user: {UserId} with date filter: {DateFilter}", userId, dateFilter);
+                var results = _db.Calories.Where(c => c.UserId == userId && c.Date >= startDate && c.Date < endDate).ToList();
+
+                if (!results.Any())
+                {
+                    _logger.LogInformation("No calorie data found for user: {UserId} with date filter: {DateFilter}", userId, dateFilter);
+                }
+
+                _response.Result = _mapper.Map<List<CaloriesDto>>(results);
+                _logger.LogInformation("Successfully fetched calories data for user: {UserId} with date filter: {DateFilter}. Found {Count} records.", userId, dateFilter, results.Count);
             }
             catch (Exception ex)
             {
@@ -95,6 +103,7 @@ namespace Calories.API.Controllers
             }
             return Ok(_response);
         }
+
 
         [HttpPost]
         public ActionResult<ResponseDto> Post([FromBody] CaloriesDto caloriesDto)

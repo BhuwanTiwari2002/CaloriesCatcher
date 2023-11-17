@@ -21,7 +21,7 @@ namespace CaloriesCatcher.UI.Service
                 ApiType = StaticType.ApiType.POST,
                 Data = caloriesDto,
                 Url =  StaticType.CaloriesAPIBase + "api/calories"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> GetCaloriesByUserAsync(string userId)
@@ -30,7 +30,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.GET,
                 Url = StaticType.CaloriesAPIBase + $"api/calories/{userId}"
-            });
+            }).ConfigureAwait(false);
         }
         public async Task<ResponseDto> GetCaloriesByUserAsync(string userId, int filterOption)
         {
@@ -38,7 +38,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.GET,
                 Url = StaticType.CaloriesAPIBase + $"api/calories/{userId}/{filterOption}"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> DeleteCaloriesAsync(int userId)
@@ -47,7 +47,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.DELETE,
                 Url = StaticType.CaloriesAPIBase + $"api/calories/Delete/{userId}"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> UpdateCaloriesAsync(CaloriesDto caloriesDto)
@@ -57,7 +57,7 @@ namespace CaloriesCatcher.UI.Service
                 ApiType = StaticType.ApiType.PUT,
                 Data = caloriesDto,
                 Url = StaticType.CaloriesAPIBase + "api/calories"
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task<ResponseDto> GetAllCaloriesAsync()
@@ -66,7 +66,7 @@ namespace CaloriesCatcher.UI.Service
             {
                 ApiType = StaticType.ApiType.GET,
                 Url = StaticType.CaloriesAPIBase + "api/calories"
-            });
+            }).ConfigureAwait(false);
         }
         
     }
