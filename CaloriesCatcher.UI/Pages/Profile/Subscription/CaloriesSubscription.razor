@@ -51,6 +51,7 @@
         </div>
     </MudItem>
 </MudGrid>
+<CaloriesCatcher.UI.Components.CalorieFooter />
 @code {
     [Inject] StripePaymentsService stripeService { get; set; }
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
