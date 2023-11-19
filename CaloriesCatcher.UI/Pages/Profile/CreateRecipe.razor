@@ -78,7 +78,7 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
-    Calories.API.Models.Dto.RecipeDto UpdatedRecipeCalories = new Calories.API.Models.Dto.RecipeDto();
+    RecipeDto UpdatedRecipeCalories = new RecipeDto();
     private string newIngredientName;
     private double newIngredientQuantity;
     public string UserId { get; set; }
@@ -144,8 +144,8 @@
             //send TempAPIInformation to the API
         }
         //after foreach hit an
-        //UpdatedRecipeCalories.Calories = API Response
-        //_recipeService.UpdateRecipeAsync(UpdatedRecipeCalories);
+        UpdatedRecipeCalories.Calories = 105;
+        _recipeService.UpdateRecipeAsync(UpdatedRecipeCalories);
 
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
