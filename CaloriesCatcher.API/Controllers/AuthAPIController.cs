@@ -12,11 +12,13 @@ namespace Auth.API.Controllers
     {
         private readonly IAuthService _authService;
         protected ResponseDto _responseDto;
+        private readonly ILogger<AuthAPIController> _logger;
 
-        public AuthAPIController(IAuthService authService)
+        public AuthAPIController(IAuthService authService, ILogger<AuthAPIController> logger)
         {
             _authService = authService;
             _responseDto = new();
+            _logger = logger;
         }
 
         [HttpPost("register")]
@@ -29,9 +31,11 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = errorMessage;
+                _logger.LogInformation(message: $"Error occurred when registering. Error Message: {errorMessage}");
                 return BadRequest(_responseDto);
             }
 
+            _logger.LogInformation(message: $"Successfully Registered.");
             return Ok(_responseDto);
         }
 
@@ -44,10 +48,12 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Username or password is incorrect";
+                _logger.LogInformation(message: $"Error occurred when attempting to login.");
                 return BadRequest(_responseDto);
             }
 
             _responseDto.Result = loginResponse;
+            _logger.LogInformation(message: $"Successful Login");
             return Ok(_responseDto);
         }
 
@@ -59,9 +65,11 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Error encountered";
+                _logger.LogInformation(message: $"Error occurred while attempting to assign role.");
                 return BadRequest(_responseDto);
             }
 
+            _logger.LogInformation(message: $"Successfully assigned role.");
             return Ok(_responseDto);
         }
 
@@ -71,10 +79,12 @@ namespace Auth.API.Controllers
             var response = await _authService.ForgotPassword(dto.Email);
             if (response == "Success")
             {
+                _logger.LogInformation(message: $"Successful sent password reset link.");
                 return Ok(new { Message = "An email with a reset code has been sent. Please check your email." });
             }
             else
             {
+                _logger.LogInformation(message: $"Error occurred when attempting to send reset password link.");
                 return BadRequest(new { Message = response });
             }
         }
@@ -85,10 +95,12 @@ namespace Auth.API.Controllers
             var response = await _authService.ResetPassword(request);
             if (response == "Password reset successfully")
             {
+                _logger.LogInformation(message: $"Seccessful password reset.");
                 return Ok(new { Message = response });
             }
             else
             {
+                _logger.LogInformation(message: $"Error occurred when attempting to reset password.");
                 return BadRequest(new { Message = response });
             }
         }
@@ -101,9 +113,11 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Cannot Find users";
+                _logger.LogInformation(message: $"Error occurred when fetching all users.");
                 return BadRequest(_responseDto);
             }
             _responseDto.Result = response;
+            _logger.LogInformation(message: $"Successfully fetched all users.");
             return Ok(_responseDto);
         }
 
@@ -115,9 +129,11 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Something went wrong";
+                _logger.LogInformation(message: $"Error occurred when attempting to delete UserId: {id}.");
                 return BadRequest(_responseDto);
             }
             _responseDto.Result = response;
+            _logger.LogInformation(message: $"Successfully deleted UserId: {id}");
             return Ok(_responseDto);
         }
 
@@ -129,19 +145,17 @@ namespace Auth.API.Controllers
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = "Something went wrong";
+                _logger.LogInformation(message: $"Error occurred when attempting to fetch UserId: {id}.");
                 return BadRequest(_responseDto); 
             }
             _responseDto.Result = response;
+            _logger.LogInformation(message: $"Successfully fetched UserId: {id}");
             return Ok(_responseDto); 
-        }
-        
-     
+        }      
     }
-
     
     public class ForgotPasswordDto
     {
         public string Email { get; set; }
-    }
-    
+    }    
 }
