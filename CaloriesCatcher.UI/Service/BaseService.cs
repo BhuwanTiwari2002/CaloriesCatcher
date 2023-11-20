@@ -192,5 +192,51 @@ namespace CaloriesCatcher.UI.Service
                 };
             } 
         }
+        public async Task<RecipeModelEdamam> SendAsyncRecipeNutritionEdamam(RequestDto requestDto)
+        {
+            try
+            {
+                using HttpClient client = _httpClientFactory.CreateClient("CalorieCatcherAPI");
+                // Create HttpRequestMessage
+                var message = new HttpRequestMessage
+                {
+                    Headers = { { "Accept", "application/json" } },
+                    RequestUri = new Uri(requestDto.Url),
+                    Method = requestDto.ApiType switch
+                    {
+                        ApiType.POST => HttpMethod.Post,
+                        ApiType.PUT => HttpMethod.Put,
+                        ApiType.DELETE => HttpMethod.Delete,
+                        _ => HttpMethod.Get
+                    }
+                };
+
+                if (requestDto.Data != null)
+                {
+                    message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
+                }
+
+                var apiResponse = await client.SendAsync(message);
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    var apiContent = await apiResponse.Content.ReadAsStringAsync();
+                    RecipeModelEdamam recipe = JsonConvert.DeserializeObject<RecipeModelEdamam>(apiContent);
+                    recipe.isSuccess = true;
+                    return recipe;
+                }
+
+                return new RecipeModelEdamam()
+                {
+
+                };
+            }
+            catch (Exception ex)
+            {
+                return new RecipeModelEdamam()
+                {
+                    isSuccess = false
+                };
+            }
+        }
     }
 }

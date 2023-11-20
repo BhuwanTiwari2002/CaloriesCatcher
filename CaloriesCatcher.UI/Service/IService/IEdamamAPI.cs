@@ -1,5 +1,6 @@
 ﻿using CaloriesCatcher.UI.Model;
 using CaloriesCatcher.UI.Model.Edamam;
+using KitchenComfort.Web.Models;
 
 namespace CaloriesCatcher.UI.Service.IService
 {
@@ -7,5 +8,8 @@ namespace CaloriesCatcher.UI.Service.IService
     {
         Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto);
         Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto);
+        Task<Nutrition> GetNutritionForRecipe(EdamamRequestDto edamamRequestDto);
+
+
     }
 }

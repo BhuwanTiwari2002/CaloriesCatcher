@@ -8,7 +8,7 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Typo="Typo.h2">Create a Recipe</MudText>
+            <MudText Typo="Typo.h2">@Test Create Recipe</MudText>
         </MudPaper>
     </MudItem>
     <MudItem xs="12" sm="6">
@@ -71,6 +71,7 @@
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+    private IEdamamAPI edamamService { get; set; } = default!;
 
     //data lists
     List<RecipeIngredientDto> recipeIngredients = new List<RecipeIngredientDto>();
@@ -82,6 +83,7 @@
     private string newIngredientName;
     private double newIngredientQuantity;
     public string UserId { get; set; }
+    public string Test;
 
 
     protected override async Task OnInitializedAsync()
@@ -134,25 +136,33 @@
 
     private void AddRecipeToDb()
     {
-        //Upload flat list of Ingredients + Quantity
-
-        var TempAPIInformation = new System.Text.StringBuilder();
-
-        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
-        {
-            TempAPIInformation.AppendLine(recipeIngredientDto.Quantity.ToString() + " " + recipeIngredientDto.IngredientName);
-            //send TempAPIInformation to the API
-        }
-        //after foreach hit an
-        UpdatedRecipeCalories.Calories = 105;
-        _recipeService.UpdateRecipeAsync(UpdatedRecipeCalories);
 
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
             _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
         }
-        navigationManager.NavigateTo("/discover/recipes", true);
+
+        //Upload flat list of Ingredients + Quantity
+        var TempAPIInformation = new System.Text.StringBuilder();
+
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+            TempAPIInformation.AppendLine(recipeIngredientDto.Quantity.ToString() + " " + recipeIngredientDto.IngredientName + ", ");
+            //send TempAPIInformation to the API
+        }
+        Test = RecentRecipeId.RecipeName + TempAPIInformation.ToString();
+
+        //edamamService.SendAsyncRecipeNutritionEdamam(new EdamamRecipeNutritionDto(Test));
+
+
+        //after foreach hit an
+        
+        UpdatedRecipeCalories.Calories = 105;
+        _recipeService.UpdateRecipeAsync(UpdatedRecipeCalories);
+
+        
+        //navigationManager.NavigateTo("/discover/recipes", true);
     }
 
 }

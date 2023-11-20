@@ -33,5 +33,15 @@ namespace CaloriesCatcher.UI.Service
                 
             });        
         }
+
+        public async Task<Nutrition> GetNutritionForRecipe(EdamamRecipeNutritionDto edamamRecipeNutritionDto)
+        {
+            return await _baseService.SendAsyncRecipeNutritionEdamam(new RequestDto()
+            {
+                ApiType = ApiType.POST,
+                Data = edamamRecipeNutritionDto,
+                Url = $"{edamamRecipeNutritionDto.Url}?app_id={edamamRecipeNutritionDto.app_id}&app_key={edamamRecipeNutritionDto.app_key}"
+            });
+        }
     }
 }
