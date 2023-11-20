@@ -5,7 +5,7 @@ namespace CaloriesCatcher.UI.Service.IService
 {
     interface IEdamamAPI
     {
-        Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto);
+        Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto, bool isNutritionDetails = false);
         Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto);
     }
 }

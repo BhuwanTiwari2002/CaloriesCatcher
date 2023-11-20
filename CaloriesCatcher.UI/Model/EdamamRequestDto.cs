@@ -18,5 +18,11 @@ namespace CaloriesCatcher.UI.Model
             this.ingredient = ingredient;
             Url = "https://api.edamam.com/api/nutrition-data";
         }
+        public EdamamRequestDto()
+        {
+            app_id = "d40eca51";
+            app_key = "192fe1bbaeed7914764ddd4a4348e10c"; 
+            Url = "https://api.edamam.com/api/nutrition-details";
+        }
     }
 }

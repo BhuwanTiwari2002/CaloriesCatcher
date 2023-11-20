@@ -2,6 +2,7 @@
 @using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Components.Dialogs;
 @using CaloriesCatcher.UI.Model;
+@using CaloriesCatcher.UI.Model.Edamam
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
 <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
@@ -68,6 +69,7 @@
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
+    [Inject] IEdamamAPI _edamamApi { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
 
     //data lists
@@ -82,11 +84,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        GetUserIdAndRecipes();
-
+        await GetUserIdAndRecipes();
+        await getDataFromEdamam();
     }
 
-    async private void GetUserIdAndRecipes()
+    private async Task getDataFromEdamam()
+    {
+        EdamamRequestDto edamamRequestDto = new EdamamRequestDto();
+        NutritionDetail nutritionDetail = new NutritionDetail();
+        nutritionDetail.title = "Chicken";
+        nutritionDetail.ingr = new List<string>()
+        {
+            "5 Chicken"
+        };
+        edamamRequestDto.Data = nutritionDetail;
+        var result = await _edamamApi.GetNutrition(edamamRequestDto, true);
+    }
+    
+    private async Task GetUserIdAndRecipes()
     {
         var authState = await authenticationState;
         var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);

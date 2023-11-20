@@ -13,14 +13,27 @@ namespace CaloriesCatcher.UI.Service
         {
             _baseService = baseService;
         }
-        public async Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto)
+        public async Task<Nutrition> GetNutrition(EdamamRequestDto edamamRequestDto, bool isNutritionDetails = false)
         {
-            return await _baseService.SendAsyncEdamam(new RequestDto()
+            if (isNutritionDetails == true)
             {
-                ApiType = ApiType.GET,
-                Data = edamamRequestDto,
-                Url = $"{edamamRequestDto.Url}?app_id={edamamRequestDto.app_id}&app_key={edamamRequestDto.app_key}&nutrition-type=cooking&ingr={edamamRequestDto.ingredient}"
-            }).ConfigureAwait(false);
+                return await _baseService.SendAsyncEdamam(new RequestDto()
+                {
+                    ApiType = ApiType.POST,
+                    Data = edamamRequestDto,
+                    Url = $"{edamamRequestDto.Url}?app_id={edamamRequestDto.app_id}&app_key={edamamRequestDto.app_key}"
+                }).ConfigureAwait(false);
+            }
+            else
+            {
+                return await _baseService.SendAsyncEdamam(new RequestDto()
+                {
+                    ApiType = ApiType.GET,
+                    Data = edamamRequestDto,
+                    Url = $"{edamamRequestDto.Url}?app_id={edamamRequestDto.app_id}&app_key={edamamRequestDto.app_key}&nutrition-type=cooking&ingr={edamamRequestDto.ingredient}"
+                }).ConfigureAwait(false); 
+            }
+            
         }
 
         public async Task<RecipeModelEdamam> GetRecipe(RecipeEdamaRequestDto recipeEdamaRequestDto)
