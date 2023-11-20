@@ -79,6 +79,9 @@
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
     List<RecipeDto> listOfRecipes = new List<RecipeDto>();
     public string UserId { get; set; }
     List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
@@ -90,6 +93,16 @@
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
     int currentStreak = 0;
     int longestStreak = 0;
+
+    
+    // Refresh calories data method
+    private async Task RefreshDataAndUI()
+    {
+        await RefreshCaloriesData();
+        getGraphData();
+        StateHasChanged();
+    }
+
     
     protected override async Task OnInitializedAsync()
     {
@@ -98,6 +111,9 @@
         //getTrackingGraphData();
         GetStreaks();
         await getRecipes();
+
+        // // Ensure the UI is refreshed after operations
+        //StateHasChanged();
     }
 
     async Task getRecipes()
@@ -190,7 +206,6 @@
         if (response != null && response.IsSuccess)
         {
             ListOfCalories = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
-            StateHasChanged();
         }
         else
         {
@@ -207,8 +222,26 @@
         snackBar.Add($"Added {calorie.CalorieName} Successfully", Severity.Success);
         getGraphData();
         StateHasChanged();
+
+        // Refresh Calories data
+        //snackBar.Add($"Added {calorie.CalorieName} Successfully", Severity.Success);
+        //await RefreshDataAndUI();
+
+
+        //await InvokeAsync(() => StateHasChanged());
+
+        //await RefreshCaloriesData(); // Refresh
+
+        // Reload the page
+        //NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        //Or
+        //NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+
+        // Redirect to the same page
+        NavigationManager.NavigateTo("/", true);
+
     }
-    private async void DeleteCalories(int caloriesId)
+    private async Task DeleteCalories(int caloriesId)
     {
         try
         {
@@ -218,7 +251,10 @@
                 ListOfCalories.Remove(ListOfCalories.FirstOrDefault(c => c.Id == caloriesId));
                 snackBar.Add($"Success: {response.Message} was deleted", Severity.Success);
                 getGraphData();
-                StateHasChanged();
+                //StateHasChanged();
+                await InvokeAsync(() => StateHasChanged());
+
+                //await RefreshCaloriesData(); // Refresh
             }
             else
             {
@@ -238,5 +274,11 @@
         snackBar.Add("Calorie Updated", Severity.Success);
         await RefreshCaloriesData();
         getGraphData();
+
+        
+        await InvokeAsync(() => StateHasChanged());
+        //StateHasChanged(); // Ensure UI update
+
+        //await RefreshCaloriesData(); // Refresh
     }
 }
