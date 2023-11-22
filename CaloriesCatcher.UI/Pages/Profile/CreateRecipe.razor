@@ -8,7 +8,7 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Color="Color.Primary" Typo="Typo.h4">@RecentRecipeId.RecipeName</MudText>
+            <MudText Color="Color.Primary" Typo="Typo.h4">@RecentRecipeId.RecipeName @TotalCal.ToString()</MudText>
         </MudPaper>
     </MudItem>
 
@@ -60,6 +60,7 @@
     //injections
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
+    [Inject] IEdamamAPI _edamamAPI { get; set; } = default!;
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
@@ -70,8 +71,11 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    private CaloriesCatcher.UI.Model.Nutrition _nutrition;
     private string newIngredientName;
     private double newIngredientQuantity;
+    public double TotalCal;
+    public string _foodname;
     public string UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -122,15 +126,26 @@
 
     }
 
+    private async void GetCaloriesPerIngredient()
+    {
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+
+            _nutrition = await _edamamAPI.GetNutrition(new EdamamRequestDto(recipeIngredientDto.Quantity + " " + recipeIngredientDto.IngredientName));
+            TotalCal = TotalCal + _nutrition.Calories;
+        }
+        //_recipeService.UpdateRecipeAsync();
+    }
     private void AddRecipeToDb()
     {
         //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
+        
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
             _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
         }
-        navigationManager.NavigateTo("/discover/recipes", true);
+        //navigationManager.NavigateTo("/discover/recipes", true);
     }
 
 }
