@@ -15,9 +15,9 @@
     <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="35%">
         <MudItem>
             <MudList>
-                <MudIcon Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditUserDetail" />
-                <MudListItem><MudTextField @bind-Value="@userDetail.Height" Label="Height" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="@userDetail.Weight" Label="Weight" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudIconButton Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditUserDetail" />
+                <MudListItem><MudTextField @bind-Value="@userDetail.Height" Label="Height" Adornment="Adornment.End" AdornmentText="cm" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
+                <MudListItem><MudTextField @bind-Value="@userDetail.Weight" Label="Weight" Adornment="Adornment.End" AdornmentText="lb" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="@userDetail.DailyCalories" Label="Daily Calories" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="@userDetail.Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
                 <MudListItem><MudTextField @bind-Value="@userDetail.BirthDate" Label="Birthday" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
