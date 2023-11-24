@@ -4,16 +4,7 @@
 @using Microsoft.Extensions.Options
 @using System.Security.Claims
 
-<MudCard Elevation="3" Outlined="true" Class="mt-5 mx-auto" Style="max-width: 500px;">
-    <MudCardContent>
-        <MudSelect T="Subscription" @bind-Value="SelectedSubscription">
-            <MudSelectItem Value="@TurtleSubscription">Turtle (Free)</MudSelectItem>
-            <MudSelectItem Value="@ElephantSubscription">Elephant ($0.99)</MudSelectItem>
-            <MudSelectItem Value="@ParrotSubscription">Parrot ($1.99)</MudSelectItem>
-        </MudSelect>
-        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Subscribe" Class="mt-3">Subscribe Now</MudButton>
-    </MudCardContent>
-</MudCard>
+
 <MudGrid Class="mt-5 px-5"> 
     <MudItem xs="12" Class="d-flex flex-column align-center justify-center">
         <MudText Typo="Typo.h3" Class="mb-5">Subscription Details</MudText>
@@ -42,6 +33,16 @@
         </div>
     </MudItem>
 </MudGrid>
+<MudCard Elevation="3" Outlined="true" Class="mt-5 mx-auto" Style="max-width: 500px;">
+    <MudCardContent>
+        <MudSelect T="Subscription" @bind-Value="SelectedSubscription">
+            <MudSelectItem Value="@TurtleSubscription">Turtle (Free)</MudSelectItem>
+            <MudSelectItem Value="@ElephantSubscription">Elephant ($0.99)</MudSelectItem>
+            <MudSelectItem Value="@ParrotSubscription">Parrot ($1.99)</MudSelectItem>
+        </MudSelect>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Subscribe" Class="mt-3">Subscribe Now</MudButton>
+    </MudCardContent>
+</MudCard>
 <MudGrid>
 <MudItem xs="12" sm="12">
         <div style="  border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" class="d-flex flex-column align-center justify-center py-8">
