@@ -11,4 +11,5 @@ public class UserDetail
     public string Gender { get; set; } 
     public int? CalorieId { get; set; } 
     public int? RecipeFoodId { get; set; } 
+    public string Name { get; set; }
 }
