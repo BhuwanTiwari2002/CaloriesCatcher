@@ -12,20 +12,6 @@
         </MudPaper>
     </MudItem>
 
-    @* <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="65%">
-        <MudItem>
-            <MudList>
-                <MudIconButton Style="float:right" Class="mt-4 d-flex align-content-end" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditUserDetail" />
-                <MudImage Style="float:left" Src="images/uploadimage.png" Alt="Profile Picture" Elevation="25" Class="rounded-lg" />
-             
-                <MudListItem><MudTextField @bind-Value="@userDetail.Height" Label="Height" Adornment="Adornment.End" AdornmentText="cm" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="@userDetail.Weight" Label="Weight" Adornment="Adornment.End" AdornmentText="lb" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="@userDetail.DailyCalories" Label="Daily Calories" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="@userDetail.Gender" Label="Gender" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-                <MudListItem><MudTextField @bind-Value="@userDetail.BirthDate" Label="Birthday" ReadOnly="true" Variant="Variant.Text" /></MudListItem>
-            </MudList>
-        </MudItem>
-    </MudPaper> *@
     <MudItem xs="2" />
     <MudItem xs="2" />
     <MudItem xs="2">
@@ -35,7 +21,7 @@
     </MudItem> 
     <MudItem xs="2">
         <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg mt-16">
-            <MudTextField Class="mx-4" @bind-Value="@userDetail.Id" Label="ID" ReadOnly="true" Variant="Variant.Text" />
+            <MudTextField Class="mx-4" @bind-Value="@userDetail.Name" Label="User Name" ReadOnly="true" Variant="Variant.Text" />
         </MudPaper>
     </MudItem>
     <MudItem xs="2">
@@ -105,11 +91,11 @@
 
         if (response != null && response.IsSuccess && response.Result != null)
         {
-           userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
         }
         else
         {
-           userDetail = CreateDefaultUserDetail(authState.User.FindFirst("Sub")?.Value);
+            userDetail = CreateDefaultUserDetail(authState.User.FindFirst("Sub")?.Value);
             //EditUserDetail();
         }
     }
@@ -125,14 +111,15 @@
     private UserDetail CreateDefaultUserDetail(string userId)
     {
         return new UserDetail
-        {
-            UserId = userId,
-            Height = 0,
-            Weight = 0,
-            DailyCalories = 0,
-            BirthDate = DateTime.Now,
-            Gender = "Assign Gender",
-        };
+            {
+                UserId = userId,
+                Height = 0,
+                Weight = 0,
+                DailyCalories = 0,
+                BirthDate = DateTime.Now,
+                Gender = "Assign Gender",
+                Name = "User Name"
+    };
     }
     
 }
