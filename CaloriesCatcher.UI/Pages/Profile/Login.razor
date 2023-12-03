@@ -85,5 +85,6 @@
     private void OnGoogleLogin()
     {
         authService.StartGoogleLogin();
+        navigationManager.NavigateTo("/", true);
     }
 }

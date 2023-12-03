@@ -76,7 +76,8 @@
                         <div class="recipe-actions">
                             <MudIconButton @onclick="() => logRecipeToCalories(hit.Recipe.Calories, hit.Recipe.Label)" Icon="@Icons.Material.Filled.AddCircleOutline" Size="Size.Large" Color="Color.Primary" Title="Log Calories"></MudIconButton>
                             <MudIconButton @onclick="() => addRecipe(hit.Recipe.Label, hit.Recipe.Calories, hit.Recipe.Image)" Icon="@Icons.Material.Filled.FavoriteBorder" Size="Size.Large" Color="Color.Secondary" Title="Add to Favorites"></MudIconButton>
-                        </div>
+                            <MudIconButton @onclick="() => showDetailDialog(hit.Recipe.ingredients)" Icon="@Icons.Material.Filled.ViewList" Size="Size.Large" Color="Color.Success"></MudIconButton>
+                       </div>
                     </MudCard>
                 }
             }
@@ -180,12 +181,19 @@
         }
     }
 
-    async private void DisplayRecipe()
+    async Task showDetailDialog(List<Ingredients> ingredients)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("_ingredientsList", ingredients);
+        var dialogResult = await dialogService.Show<IngredientsListDialog>("Ingredient", parameters).Result; 
+    }
+    
+     private void DisplayRecipe()
     {
         DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
         var dialog = dialogService.Show<RecipeCreateDialog>("Create Recipe", closeOnEscapeKey);
-        var result = await dialog.Result;
     }
+    
 }
 
 <style>
