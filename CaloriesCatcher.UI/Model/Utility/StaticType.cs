@@ -13,6 +13,10 @@
             POST, 
             PUT, 
             DELETE
+            //http://bhupintiwari-001-site1.gtempurl.com/
+            //https://localhost:7002/
+            //
+            //
         }
     }
 }

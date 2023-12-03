@@ -8,16 +8,15 @@
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-            <MudText Color="Color.Primary" Typo="Typo.h4">@RecentRecipeId.RecipeName @TotalCal.ToString()</MudText>
+            <MudText Color="Color.Primary" Typo="Typo.h4">@RecentRecipeId.RecipeName</MudText>
         </MudPaper>
     </MudItem>
 
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
-
+            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity and Measurment" @bind-Value="newIngredientQuantity" />
             <MudTextField Class="m-4" T="string" Variant="Variant.Outlined" Label="Name" @bind-Value="newIngredientName" />
-            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity"@bind-Value="newIngredientQuantity" />
-            <MudButton Class="m-4" OnClick="AddIngredient">Add Ingredient</MudButton>
+            <MudButton Class="m-4" OnClick="AddIngredient" Color="Color.Secondary">Add Ingredient</MudButton>
            
         </MudPaper>
        </MudItem>
@@ -61,6 +60,7 @@
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
     [Inject] IEdamamAPI _edamamAPI { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
@@ -71,6 +71,7 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    RecipeDto UpdatedRecipe = new RecipeDto();
     private CaloriesCatcher.UI.Model.Nutrition _nutrition;
     private string newIngredientName;
     private double newIngredientQuantity;
@@ -81,23 +82,31 @@
     protected override async Task OnInitializedAsync()
     {
         GetUserIdAndRecipes();
-
     }
 
     async private void GetUserIdAndRecipes()
     {
+        //getting the most recent Id, should be the one from the dialog box that was just created
         var authState = await authenticationState;
         var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);
         UserId = authState.User.FindFirst("sub")?.Value;
         if (response != null && response.IsSuccess)
         {
-            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
-            RecentRecipeId = listOfRecipes.LastOrDefault();
-            StateHasChanged();
+            try
+            {
+                listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
+                RecentRecipeId = listOfRecipes.LastOrDefault();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                snackBar.Add("No Recent Recipe Created", Severity.Error);
+            }
+
         }
         else
         {
-            //snackBar.Add("Something went wrong", Severity.Error);
+            snackBar.Add("Something went wrong", Severity.Error);
         }
     }
 
@@ -120,7 +129,6 @@
         }
         catch (Exception ex)
         {
-
             Console.WriteLine(ex.Message);
         }
 
@@ -130,22 +138,27 @@
     {
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
-
+            //running through each ingredient
             _nutrition = await _edamamAPI.GetNutrition(new EdamamRequestDto(recipeIngredientDto.Quantity + " " + recipeIngredientDto.IngredientName));
             TotalCal = TotalCal + _nutrition.Calories;
         }
-        //_recipeService.UpdateRecipeAsync();
+        //changing from API.Model -> UI.Model
+        UpdatedRecipe.Calories = TotalCal;
+        UpdatedRecipe.RecipeId = RecentRecipeId.RecipeId;
+        UpdatedRecipe.UserId = RecentRecipeId.UserId;
+        UpdatedRecipe.RecipeName = RecentRecipeId.RecipeName;
+        UpdatedRecipe.ImagePath = RecentRecipeId.ImagePath;
+        _recipeService.UpdateRecipeAsync(UpdatedRecipe);
     }
     private void AddRecipeToDb()
     {
-        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
-        
+        GetCaloriesPerIngredient();
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
             _ingredientservice.CreateRecipeIngredientAsync(recipeIngredientDto);
         }
-        //navigationManager.NavigateTo("/discover/recipes", true);
+        navigationManager.NavigateTo("/discover/recipes", true);
     }
 
 }
