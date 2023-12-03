@@ -1,0 +1,45 @@
+<MudDialog>
+    <DialogContent>
+        <MudList Clickable="true">
+            <MudListSubheader>
+                Ingreidents
+            </MudListSubheader>
+            @foreach(Ingredients item in _ingredientsList)
+            {
+                <MudListItem Text="@item.food">
+                    <NestedList>
+                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                           Quantity: @item.quantity
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                            Measure: @item.measure
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                           Weight: @item.weight
+                        </MudListItem>
+                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                            Food Category: @item.foodCategory
+                        </MudListItem>
+                    </NestedList>
+                </MudListItem>
+            }
+        </MudList>
+    </DialogContent>
+    <DialogActions>
+            <MudButton OnClick="CloseDialog">Close</MudButton>
+        </DialogActions>
+</MudDialog>
+
+
+@code {
+    /* Services */
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public List<Ingredients> _ingredientsList { get; set; }
+    
+    private void CloseDialog()
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        MudDialog.Close(DialogResult.Ok(true));
+    }}

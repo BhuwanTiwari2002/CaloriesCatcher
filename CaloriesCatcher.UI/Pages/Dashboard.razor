@@ -259,9 +259,9 @@
     }
 
     /* Opens the Dialog to let the user create a new calorie */
-    async void OpenCaloriesDialog()
+    async Task OpenCaloriesDialog()
     {
-        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true };
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, DisableBackdropClick = true };
         var dialog = dialogService.Show<CaloriesLog>("Calories Log", closeOnEscapeKey);
         var result = await dialog.Result;
         CaloriesDto calorie = (CaloriesDto) result.Data;
@@ -269,7 +269,7 @@
         snackBar.Add($"Added {calorie.CalorieName} Successfully", Severity.Success);
         getGraphData();
         StateHasChanged();
-    }
+    }   
 
     /* Deletes the Calorie based on the id */
     private async Task DeleteCalories(int caloriesId)
