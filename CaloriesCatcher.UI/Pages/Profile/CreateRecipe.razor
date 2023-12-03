@@ -13,8 +13,8 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg" Elevation=" 3" Width="50%">
-
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
+            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity and Measurment" @bind-Value="newIngredientQuantity" />
             <MudTextField Class="m-4" T="string" Variant="Variant.Outlined" Label="Name" @bind-Value="newIngredientName" />
             <MudButton Class="m-4" OnClick="AddIngredient" Color="Color.Secondary">Add Ingredient</MudButton>
            
