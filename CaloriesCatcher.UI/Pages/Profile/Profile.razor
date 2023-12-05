@@ -99,12 +99,21 @@
             //EditUserDetail();
         }
     }
+
     private async Task EditUserDetail()
     {
         var parameters = new DialogParameters();
         parameters.Add("userDetail", userDetail);
         var dialogResult = await dialogService.Show<UserDetailEditFieldInput>("Your Profile", parameters).Result;
-        snackBar.Add("Profile Updated", Severity.Normal);
+
+        if (!dialogResult.Canceled)
+        {
+            snackBar.Add("Profile was updated", Severity.Normal);
+        }
+        else
+        {
+            snackBar.Add("Profile was not updated", Severity.Normal);
+        }
         await GetUserDetailData();
     }
 
