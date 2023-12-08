@@ -1,5 +1,8 @@
-﻿@page "/profile"
+﻿<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+@page "/profile"
 @using CaloriesCatcher.UI.Components.Dialogs
+@using CaloriesCatcher.UI.Components;
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
@@ -71,7 +74,12 @@
     <MudItem xs="2" />
     <MudItem xs="2" />
 </MudGrid>
-<CaloriesCatcher.UI.Components.CalorieFooter />
+<CalorieFooter />
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IUserDetailService userDetailService { get; set; } = default!;
