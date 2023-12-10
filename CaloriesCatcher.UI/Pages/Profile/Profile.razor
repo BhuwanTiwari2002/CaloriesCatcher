@@ -12,7 +12,7 @@
         </MudPaper>
     </MudItem>
 
-    <MudItem xs="2" />
+    <MudItem xs="3" />
     <MudItem xs="2" />
     <MudItem xs="2">
         <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg" Elevation="25">
@@ -20,15 +20,11 @@
         </MudPaper>
     </MudItem> 
     <MudItem xs="2">
-        <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg mt-16">
-            <MudTextField Class="mx-4" @bind-Value="@userDetail.Name" Label="User Name" ReadOnly="true" Variant="Variant.Text" />
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="2">
-            <MudIconButton Class="d-flex" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditUserDetail" />
+        <MudIconButton Class="d-flex" Icon="@Icons.Material.Filled.Edit" Title="Edit" Variant="Variant.Filled" @onclick="EditUserDetail" />
+         
         
     </MudItem>
-    <MudItem xs="2" />
+    <MudItem xs="3" />
     @* line 2 *@
     <MudItem xs="2" />
     <MudItem xs="2" />
@@ -99,27 +95,35 @@
             //EditUserDetail();
         }
     }
+
     private async Task EditUserDetail()
     {
         var parameters = new DialogParameters();
         parameters.Add("userDetail", userDetail);
         var dialogResult = await dialogService.Show<UserDetailEditFieldInput>("Your Profile", parameters).Result;
-        snackBar.Add("Profile Updated", Severity.Normal);
+
+        if (!dialogResult.Canceled)
+        {
+            snackBar.Add("Profile was updated", Severity.Success);
+        }
+        else
+        {
+            snackBar.Add("Profile was not updated", Severity.Error);
+        }
         await GetUserDetailData();
     }
 
     private UserDetail CreateDefaultUserDetail(string userId)
     {
         return new UserDetail
-            {
-                UserId = userId,
-                Height = 0,
-                Weight = 0,
-                DailyCalories = 0,
-                BirthDate = DateTime.Now,
-                Gender = "Assign Gender",
-                Name = "User Name"
-    };
-    }
-    
+        {
+            UserId = userId,
+            Height = 0,
+            Weight = 0,
+            DailyCalories = 0,
+            BirthDate = DateTime.Now,
+            Gender = "Assign Gender",
+            Name = "User Name"
+        };
+    }    
 }
