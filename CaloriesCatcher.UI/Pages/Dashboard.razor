@@ -7,8 +7,16 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
         @using RecipeDto = Calories.API.Models.Dto.RecipeDto
+        <br />
+        <div style="float:left; width:96%; margin: 20px; border-radius: 7px;">
+        <MudPaper Class="pa-4 mr-8" Width="100%" Style="border-radius: 7px;">
+            <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@GraphPercentage.ToString()</MudText>
+                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Value="@GraphPercentage" />
+        </MudPaper>
+        </div>
+        
         <div style="float:left; width:40%; margin: 20px; border-radius: 7px;">
-            <MudText Style="margin-left: 5%">User Id: @UserId</MudText>
+            <!--<MudText Style="margin-left: 5%">User Id: @UserId</MudText>-->
             <MudPaper Width="100%" Style="border-radius: 7px;">
                 <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="40%"/>
@@ -101,14 +109,19 @@
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
     int currentStreak = 0;
     int longestStreak = 0;
+    decimal TempCalories;
+    double GraphPercentage = 0;
 
     protected override async Task OnInitializedAsync()
     {
         await RefreshCaloriesData(0);
         getGraphData();
+        await getTrackingGraphData();
+        await GetDataForUserProgressBar();
         GetStreaks();
         await getRecipes();
         //await GetDataForUserProgressBar();
+
     }
     /* Loads the list of Recipes */
     async Task getRecipes()
@@ -121,25 +134,27 @@
     }
 
     /* Will get the Profile Daily Calories Goal & The daily calories */
-    public async void getTrackingGraphData()
+    public async Task getTrackingGraphData()
     {
-        foreach (CaloriesDto caloriesDto in ListOfCalories)
-        {
-            if (caloriesDto.Date.Date == DateTime.Today)
-            {
-                trackingData[1] += caloriesDto.Calorie;
-            }
-        }
-        var result = await _userDetailService.GetByUser(UserId);
-        if (result.IsSuccess == true & result.Result != null)
-        {
-            var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
-            trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);  
-        }
-        else
-        {
-            trackingData[0] = 0;
-        }
+        //foreach (CaloriesDto caloriesDto in ListOfCalories)
+        //{
+        //    if (caloriesDto.Date.Date == DateTime.Today)
+        //    {
+        //        trackingData[1] += caloriesDto.Calorie;
+        //    }
+        //}
+        //var result = await _userDetailService.GetByUser(UserId);
+        //if (result.IsSuccess == true & result.Result != null)
+        //{
+        //    var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
+        //    trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);
+        //    GraphPercentage = trackingData[0] / trackingData[1];
+        //}
+        //else
+        //{
+        //    trackingData[0] = 0;
+        //}
+
     }
 
     /* This will update the graph data */
@@ -309,14 +324,15 @@
     /* Get Data for Progress Bar  */
     private async Task GetDataForUserProgressBar()
     {
-        var response = await _userDetailService.GetByUser(UserId);
-        if (response.IsSuccess == true && response != null)
-        {
-            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
-        } else
-        {
-            snackBar.Add("Something went wrong, could not load user details");
-        }
+        //var response = await _userDetailService.GetByUser(UserId);
+        //if (response.IsSuccess == true && response != null)
+        //{
+        //    userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
+        //    //userDetail.DailyCalories = GraphPercentage;
+        //} else
+        //{
+        //    snackBar.Add("Something went wrong, could not load user details");
+        //}
 
     }
 }
