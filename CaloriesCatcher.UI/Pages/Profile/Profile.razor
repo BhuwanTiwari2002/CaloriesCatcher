@@ -21,11 +21,10 @@
     </MudItem> 
     <MudItem xs="2">
         <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg mt-16">
-            <MudTextField Class="mx-4" @bind-Value="@userDetail.Name" Label="User Name" ReadOnly="true" Variant="Variant.Text" />
         </MudPaper>
     </MudItem>
     <MudItem xs="2">
-            <MudIconButton Class="d-flex" Icon="@Icons.Material.Filled.Edit" Title="Edit" @onclick="EditUserDetail" />
+        <MudIconButton Class="d-flex" Icon="@Icons.Material.Filled.Edit" Title="Edit" Variant="Variant.Filled" @onclick="EditUserDetail" />
         
     </MudItem>
     <MudItem xs="2" />
@@ -108,11 +107,11 @@
 
         if (!dialogResult.Canceled)
         {
-            snackBar.Add("Profile was updated", Severity.Normal);
+            snackBar.Add("Profile was updated", Severity.Success);
         }
         else
         {
-            snackBar.Add("Profile was not updated", Severity.Normal);
+            snackBar.Add("Profile was not updated", Severity.Error);
         }
         await GetUserDetailData();
     }
