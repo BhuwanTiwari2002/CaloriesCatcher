@@ -2,22 +2,22 @@
     <DialogContent>
         <MudList Clickable="true">
             <MudListSubheader>
-                Ingreidents
+                <MudText Typo="Typo.h5" Color="Color.Primary">Ingredients:</MudText>
             </MudListSubheader>
             @foreach(Ingredients item in _ingredientsList)
             {
-                <MudListItem Text="@item.food">
+                <MudListItem  Class="m-auto" Text="@item.food">
                     <NestedList>
-                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                        <MudListItem Class="my-2" Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small"> 
                            Quantity: @item.quantity
                         </MudListItem>
-                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                        <MudListItem Class="my-2" Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
                             Measure: @item.measure
                         </MudListItem>
-                        <MudListItem Icon="@Icons.Material.Filled.List"> 
-                           Weight: @item.weight
+                        <MudListItem Class="my-2" Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
+                            Weight: @item.weight 
                         </MudListItem>
-                        <MudListItem Icon="@Icons.Material.Filled.List"> 
+                        <MudListItem Class="my-2" Icon="@Icons.Material.Filled.Circle" IconSize="Size.Small">
                             Food Category: @item.foodCategory
                         </MudListItem>
                     </NestedList>
