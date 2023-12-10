@@ -139,7 +139,7 @@
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             //running through each ingredient
-            _nutrition = await _edamamAPI.GetNutrition(new EdamamRequestDto(recipeIngredientDto.Quantity + " " + recipeIngredientDto.IngredientName));
+            _nutrition = await _edamamAPI.GetNutrition(new EdamamRequestDto(recipeIngredientDto.Quantity + " " + recipeIngredientDto.IngredientName));//
             TotalCal = TotalCal + _nutrition.Calories;
         }
         //changing from API.Model -> UI.Model
