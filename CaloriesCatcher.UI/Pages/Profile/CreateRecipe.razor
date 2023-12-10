@@ -13,35 +13,34 @@
     </MudItem>
 
     <MudItem xs="12">
-        <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg" Elevation=" 3" Width="50%">
-
+        <MudPaper Class="d-flex align-center justify-center mx-auto" Elevation=" 3" Width="50%">
+            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity" @bind-Value="newIngredientQuantity" />
             <MudTextField Class="m-4" T="string" Variant="Variant.Outlined" Label="Name" @bind-Value="newIngredientName" />
-            <MudTextField Class="m-4" T="double" Variant="Variant.Outlined" Label="Quantity"@bind-Value="newIngredientQuantity" />
-            <MudButton Class="m-4" OnClick="AddIngredient">Add Ingredient</MudButton>
-           
+            <MudButton Class="m-4" OnClick="AddIngredient" Color="Color.Secondary">Add Ingredient</MudButton>
+
         </MudPaper>
-       </MudItem>
+    </MudItem>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mx-auto py-8 rounded-lg" Elevation=" 3" Width="50%">
-                <MudText Color="Color.Primary" Typo="Typo.h5" GutterBottom="true">Ingredients List</MudText>
+            <MudText Color="Color.Primary" Typo="Typo.h5" GutterBottom="true">Ingredients List</MudText>
         </MudPaper>
         <MudPaper Class="d-flex align-center justify-center mx-auto py-8 rounded-lg" Elevation=" 3" Width="50%">
-                    <MudList>
-                        @foreach (var RecipeIngredientDto in recipeIngredients)
-                        {
-                            <li><MudText Typo="Typo.h6">@RecipeIngredientDto.Quantity cup(s) @RecipeIngredientDto.IngredientName</MudText><MudButton @onclick="() => DeleteIngredient(RecipeIngredientDto.RecipeIngredientsId)" Color="Color.Error">Delete</MudButton></li>
-                        }
-                    </MudList>
-                </MudPaper>
+            <MudList>
+                @foreach (var RecipeIngredientDto in recipeIngredients)
+                {
+                    <li><MudText Typo="Typo.h6">@RecipeIngredientDto.Quantity Units of @RecipeIngredientDto.IngredientName</MudText><MudButton @onclick="() => DeleteIngredient(RecipeIngredientDto.RecipeIngredientsId)" Color="Color.Error">Delete</MudButton></li>
+                }
+            </MudList>
+        </MudPaper>
 
-      
+
     </MudItem>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mx-auto rounded-lg" Elevation=" 3" Width="50%">
             <MudButton Class="m-4 " OnClick="AddRecipeToDb" Variant="Variant.Filled" Color="Color.Primary">Save Recipe</MudButton>
-      
+
             <MudButton Class="m-4 mx-16" Variant="Variant.Filled">Save Recipe & Add to Day</MudButton>
-      
+
             <MudButton Class="m-4" Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
         </MudPaper>
     </MudItem>
@@ -60,6 +59,8 @@
     //injections
     [Inject] IDialogService dialogService { get; set; } = default!;
     [Inject] IRecipe _recipeService { get; set; } = default!;
+    [Inject] IEdamamAPI _edamamAPI { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
     [Inject] IRecipeIngredients _ingredientservice { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
     [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
@@ -70,38 +71,42 @@
 
     //single variables
     Calories.API.Models.Dto.RecipeDto RecentRecipeId = new Calories.API.Models.Dto.RecipeDto();
+    RecipeDto UpdatedRecipe = new RecipeDto();
+    private CaloriesCatcher.UI.Model.Nutrition _nutrition;
     private string newIngredientName;
     private double newIngredientQuantity;
+    public double TotalCal;
+    public string _foodname;
     public string UserId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         GetUserIdAndRecipes();
-
     }
 
     async private void GetUserIdAndRecipes()
     {
+        //getting the most recent Id, should be the one from the dialog box that was just created
         var authState = await authenticationState;
         var response = await _recipeService.GetRecipesByUserAsync(authState.User.FindFirst("Sub")?.Value);
         UserId = authState.User.FindFirst("sub")?.Value;
         if (response != null && response.IsSuccess)
         {
-            listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
             try
             {
+                listOfRecipes = JsonConvert.DeserializeObject<List<Calories.API.Models.Dto.RecipeDto>>(Convert.ToString(response.Result));
                 RecentRecipeId = listOfRecipes.LastOrDefault();
+                StateHasChanged();
             }
             catch (Exception ex)
             {
-                throw ex; 
+                snackBar.Add("No Recent Recipe Created", Severity.Error);
             }
-            
-            StateHasChanged();
+
         }
         else
         {
-            //snackBar.Add("Something went wrong", Severity.Error);
+            snackBar.Add("Something went wrong", Severity.Error);
         }
     }
 
@@ -124,15 +129,30 @@
         }
         catch (Exception ex)
         {
-
             Console.WriteLine(ex.Message);
         }
 
     }
 
+    private async void GetCaloriesPerIngredient()
+    {
+        foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
+        {
+            //running through each ingredient
+            _nutrition = await _edamamAPI.GetNutrition(new EdamamRequestDto(recipeIngredientDto.Quantity + " " + recipeIngredientDto.IngredientName));
+            TotalCal = TotalCal + _nutrition.Calories;
+        }
+        //changing from API.Model -> UI.Model
+        UpdatedRecipe.Calories = TotalCal;
+        UpdatedRecipe.RecipeId = RecentRecipeId.RecipeId;
+        UpdatedRecipe.UserId = RecentRecipeId.UserId;
+        UpdatedRecipe.RecipeName = RecentRecipeId.RecipeName;
+        UpdatedRecipe.ImagePath = RecentRecipeId.ImagePath;
+        _recipeService.UpdateRecipeAsync(UpdatedRecipe);
+    }
     private void AddRecipeToDb()
     {
-        //needs: Recipe Id, Recipe Name, and Foreach recipe/food it needs and Id, Name and Quantity, passed in Recipe Id, Passed in UserId, Generated Recipe/food Id
+        GetCaloriesPerIngredient();
         foreach (RecipeIngredientDto recipeIngredientDto in recipeIngredients)
         {
             recipeIngredientDto.RecipeId = RecentRecipeId.RecipeId;
