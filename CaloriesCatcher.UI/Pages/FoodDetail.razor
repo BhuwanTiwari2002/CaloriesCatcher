@@ -1,5 +1,8 @@
-﻿@page "/fooddetail" 
-
+﻿
+<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+        @page "/fooddetail" 
+        @using CaloriesCatcher.UI.Components;
 <MudGrid>
     <MudItem xs="12">
         <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
@@ -41,4 +44,10 @@
 
 
 
-<CaloriesCatcher.UI.Components.CalorieFooter />
+<CalorieFooter />
+
+ </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied/>
+    </NotAuthorized>
+</AuthorizeView>

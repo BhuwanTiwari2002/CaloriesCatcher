@@ -1,8 +1,12 @@
-@page "/discover/recipes"
-@using CaloriesCatcher.UI.Components.Dialogs;
-@using CaloriesCatcher.UI.Model.Edamam
-@using CaloriesCatcher.UI.Service.IService
-@using CaloriesCatcher.UI.Model
+<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+
+        @page "/discover/recipes"
+        @using CaloriesCatcher.UI.Components.Dialogs;
+        @using CaloriesCatcher.UI.Model.Edamam
+        @using CaloriesCatcher.UI.Service.IService
+        @using CaloriesCatcher.UI.Model
+        @using CaloriesCatcher.UI.Components;
 <MudGrid Style="max-width: 1200px; margin: auto;">
     <MudItem xs="12" Class="mb-2 text-center">
         <MudText Color="Color.Primary" Typo="Typo.h4">Recipe Discovery</MudText>
@@ -55,7 +59,11 @@
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="DisplayRecipe">Create Recipe</MudButton>
     </MudItem>
 </MudGrid>
-
+ </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied/>
+    </NotAuthorized>
+</AuthorizeView>
 <div>
     @if (_recipeModelEdamam != null)
     {

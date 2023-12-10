@@ -1,8 +1,11 @@
-﻿@page "/nutrition"
+﻿<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+@page "/nutrition"
 @using CaloriesCatcher.UI.Model;
 @using CaloriesCatcher.UI.Model.Edamam
 @using CaloriesCatcher.UI.Service.IService;
 @using Newtonsoft.Json;
+@using CaloriesCatcher.UI.Components;
 
 <MudForm @ref="_foodNameForm" Style="margin: auto; width: 30%;">
     <MudText Class="mt-2" Typo="Typo.h6">Enter Food Name</MudText>
@@ -36,7 +39,11 @@ else if (_nutrition != null)
     </div>
 }
 <CaloriesCatcher.UI.Components.CalorieFooter />
-
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Inject]
     private IEdamamAPI edamamService { get; set; } = default!;

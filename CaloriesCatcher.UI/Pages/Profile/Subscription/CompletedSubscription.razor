@@ -1,9 +1,12 @@
-﻿@page "/payment-success"
+﻿<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+@page "/payment-success"
 @using Microsoft.AspNetCore.WebUtilities
 @using CaloriesCatcher.UI.Service
 @using CaloriesCatcher.UI.Service.IService
 @using KitchenComfort.Web.Models
 @using Newtonsoft.Json
+@using CaloriesCatcher.UI.Components;
 
 <MudContainer>
     <MudCard Elevation="3" Outlined="true" Class="mx-auto my-5" Style="max-width: 600px;">
@@ -17,7 +20,12 @@
         </MudCardContent>
     </MudCard>
 </MudContainer>
-<CaloriesCatcher.UI.Components.CalorieFooter />
+<CalorieFooter />
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
 @code {
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] StripePaymentsService stripeService { get; set; }

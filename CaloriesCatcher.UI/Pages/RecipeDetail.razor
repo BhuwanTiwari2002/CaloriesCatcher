@@ -1,4 +1,6 @@
-﻿@page "/recipedetail" 
+﻿<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+@page "/recipedetail" 
 @using CaloriesCatcher.UI.Components;
 
 <MudGrid>
@@ -69,4 +71,9 @@
 
 
 
-<CaloriesCatcher.UI.Components.CalorieFooter />
+<CalorieFooter />
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
