@@ -10,8 +10,8 @@
         <br />
         <div style="float:left; width:96%; margin: 20px; border-radius: 7px;">
         <MudPaper Class="pa-4 mr-8" Width="100%" Style="border-radius: 7px;">
-            <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@GraphPercentage.ToString()</MudText>
-                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Value="@GraphPercentage" />
+            <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@ListOfCalories.Sum(c => c.Calorie)</MudText>
+                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Max="3000" Value="@ListOfCalories.Sum(c => c.Calorie)" />
         </MudPaper>
         </div>
         
@@ -102,6 +102,8 @@
     MudChip selectedCaloriesFilter;
     UserDetail userDetail = new UserDetail();
     public string UserId = "";
+    
+    double maxDailyCaloriesForUser = 0.0;
     int i = -1;
     int dataSize = 4;
     private double[] data = new double[3] { 0, 0, 0 };
@@ -120,7 +122,8 @@
         await GetDataForUserProgressBar();
         GetStreaks();
         await getRecipes();
-        //await GetDataForUserProgressBar();
+        //await getDailyGoal();
+         //await GetDataForUserProgressBar();
 
     }
     /* Loads the list of Recipes */
@@ -333,6 +336,23 @@
         //{
         //    snackBar.Add("Something went wrong, could not load user details");
         //}
-
     }
+
+    private async Task getDailyGoal()
+    {
+        try
+        {
+            var result = await caloriesService.GetCaloriesByUserAsync(UserId);
+            if (result.Result != null)
+            {
+                    UserDetail user = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString((result.Result)));
+                    maxDailyCaloriesForUser = Convert.ToDouble(user.DailyCalories);
+            }
+        }
+        catch (Exception e)
+        {
+            snackBar.Add("There was an error getting the user max daily calories" + e.Message);
+        }
+    }
+
 }
