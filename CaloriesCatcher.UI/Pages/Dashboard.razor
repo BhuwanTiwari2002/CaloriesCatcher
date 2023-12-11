@@ -7,8 +7,16 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
         @using RecipeDto = Calories.API.Models.Dto.RecipeDto
+        <br />
+        <div style="float:left; width:96%; margin: 20px; border-radius: 7px;">
+        <MudPaper Class="pa-4 mr-8" Width="100%" Style="border-radius: 7px;">
+            <MudText Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Daily Calories Progress</MudText>
+                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Value="@GraphPercentage" />
+        </MudPaper>
+        </div>
+        
         <div style="float:left; width:40%; margin: 20px; border-radius: 7px;">
-            <MudText Style="margin-left: 5%">User Id: @UserId</MudText>
+            <!--<MudText Style="margin-left: 5%">User Id: @UserId</MudText>-->
             <MudPaper Width="100%" Style="border-radius: 7px;">
                 <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">Today's Details</MudText>
                 <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="i" InputLabels="@labels" Width="35%" Height="40%"/>
@@ -47,9 +55,6 @@
         <div style="float:right; width:50%;margin-top:3.0%; margin-right:3%; margin-bottom:5%; border-radius: 7px !important;">
             <MudPaper Style="border-radius: 7px !important; margin: auto;">
                 <MudItem xs="12" md="12">
-                    <br/>
-                    <MudText Style="margin-left: 5%;;" Color="Color.Primary" Typo="Typo.h6">Recently Added Recipes</MudText>
-                    <RecipeCard Recipes="listOfRecipes"></RecipeCard>
                     <MudItem Style="margin-left: 4%" xs="12" md="8" Class="mb-4">
                         <div class="p-3" style="background-color: rgba(203, 195, 227, 1); color: black; border-radius: 7px;">
                             <div style="display: flex; align-items: center; margin-top: 10px;">
@@ -94,6 +99,8 @@
     MudChip selectedCaloriesFilter;
     UserDetail userDetail = new UserDetail();
     public string UserId = "";
+
+    double maxDailyCaloriesForUser = 0.0;
     int i = -1;
     int dataSize = 4;
     private double[] data = new double[3] { 0, 0, 0 };
@@ -101,6 +108,8 @@
     private Double[] trackingData = new Double[2] { 0.0, 0.0 };
     int currentStreak = 0;
     int longestStreak = 0;
+    decimal TempCalories;
+    double GraphPercentage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -108,7 +117,7 @@
         getGraphData();
         GetStreaks();
         await getRecipes();
-        //await GetDataForUserProgressBar();
+        await GetDataForUserProgressBar();
     }
     /* Loads the list of Recipes */
     async Task getRecipes()
@@ -121,25 +130,9 @@
     }
 
     /* Will get the Profile Daily Calories Goal & The daily calories */
-    public async void getTrackingGraphData()
+    async Task getTrackingGraphData()
     {
-        foreach (CaloriesDto caloriesDto in ListOfCalories)
-        {
-            if (caloriesDto.Date.Date == DateTime.Today)
-            {
-                trackingData[1] += caloriesDto.Calorie;
-            }
-        }
-        var result = await _userDetailService.GetByUser(UserId);
-        if (result.IsSuccess == true & result.Result != null)
-        {
-            var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
-            trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);  
-        }
-        else
-        {
-            trackingData[0] = 0;
-        }
+
     }
 
     /* This will update the graph data */
@@ -216,6 +209,7 @@
             {
                 ListOfCalories = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
                 getGraphData();
+
                 StateHasChanged();
             } else
             {
@@ -255,6 +249,7 @@
                 snackBar.Add("Something went wrong", Severity.Error);
             }  
         }
+        GetDataForUserProgressBar();
         StateHasChanged();
     }
 
@@ -309,14 +304,39 @@
     /* Get Data for Progress Bar  */
     private async Task GetDataForUserProgressBar()
     {
-        var response = await _userDetailService.GetByUser(UserId);
-        if (response.IsSuccess == true && response != null)
+        trackingData[0] = 2200;
+        foreach (CaloriesDto caloriesDto in ListOfCalories)
         {
-            userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(response.Result));
-        } else
-        {
-            snackBar.Add("Something went wrong, could not load user details");
+            if (caloriesDto.Date.Date == DateTime.Today)
+            {
+                trackingData[1] += caloriesDto.Calorie;
+            }
         }
-
+        if (trackingData[1] > 0)
+        {
+            GraphPercentage = (trackingData[1] / trackingData[0]) * 100;
+        }
+        else
+        {
+            GraphPercentage = 0;
+        }
     }
+
+    private async Task getDailyGoal()
+    {
+        try
+        {
+            var result = await caloriesService.GetCaloriesByUserAsync(UserId);
+            if (result.Result != null)
+            {
+                    UserDetail user = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString((result.Result)));
+                    maxDailyCaloriesForUser = Convert.ToDouble(user.DailyCalories);
+            }
+        }
+        catch (Exception e)
+        {
+            snackBar.Add("There was an error getting the user max daily calories" + e.Message);
+        }
+    }
+
 }
