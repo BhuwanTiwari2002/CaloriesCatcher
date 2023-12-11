@@ -7,11 +7,13 @@
         @using CaloriesCatcher.UI.Service.IService;
         @using Newtonsoft.Json;
         @using RecipeDto = Calories.API.Models.Dto.RecipeDto
+
+        <MudText Style="margin-left: 5%">User Id: @UserId</MudText>
         <br />
         <div style="float:left; width:96%; margin: 20px; border-radius: 7px;">
         <MudPaper Class="pa-4 mr-8" Width="100%" Style="border-radius: 7px;">
             <MudText Style="margin-left: 5%" Color="Color.Primary" Typo="Typo.h6" GutterBottom="true">@ListOfCalories.Sum(c => c.Calorie)</MudText>
-                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Max="3000" Value="@ListOfCalories.Sum(c => c.Calorie)" />
+                <MudProgressLinear Color="Color.Success" Rounded="true" Size="Size.Large" Value="@ListOfCalories.Sum(c => c.Calorie)" />
         </MudPaper>
         </div>
         
@@ -102,7 +104,7 @@
     MudChip selectedCaloriesFilter;
     UserDetail userDetail = new UserDetail();
     public string UserId = "";
-    
+
     double maxDailyCaloriesForUser = 0.0;
     int i = -1;
     int dataSize = 4;
@@ -118,12 +120,10 @@
     {
         await RefreshCaloriesData(0);
         getGraphData();
-        await getTrackingGraphData();
         await GetDataForUserProgressBar();
         GetStreaks();
         await getRecipes();
-        //await getDailyGoal();
-         //await GetDataForUserProgressBar();
+        await getTrackingGraphData();
 
     }
     /* Loads the list of Recipes */
@@ -137,26 +137,18 @@
     }
 
     /* Will get the Profile Daily Calories Goal & The daily calories */
-    public async Task getTrackingGraphData()
+    async Task getTrackingGraphData()
     {
-        //foreach (CaloriesDto caloriesDto in ListOfCalories)
-        //{
-        //    if (caloriesDto.Date.Date == DateTime.Today)
-        //    {
-        //        trackingData[1] += caloriesDto.Calorie;
-        //    }
-        //}
-        //var result = await _userDetailService.GetByUser(UserId);
-        //if (result.IsSuccess == true & result.Result != null)
-        //{
-        //    var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
-        //    trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);
-        //    GraphPercentage = trackingData[0] / trackingData[1];
-        //}
-        //else
-        //{
-        //    trackingData[0] = 0;
-        //}
+        var result = await _userDetailService.GetByUser(UserId);
+        if (result.IsSuccess == true)
+        {
+            var userDetail = JsonConvert.DeserializeObject<UserDetail>(Convert.ToString(result.Result));
+            trackingData[0] = Decimal.ToDouble(userDetail.DailyCalories);
+        }
+        else
+        {
+            trackingData[0] = 0;
+        }
 
     }
 
