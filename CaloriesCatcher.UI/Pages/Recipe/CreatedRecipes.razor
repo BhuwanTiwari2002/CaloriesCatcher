@@ -1,0 +1,89 @@
+<AuthorizeView Roles="ADMIN, TURTLE, ELEPHANT, PARROT, CAT, BASIC">
+    <Authorized>
+        @page "/created/recipes"
+        @using CaloriesCatcher.UI.Components;
+        @using CaloriesCatcher.UI.Components.Dialogs
+        @using CaloriesCatcher.UI.Model;
+        @using CaloriesCatcher.UI.Service.IService;
+        @using Newtonsoft.Json;
+        @using RecipeDto = Calories.API.Models.Dto.RecipeDto
+
+        @* This is the second part of the dashboard *@
+        <div style="float:right; width:94%;margin-top:3.0%; margin-right:3%; margin-bottom:5%; border-radius: 7px !important;">
+            <MudPaper Style="border-radius: 7px !important; margin: auto;">
+                <MudItem xs="12" md="12">
+                    <br />
+                    <MudText Style="margin-left: 5%;;" Color="Color.Primary" Typo="Typo.h6">Personal Recipes</MudText>
+                    <RecipeCard Recipes="listOfRecipes"></RecipeCard>
+                    
+                </MudItem>
+                <div style="height: 50px"></div>
+            </MudPaper>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <NotAuthorzied />
+    </NotAuthorized>
+</AuthorizeView>
+<CalorieFooter />
+@code {
+    /* Services */
+    [Inject] private ICalories caloriesService { get; set; } = default!;
+    [Inject] private ISnackbar snackBar { get; set; } = default!;
+    [Inject] IDialogService dialogService { get; set; } = default!;
+    [Inject] IRecipe _recipeService { get; set; } = default!;
+    [Inject] private IUserDetailService _userDetailService { get; set; } = default!;
+    [CascadingParameter] Task<AuthenticationState> authenticationState { get; set; } = default!;
+
+    /* Variables */
+    List<RecipeDto> listOfRecipes = new List<RecipeDto>();
+    List<CaloriesDto> ListOfCalories = new List<CaloriesDto>();
+    MudChip selectedCaloriesFilter;
+    UserDetail userDetail = new UserDetail();
+    public string UserId = "";
+    int i = -1;
+    int dataSize = 4;
+    private double[] data = new double[3] { 0, 0, 0 };
+    string[] labels = { "Breakfast", "Lunch", "Dinner" };
+    private Double[] trackingData = new Double[2] { 0.0, 0.0 };
+    int currentStreak = 0;
+    int longestStreak = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshCaloriesData(0);
+        await getRecipes();
+    }
+    /* Loads the list of Recipes */
+    async Task getRecipes()
+    {
+        var result = await _recipeService.GetRecipesByUserAsync(UserId);
+        if (result.IsSuccess == true)
+        {
+            listOfRecipes = JsonConvert.DeserializeObject<List<RecipeDto>>(Convert.ToString(result.Result));
+        }
+    }
+
+    /* This will get the List of Calories based on the user filter option */
+    async Task RefreshCaloriesData(int filterOption)
+    {
+        var authState = await authenticationState;
+        UserId = authState.User.FindFirst("sub")?.Value;
+        if (filterOption == 0) // Daily
+        {
+            var response = await caloriesService.GetCaloriesByUserAsync(UserId, 0);
+            if (response != null && response.IsSuccess)
+            {
+                ListOfCalories = JsonConvert.DeserializeObject<List<CaloriesDto>>(Convert.ToString(response.Result));
+
+                StateHasChanged();
+            }
+            else
+            {
+                snackBar.Add("Something went wrong", Severity.Error);
+            }
+        }
+        
+        StateHasChanged();
+    }
+}

@@ -1,7 +1,7 @@
 @using Calories.API.Models.Dto
 
 <div class="recipe-container">
-    @foreach (RecipeDto recipe in Recipes.Take(3))
+    @foreach (RecipeDto recipe in Recipes.Take(100))
     {
         <MudCard class="recipe-card">
             <div class="recipe-media">
@@ -10,6 +10,9 @@
             <div class="recipe-content">
                 <MudText Typo="Typo.h5" Class="recipe-label">@recipe.RecipeName</MudText>
                 <MudText Typo="Typo.body2" Class="recipe-label">Calories: @recipe.Calories</MudText>
+            </div>
+            <div>
+                <MudButton Variant="Variant.Filled" Class="mx-4" Color="Color.Secondary">Add To Day</MudButton>
             </div>
         </MudCard>
     }
@@ -29,6 +32,8 @@
 <style>
     .recipe-card {
         max-width: 200px;
+        min-width: 200px
+        
         border-radius: 15px;
         box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
         margin: 1rem;
